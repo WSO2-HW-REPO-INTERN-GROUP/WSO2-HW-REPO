@@ -13,6 +13,11 @@
     }
 
     function getSearchedDevices(){
+
+        var userName=request.getParameter("userName");
+        var serialNum=request.getParameter("serial");
+        var deviceType=request.getParameter("deviceType");
+
         var searchedDevices=[
             {"Device ID":"0001","Type":"Laptop","Status":"Test","User":"shaminda@wso2.com","Rating":"3"},
             {"Device ID":"0001","Type":"Laptop","Status":"Test","User":"shaminda@wso2.com","Rating":"3"},
@@ -22,7 +27,6 @@
 
         print(JSON.stringify(searchedDevices));
     }
-
 
     function getAllDevices(){
 

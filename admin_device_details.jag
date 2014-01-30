@@ -61,7 +61,23 @@
                                 errSpan.textContent="Please Check for Correct device type selection or empty description";
                             }
                             else{
+
+                                var newDeviceData={
+
+                                    "type":type.options[type.selectedIndex].text,
+                                    "device":devices.options[devices.selectedIndex].text,
+                                    "description":description.value
+
+                                };
+
+                                $.post("admin_requests_handler.jag",{request:"addAccessory",inputs:JSON.stringify(newDeviceData)},function(data){
+                                    alert(data);
+                                });
+
+
                                 $(this).dialog('close');
+
+
                             }
 
 
@@ -115,10 +131,11 @@
             
             
                 $("#upgradeHistoryLink").click(function(event){
+
+                    var urlData=window.location.search.substring(1);
+                    var deviceID=urlData.split("=");
             
-            
-            
-                    $.post("getOperationValues.jag",{operation:"upgradeHistory"},function(data,status){
+                    $.post("getOperationValues.jag",{operation:"upgradeHistory",deviceID:deviceID},function(data,status){
             
                             var objArray=JSON.parse(data);
             
@@ -191,23 +208,16 @@
                     //Open your dialog.
                     $("#upgradeHistoryPopup").dialog("open");
                 });
-            
-            
-            
-            
-            
-            
-            
-            
             });
             
             function readURL(){
                     var urlData=window.location.search.substring(1);
-                    var issueID=urlData.split("=");
+                    var deviceID=urlData.split("=");
+                    alert(deviceID);
                     var issueHistory=document.getElementById("issueHistoryLink");
-                    issueHistory.setAttribute("href","admin_device_issues.jag?id=10");
+                    issueHistory.setAttribute("href","admin_device_issues.jag?id="+deviceID[1]);
             
-                    $.post("admin_device_operations.jag",{issueID:issueID[1],operation:"getBasicDetails"},function(data,status){
+                    $.post("admin_device_operations.jag",{deviceID:deviceID[1],operation:"getBasicDetails"},function(data,status){
                         //$("#issueDetailsDiv").append(data);
             
                         var i=0;
@@ -248,7 +258,11 @@
                 }
             
              function getAccessories(){
-                $.post("admin_device_operations.jag",{operation:"getAccessories"},function(data,status){
+
+                var urlData=window.location.search.substring(1);
+                var deviceID=urlData.split("=");
+
+                $.post("admin_device_operations.jag",{operation:"getAccessories",deviceID:deviceID[1]},function(data,status){
             
                             var objArray=JSON.parse(data);
             

@@ -37,16 +37,16 @@
                 getReportedIssues();
             
             
-            
+
+                alert(issueID);
             });
             
             function getReportedIssues(){
 
                 var urlData=window.location.search.substring(1);
                 var issueID=urlData.split("=");
-                alert(issueID);
 
-                $.post("getOperationValues.jag",{operation:"getReportedIssues"},function(data,status){
+                $.post("getOperationValues.jag",{operation:"getReportedIssues",},function(data,status){
             
                     alert(data);
             

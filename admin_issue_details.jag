@@ -126,7 +126,7 @@
                                         errSpan.style.display="none";
 
                                         $.post("admin_requests_handler.jag",{deviceType:deviceType,description:description,hardware:hardware,request:"addNewUpgrade"},function(data){
-                                                ///alert(data);
+                                                //alert(data);
 
                                         });
 

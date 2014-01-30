@@ -11,8 +11,6 @@
         print(JSON.stringify(allWarranty));
     }
 
-
-
     if(adminRequest=="addNewUpgrade"){
 
         var deviceType=request.getParameter("deviceType");
@@ -24,6 +22,16 @@
     if(adminRequest=="renewWarranty"){
         var newEndDate=request.getParameter("newEndDate");
         print(newEndDate);
+    }
+
+    if(adminRequest=="test"){
+        var nsg=request.getParameter("arr");
+        print(nsg);
+    }
+
+    if(adminRequest=="addAccessory"){
+        var nsg=request.getParameter("inputs");
+        print(nsg);
     }
 
 %>

@@ -42,7 +42,10 @@
                         modal: true,
                         buttons:{
                             'Confirm': function() {
+
+                            var submitError=false;
                             var deviceType=$('#deviceType').val();
+                            var inputJsonObj={};
 
                             alert(deviceType);
 
@@ -51,6 +54,7 @@
                                             //alert(deviceType);
                                             basicFields[i].removeClass("inputField");
                                             basicFields[i].addClass("errorInputField");
+                                            submitError=true;
                                     }
                                     else{
                                             basicFields[i].removeClass("errorInputField");
@@ -65,20 +69,27 @@
 
                                     case '1':{
                                         var padFields=new Array();
+                                        var itemsArr={};
 
                                         padFields=[$("#padScreen"),$("#padTouch"),$("#padCam"),$("#padVga")];
+
+                                        inputJsonObj["type"]="pad";
+
                                         for(var i=0;i<padFields.length;i++){
 
                                             if(padFields[i].val()==""){
-
                                                 padFields[i].removeClass("inputField");
                                                 padFields[i].addClass("errorInputField");
+                                                submitError=true;
                                             }
                                             else{
                                                     padFields[i].removeClass("errorInputField");
                                                     padFields[i].addClass("inputField");
+                                                    itemsArr[padFields[i].attr('id')]=padFields[i].val();
                                             }
                                         }
+
+                                        inputJsonObj["pad"]=itemsArr;
 
                                         break;
                                     }
@@ -88,19 +99,24 @@
                                     case '2':{
 
                                         var desktopsFields=new Array();
+                                        var itemsArr={};
+                                        inputJsonObj["type"]="deskTop";
 
                                         desktopsFields=[$("#dtProcessor"),$("#dtMemory"),$("#dtVga"),$("#dtHdd")];
+
                                         for(var i=0;i<desktopsFields.length;i++){
                                             if(desktopsFields[i].val()==""){
-
                                                 desktopsFields[i].removeClass("inputField");
                                                 desktopsFields[i].addClass("errorInputField");
+                                                submitError=true;
                                             }
                                             else{
                                                     desktopsFields[i].removeClass("errorInputField");
                                                     desktopsFields[i].addClass("inputField");
+                                                    itemsArr[desktopsFields[i].attr('id')]=desktopsFields[i].val();
                                             }
                                         }
+                                        inputJsonObj["deskTop"]=itemsArr;
 
                                         break;
                                     }
@@ -108,20 +124,35 @@
 
                                     case '3':
                                         var laptopsFields=new Array();
+                                        var itemsArr={};
+                                        inputJsonObj["type"]="laptop";
 
                                         laptopsFields=[$("#lapScreen"),$("#lapProcessor"),$("#lapMemory"),$("#lapVga"),$("#lapHdd")];
                                         for(var i=0;i<laptopsFields.length;i++){
                                             if(laptopsFields[i].val()==""){
-
                                                 laptopsFields[i].removeClass("inputField");
                                                 laptopsFields[i].addClass("errorInputField");
+                                                submitError=true;
                                             }
                                             else{
                                                     laptopsFields[i].removeClass("errorInputField");
                                                     laptopsFields[i].addClass("inputField");
+                                                    itemsArr[laptopsFields[i].attr('id')]=laptopsFields[i].val();
                                             }
                                         }
+
+                                        inputJsonObj["laptop"]=itemsArr;
+
                                     break;
+                                }
+
+                                if(submitError==false){
+
+                                    $.post("admin_requests_handler.jag",{request:"test",arr:JSON.stringify(inputJsonObj)},function(data){
+                                        alert(data);
+                                    });
+
+                                    //$(this).dialog("close");
                                 }
                             }
                         }
@@ -184,6 +215,7 @@
                     $("#searchDevices").click(function(){
                         var userName=document.getElementById("userName");
                         var serialNum=document.getElementById('serialNum');
+                        var deviceTypeSelect=document.getElementById("deviceTypeSelect");
                         var errSpan=document.getElementById("searchErr");
 
                         if(userName.value=="" && serialNum.value==""){
@@ -210,16 +242,16 @@
                             }
 
 
-                            $.post("admin_devices_operations.jag",{operation:"getSearchedDevices"},function(data,status){
+                            $.post("admin_devices_operations.jag",{operation:"getSearchedDevices",userName:userName.value,serial:serialNum.value,deviceType:deviceTypeSelect.value},function(data,status){
 
                                 var objArray=JSON.parse(data);
-
-
 
 
                                 var i=0;
 
                                 for(var i=0;i<objArray.length;i++){
+
+                                    var deviceId;
 
                                     var newRow=document.createElement('tr');
 
@@ -236,9 +268,13 @@
                                         td.appendChild(document.createTextNode(object[property]));
 
                                         newRow.appendChild(td);
+
+                                        if(property=="Device ID"){
+                                            deviceId=object[property];
+                                        }
                                     }
                                     var link=document.createElement('a');
-                                    link.setAttribute("href","admin_device_details.jag");
+                                    link.setAttribute("href","admin_device_details.jag?id="+deviceId);
                                     link.innerHTML="more";
                                     var  linkTD=document.createElement("td");
                                     linkTD.appendChild(link);
@@ -276,7 +312,8 @@
                 
                 
                         for(var i=0;i<objArray.length;i++){
-                
+
+                            var deviceId;
                             var newRow=document.createElement('tr');
                 
                             if(i%2==0){
@@ -290,11 +327,15 @@
                                 var td=document.createElement('td');
                 
                                 td.appendChild(document.createTextNode(object[property]));
+
+                                if(property=="Device ID"){
+                                    deviceId=object[property];
+                                }
                 
                                 newRow.appendChild(td);
                             }
                             var link=document.createElement('a');
-                            link.setAttribute("href","admin_device_details.jag");
+                            link.setAttribute("href","admin_device_details.jag?id="+deviceId);
                             link.innerHTML="more";
                             var  linkTD=document.createElement("td");
                             linkTD.appendChild(link);
