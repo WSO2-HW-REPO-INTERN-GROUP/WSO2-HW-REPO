@@ -1,0 +1,151 @@
+<%
+
+var serverPath= "http://localhost:9765/WSO2-HW-REPO";
+response.contentType = 'text/javascript';
+
+var verb = request.getMethod();
+var data = request.getContent();
+var uri = request.getRequestURI();
+
+
+var log = new Log();
+var reqs = {'requests' : [
+
+
+    {'device':"Toshiba",'purpose':"testing",'req':"biz-group"},
+    {'device':"Dell",'purpose':"testing",'req':"dev-group"},
+    {'device':"Lenovo",'purpose':"testing",'req':"QA-group"},
+    {'device':"Apple",'purpose':"testing",'req':"strategy-group"}
+
+]};
+session.put('requests', reqs);
+
+if(request.getParameter('operation') != null){
+var opr=request.getParameter('operation');
+}
+else{
+    var opr=parse(data).operation;
+    var deviceID=parse(data).deviceID;
+    log.info(opr);
+}
+
+if(data != null ) {
+
+}
+
+
+
+if(verb == "POST" ) {
+
+
+    if(opr == 'addDevice'){
+
+        reqs = session.get("requests");
+       // log.info(session.get("requests"));
+       // log.info(parse(data));
+        var addDeviceObj = parse(data);
+        delete addDeviceObj.operation;
+        //inserts add device to the data strucuture
+         reqs.requests.push(addDeviceObj);
+
+        //log.info(reqs);
+
+        session.put('requests', reqs);
+
+        reqs = session.get("requests");
+
+        print(
+
+                reqs
+        );
+        //addDevice     */
+    }
+
+    else if(opr=='getDeviceDetails'){
+        getBasicDetails(deviceID);
+    }
+
+    else if(opr=='getAccessories'){
+        getAccessories(deviceID);
+    }
+
+    else if(opr=='upgradeHistory'){
+        getUpgradeHistory(deviceID);
+    }
+    else if(opr=='getIssues'){
+        getReportedIssues(deviceID);
+    }
+    else if(opr=='addIssue') {
+        print(
+                {'information' : 'issue reported successfully'}
+
+        );
+    }
+
+
+
+} else if(verb == "GET" && opr =='loadRequests') {
+
+    reqs=session.get("requests");
+
+    print(
+            reqs
+
+    );
+}
+
+else if(verb == "GET" && opr =='loadDevices') {
+    print(
+
+            {'devices' : [
+
+
+                {'device':"Toshiba",'purpose':"testing",'req':"biz-group",'health':"3",'id':"11001"},
+                {'device':"Dell",'purpose':"testing",'req':"dev-group",'health':"3",'id':"11002"},
+                {'device':"Lenovo",'purpose':"testing",'req':"QA-group",'health':"3",'id':"11003"},
+                {'device':"Apple",'purpose':"testing",'req':"strategy-group",'health':"3",'id':"11004"}
+
+            ]}
+
+
+    );
+}
+
+
+function getBasicDetails(deviceID){
+    var basicDetails={"Device ID":deviceID,"Device Serial":"AASD3345FFA1","Make":"Dell","Model":"Vostro","Health Rating":"3"};
+
+    print(JSON.stringify(basicDetails));
+}
+
+function getAccessories(deviceID){
+    var accessories=[{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"},{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"}];
+    print(JSON.stringify(accessories));
+}
+
+function getUpgradeHistory(deviceID){
+
+    var uph=[{"Upgrade Id":1,"Issue Id":23,"Issue Details":"Demo Issue1","Upgrade Details":"Demo Upgrade2"},{"Upgrade Id":2,"Issue Id":34,"Issue Details":"Demo Issue2","Upgrade Details":"Demo Upgrade1"}];
+
+    print(JSON.stringify(uph));
+}
+
+function getReportedIssues(deviceID){
+
+    var reportedIsues=[
+        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
+        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
+        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
+        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"}
+    ];
+
+    print(JSON.stringify(reportedIsues));
+
+}
+
+
+
+
+
+
+%>

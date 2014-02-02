@@ -1,437 +1,327 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
-    <title>Admin:Home</title>
-
-    <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
-
-    <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/normalUserHomeStyle.css" rel="stylesheet" type="text/css" media="all">
-    <link rel="stylesheet" href="css/carbonFormStyles.css">
-    <!--[if gte IE 8]>
-    <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-    <![endif]-->
-    <!--[if gte IE 7]>
-    <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-    <![endif]-->
-    <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href="css/jquery-ui.css"/>
-
-    <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.form.js"></script>
-    <script type="text/javascript" src="js/jqueryui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/jquery.validate.js"></script>
-    <script type="text/javascript" src="js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="js/jquery.ui.core.min.js"></script>
-    <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
-    <script type="text/javascript" src="js/jquery.ui.tabs.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/WSRequest.js"></script>
-    <script type="text/javascript" src="js/cookies.js"></script>
-    <script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>
-    <script type="text/javascript" src="js/customControls.js"></script>
-    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.js"></script>s
-
-
-
-
-    <!-- This script handles the tabbed pane functionality -->
-    <script type="text/javascript">
-
-        jQuery(document).ready(function(){
-
-            prepareList();
-
-            $("#addDeviceForm").dialog({
-                autoOpen:false,
-                height: 500,
-                width: 800,
-                modal: true,
-                buttons:{
-                    'Confirm': function() {
-                        var deviceType=$("#deviceTypeSelect option:selected").text();
-                        var purpose=$("#purposeArea").val();
-                        var requirements=$("#requirementArea").val();
-
-
-                        $.get("test.jag", {purpose: purpose,requirements:requirements ,deviceType:deviceType, action: "printData"},
-                                function(data){
-                                    $( ".myRequests" ).append( data );
-                                });
-
-                        alert(deviceType+" "+purpose+" "+requirements);
-//                        window.location.href = "test.jag";
-                        $(this).dialog('close');
-
-                    }
-                }
-            });
-
-            $("#addDeviceButton").click(function(event)
-            {
-                //Stop any default actions on the button.
-                event.preventDefault();
-                //Open your dialog.
-                $("#addDeviceForm").dialog("open");
-
-            });
-
-            function prepareList() {
-                $('#expList').find('li:has(ul)')
-                        .click( function(event) {
-                            if (this == event.target) {
-                                $(this).toggleClass('expanded');
-                                $(this).children('ul').toggle('medium');
-                            }
-                            return false;
-                        })
-                        .addClass('collapsed')
-                        .children('ul').hide();
-            };
-
-
-
-
-
-
-
-            <!-- Device request button action -->
-//
-//            $("div#tabs").tabs();
-//
-//            $("#addDeviceSubmit").click(function(){
-////                alert("Button Clicked");
-//
-//                var num_of_tabs=$("#tabs ul li").length+1;
-//                $("div#tabs ul").append(
-//                        "<li><a href='#tab" + num_of_tabs + "'>#" + num_of_tabs + "</a></li>"
-//                );
-//
-//                $("div#tabs").append(
-//                        "<div id='tab" + num_of_tabs + "'>#" + num_of_tabs + "</div>"
-//                );
-//                $("div#tabs").tabs("refresh");
-//            });
-
-            <!-- Device Request button action Finished -->
-
-
-        });
-
-
-    </script>
-
-
-</head>
-
-<body>
-<noscript>
-    &lt;div class="something-wrong"&gt;
-    &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
-    &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
-    &lt;/div&gt;
-</noscript>
-<!--[if lte IE 6]>
-<div class="something-wrong">
-    <div class="title">Did you know that your Internet Explorer is out of date?</div>
-    <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
-</div>
-<![endif]-->
-
-<div id="dcontainer"></div>
-<script type="text/javascript" src="./page2_files/dialog.js"></script>
-
-<!-- JS imports for collapsible menu -->
-<script src="./page2_files/yahoo-dom-event.js" type="text/javascript"></script>
-<script src="./page2_files/animation-min.js" type="text/javascript"></script>
-<script src="./page2_files/template.js" type="text/javascript"></script>
-<script src="./page2_files/yahoo-min.js" type="text/javascript"></script>
-<script src="./page2_files/selector-min.js" type="text/javascript"></script>
-
-<table id="main-table" border="0" cellspacing="0">
-<tbody><tr>
-    <td id="header" colspan="3">
-
-
-
-
-
-
-
-
-
-        <!--[IF IE 7]>
-        <style>
-            div#header-div div.right-links{
-                position:absolute;
-            }
-        </style>
-        <![endif]-->
-
-
-        <div id="header-div">
-            <div class="right-logo">Management Console</div>
-            <div class="left-logo">
-                <a href="https://localhost:9443/carbon/admin/index.jsp" class="header-home"><img src="./page2_files/1px.gif" width="300px" height="32px"></a>
-            </div>
-            <div class="middle-ad">
-
-
-
-
-
-            </div>
-            <div class="header-links">
-                <div class="right-links">
-                    <ul>
-
-
-
-                        <li class="middle">
-                            <label id="logged-user">
-                                <strong>Signed-in as:</strong>&nbsp;admin@carbon.super
-                            </label>
-                        </li>
-                        <li class="middle">|</li>
-                        <li class="right">
-                            <a href="https://localhost:9443/carbon/admin/logout_action.jsp">Sign-out</a>
-                        </li>
-
-                        <li class="middle">|</li>
-                        <li class="middle">
-                            <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
-                        </li>
-                        <li class="middle">|</li>
-
-                        <li class="left">
-                            <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-
-    </td>
-</tr>
-<tr>
-
-    <td id="menu-panel" valign="top" height="400px">
-        <table id="menu-table" border="0" cellspacing="0">
-            <tbody><tr>
-                <td id="region1">
-
-                    <div id="menu">
-
-                    </div>
-
-
-                </td>
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>WSO2 Hardware Repository</title>
+      <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+      <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
+      <link rel="stylesheet" href="css/carbonFormStyles.css">
+      <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
+      <link rel="stylesheet" href="css/jquery-ui.css">
+      <!--[if gte IE 8]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <!--[if gte IE 7]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+      <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+      <!--<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.form.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery-ui.min.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.validate.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.cookie.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.ui.core.min.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.ui.tabs.min.js"></script>-->
+      <!--<script type="text/javascript" src="js/main.js"></script>-->
+      <!--<script type="text/javascript" src="js/WSRequest.js"></script>-->
+      <!--<script type="text/javascript" src="js/cookies.js"></script>-->
+      <!--<script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>-->
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="js/jquery-ui.js"></script>
+      <script type="text/javascript" src="js/customControls.js"></script>
+
+      <!--myscripts-->
+      <script src="appJS/Hwdrepo.js"></script>
+      <script type="text/javascript" src="appJS/util.js"></script>
+      <!-- This script handles the tabbed pane functionality -->
+      <script>
+         jQuery(document).ready(function(){
+         
+             <!--*******************-->
+         
+         
+         prepareList();
+         
+         
+         function prepareList() {
+         $('#expList').find('li:has(ul)')
+             .click( function(event) {
+                 if (this == event.target) {
+                     $(this).toggleClass('expanded');
+                     $(this).children('ul').toggle('medium');
+                 }
+                 return false;
+             })
+             .addClass('collapsed')
+             .children('ul').hide();
+         };
+         
+         
+         $("#addDeviceForm").dialog({
+         autoOpen:false,
+         height: 500,
+         width: 800,
+         modal: true,
+         buttons:{
+         'Confirm': function() {
+             var deviceType=$("#deviceTypeSelect option:selected").text();
+             var purpose=$("#purposeArea").val();
+             var requirements=$("#requirementArea").val();
+         
+             alert(deviceType+" "+purpose+" "+requirements);
+         //                        window.location.href = "test.jag";
+             Hwdrepo.addDevice(deviceType,purpose,requirements);
+             $(this).dialog('close');
+         
+         }
+         }
+         });
+         
+         $("#addDeviceButton").click(function(event)
+         {
+         //Stop any default actions on the button.
+         event.preventDefault();
+         //Open your dialog.
+         $("#addDeviceForm").dialog("open");
+         
+         });
+         
+        Hwdrepo.viewRequests();
+
+         
+         Hwdrepo.loadDevices();
+         
+         });
+         
+      </script>
+   </head>
+   <body>
+      <noscript>
+         &lt;div class="something-wrong"&gt;
+         &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+         &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+         &lt;/div&gt;
+      </noscript>
+      <!--[if lte IE 6]>
+      <div class="something-wrong">
+         <div class="title">Did you know that your Internet Explorer is out of date?</div>
+         <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
+      </div>
+      <![endif]-->
+      <div id="dcontainer"></div>
+      <script type="text/javascript" src="./page2_files/dialog.js"></script>
+      <!-- JS imports for collapsible menu -->
+      <script src="./page2_files/yahoo-dom-event.js" type="text/javascript"></script>
+      <script src="./page2_files/animation-min.js" type="text/javascript"></script>
+      <script src="./page2_files/template.js" type="text/javascript"></script>
+      <script src="./page2_files/yahoo-min.js" type="text/javascript"></script>
+      <script src="./page2_files/selector-min.js" type="text/javascript"></script>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <!--[IF IE 7]>
+                  <style>
+                     div#header-div div.right-links{
+                     position:absolute;
+                     }
+                  </style>
+                  <![endif]-->
+                  <div id="header-div">
+                     <div class="right-logo">Admin Home</div>
+                     <div class="left-logo">
+                     </div>
+                     <div class="middle-ad">
+                     </div>
+                     <div class="header-links">
+                        <div class="right-links">
+                           <ul>
+                              <li class="middle">
+                                 <label id="logged-user">
+                                 <strong>Signed-in as:</strong>&nbsp;admin@carbon.super
+                                 </label>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="right">
+                                 <a href="https://localhost:9443/carbon/admin/logout_action.jsp">Sign-out</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="middle">
+                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="left">
+                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </td>
             </tr>
             <tr>
-                <td id="region2">
-
-
-
-                    <div id="menu2"> <ul class="main"> </ul></div>
-                </td>
-            </tr>
-            <tr>
-                <td id="region3">
-
-
-
-                    <div id="menu"> <ul class="main"><li id="region3_registry_menu3" class="menu-header" onclick="mainMenuCollapse(this.childNodes[0])" style="cursor: pointer;"><img src="./page2_files/down-arrow.gif" class="mMenuHeaders" id="region3_registry_menu">Registry</li><li class="normal" style="opacity: 0; display: none;"><ul class="sub"><li><a href="https://localhost:9443/carbon/resources/resource.jsp?region=region3&item=resource_browser_menu&path=/" class="menu-default" style="background-image: url(../resources/images/resources.gif);">Browse</a></li>
-                        <li><a href="https://localhost:9443/carbon/search/advancedSearch.jsp?region=region3&item=registry_search_menu" class="menu-default" style="background-image: url(../search/images/search-top.png);">Search</a></li>
-                    </ul></li> </ul></div>
-
-                </td>
-            </tr>
-            <tr>
-                <td id="region4">
-
-
-
-                    <div id="menu4"> <ul class="main"><li id="region4_monitor_menu4" class="menu-header" onclick="mainMenuCollapse(this.childNodes[0])" style="cursor: pointer; display: none;"><img src="./page2_files/up-arrow.gif" class="mMenuHeaders" id="region4_monitor_menu">Monitor</li><li class="normal" style="display: none;"><ul class="sub"><li><a href="https://localhost:9443/carbon/log-view/application_log_viewer.jsp?region=region4&item=app_log_menu" class="menu-default" style="background-image: url(../log-view/images/script_gear.gif);">Application Logs</a></li>
-                        <li><a href="https://localhost:9443/carbon/statistics/index.jsp?region=region4&item=statistics_menu" class="menu-default" style="background-image: url(../statistics/images/chart_bar.gif);">System Statistics</a></li>
-                        <li><a href="https://localhost:9443/carbon/log-view/index.jsp?region=region4&item=logs_menu" class="menu-default" style="background-image: url(../log-view/images/script_gear.gif);">System Logs</a></li>
-                        <li><a href="https://localhost:9443/carbon/tracer/index.jsp?region=region4&item=tracer_menu" class="menu-default" style="background-image: url(../tracer/images/tracer.gif);">SOAP Tracer</a></li>
-                        <li><a href="https://localhost:9443/carbon/viewflows/index.jsp?region=region4&item=flows_menu" class="menu-default" style="background-image: url(../viewflows/extensions/core/images/handler_flow.gif);">Message Flows</a></li>
-                    </ul></li> </ul></div>
-
-                </td>
-            </tr>
-            <tr>
-                <td id="region5">
-
-
-
-                    <div id="menu5"> <ul class="main"><li id="region5_tools_menu5" class="menu-header" onclick="mainMenuCollapse(this.childNodes[0])" style="cursor: pointer; display: none;"><img src="./page2_files/up-arrow.gif" class="mMenuHeaders" id="region5_tools_menu">Tools</li><li class="normal" style="display: none;"><ul class="sub"><li><a href="https://localhost:9443/carbon/wsdl2code/index.jsp?region=region5&item=wsdl2java_menu" class="menu-default" style="background-image: url(../wsdl2code/images/dump_aar.gif);">WSDL2Java</a></li>
-                        <li><a href="https://localhost:9443/carbon/java2wsdl/index.jsp?region=region5&item=java2wsdl_menu" class="menu-default" style="background-image: url(../java2wsdl/images/java2wsdl.gif);">Java2WSDL</a></li>
-                        <li><a href="https://localhost:9443/carbon/tryit/index.jsp?region=region5&item=tryit" class="menu-default" style="background-image: url(../tryit/images/tryit.gif);">Try It</a></li>
-                        <li><a href="https://localhost:9443/carbon/js_stub_generator/index.jsp?region=region5&item=js_stub_generator_menu" class="menu-default" style="background-image: url(../js_stub_generator/images/stub-generator.gif);">JavaScript Stub Generator</a></li>
-                        <li><a href="https://localhost:9443/carbon/js_scraper/index.jsp?region=region5&item=js_scraper_menu" class="menu-default" style="background-image: url(../js_scraper/images/scraper.gif);">Scraping Assistant</a></li>
-                        <li><a href="https://localhost:9443/carbon/wsdl_validator/index.jsp?region=region5&item=wsdl_validator_menu" class="menu-default" style="background-image: url(../wsdl_validator/images/wsdlValidate.gif);">WSDL Validator</a></li>
-                    </ul></li> </ul></div>
-                </td>
-            </tr>
-            <tr>
-                <td><img src="./page2_files/1px.gif" width="225px" height="1px"></td>
-            </tr>
-            </tbody></table>
-    </td>
-    <td id="middle-content">
-        <table id="content-table" border="0" cellspacing="0">
-            <tbody>
-            <tr>
-                <td id="page-header-links">
-                    <table class="page-header-links-table" cellspacing="0">
-                        <tbody><tr>
-                            <td class="breadcrumbs">
-                                <table class="breadcrumb-table" cellspacing="0">
-                                    <tbody><tr>
-                                        <td>
-                                            <div id="breadcrumb-div"></div>
-                                        </td>
+               <td id="menu-panel" valign="top" height="400px">
+                  <div id='mainMenu'>
+                     <ul>
+                        <li><a href='normalUser_home.jag'><span>Home</span></a></li>
+                        <li><a href='admin_requests.jag'><span>Requests</span></a></li>
+                        <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                     </ul>
+                  </div>
+               </td>
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div"></div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
                                     </tr>
-
-                                    </tbody></table>
-                            </td>
-
-                            <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
-
+                                 </tbody>
+                              </table>
+                           </td>
                         </tr>
-                        </tbody></table>
-                </td>
-            </tr>
+                        <!--<tr>-->
+                        <!--<td id="body">-->
+                        <!--<img src="./page2_files/1px.gif" width="735px" height="1px">-->
+                        <!--</td>-->
+                        <!--</tr>-->
+                        <!--This is edited for tabbed pane implementation -->
+                        <tr>
+                           <td>
+                              <div id="normalHomeListContainer" class="main_container">
+                                 <ul id="expList">
+                                    <li>
+                                       <h2><span style="color: #00346e">My Requests</span></h2>
+                                       <ul>
+                                          </br>
+                                          <li>
+                                             <div id="allRequests" class="datagrid">
+                                                <!--data is loaded by the javascript function loadAllIssues()-->
+                                                <table id="requestTable">
+                                                   '
+                                                   <thead>
+                                                      <tr>
+                                                         <th>Device Type</th>
+                                                         <th>Purpose</th>
+                                                         <th>Requirement</th>
+                                                         <th></th>
+                                                      </tr>
+                                                   </thead>
+                                                   <tbody id="requestArea">
+                                                   </tbody>
+                                                </table>
+                                             </div>
+                                          </li>
+                                       </ul>
+                                    </li>
+                                    </br>
+                                    <hr  style="margin-bottom: 25px"/>
+                                    </br>
+                                    <li>
+                                       <h2><span style="color: #00346e">My Devices</span></h2>
+                                       <ul>
+                                          </br>
+                                          <li>
+                                             <div id="allDevices" class="datagrid">
 
-            <!--This is edited for tabbed pane implementation -->
+                                                <table id="deviceTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Device ID</th>
+                                                            <th>Device Type</th>
+                                                            <th>Status</th>
+                                                            <th>Health Rating</th>
+                                                            <th>Go to Devicepage</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                       <tbody id="deviceArea">
+                                                   </tbody>
+                                                </table>
+
+                                             </div>
+                                          </li>
+                                       </ul>
+                                    </li>
+                                    </br>
+                                    <hr/>
+                                    </br>
+                                 </ul>
+                              </div>
+                              <!--<button id="addDeviceButton" name="addDeviceButton">Add New Device</button>-->
+                              <input type="button" id="addDeviceButton" class="siteButton" value="Add New Device"/>
+                              <!-- This is the form for adding a new device -->
+                              <div id="addDeviceForm">
+                                 <form>
+                                    <label id="selectDeviceLbl">Select Device Type</label>
+                                    <select id="deviceTypeSelect">
+                                       <option id="option1">Device1</option>
+                                       <option id="option2">Device2</option>
+                                       <option id="option3">Device3</option>
+                                       <option id="option4">Device4</option>
+                                    </select>
+                                    <br/>
+                                    <table id="textAreas" cellspacing="40px">
+                                       <tr>
+                                          <td style="vertical-align: middle"><label id="purposeLbl" for="purposeArea">Request Purpose</label></td>
+                                          <td><textarea rows="8" cols="80" id="purposeArea" ></textarea></td>
+                                       </tr>
+                                       <tr style="vertical-align: middle">
+                                          <td  style="vertical-align: middle"><label id="requirementLbl" for="requirementArea">Requirement Details</label></td>
+                                          <td><textarea rows="8" cols="80" id="requirementArea" ></textarea></td>
+                                       </tr>
+                                       <tr>
+                                          <td colspan="2">
+                                             <!--<input type="button" value="Submit" id="addDeviceSubmit" style="margin-top: 50px;float: right" />-->
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </form>
+                              </div>
+                           </td>
+                        </tr>
+                        <!-- End of tab pane generation -->
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
             <tr>
-                <td>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <div id="listContainer">
-                        <ul id="expList">
-                            <li><h2>My Requests</h2>
-                                <ul class="myRequests"></br>
-                                    <li>Item A.1</li>
-                                    <li>Item A.2</li>
-                                    <li>Item A.3</li>
-                                </ul>
-                            </li></br><hr/></br>
-                            <li><h2>My Devices</h2>
-                                <ul></br>
-                                    <li>Nadeeshaan</li>
-                                    <li>Ayeshan</li>
-                                    <li>Kavindi</li>
-                                </ul>
-                            </li></br><hr/></br>
-                        </ul>
-                    </div>
-
-                    <!--<button id="addDeviceButton" name="addDeviceButton">Add New Device</button>-->
-                    <input type="button" id="addDeviceButton" value="Add New Device"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <!-- This is the form for adding a new device -->
-                    <div id="addDeviceForm">
-                        <form>
-                            <label id="selectDeviceLbl">Select Device Type</label>
-                            <select id="deviceTypeSelect">
-                                <option id="option1">Device1</option>
-                                <option id="option2">Device2</option>
-                                <option id="option3">Device3</option>
-                                <option id="option4">Device4</option>
-                            </select><br/>
-
-                            <table id="textAreas" cellspacing="40px">
-                                <tr>
-                                    <td style="vertical-align: middle"><label id="purposeLbl" for="purposeArea">Request Purpose</label></td>
-                                    <td><textarea rows="8" cols="80" id="purposeArea" ></textarea></td>
-                                </tr>
-
-                                <tr style="vertical-align: middle">
-                                    <td  style="vertical-align: middle"><label id="requirementLbl" for="requirementArea">Requirement Details</label></td>
-                                    <td><textarea rows="8" cols="80" id="requirementArea" ></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <!--<input type="button" value="Submit" id="addDeviceSubmit" style="margin-top: 50px;float: right" />-->
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
-                </td>
+               <td id="footer" colspan="3">
+                  <div id="footer-div">
+                     <div class="footer-content">
+                        <div class="copyright">
+                           © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                        </div>
+                     </div>
+                  </div>
+               </td>
             </tr>
-
-            <!-- End of tab pane generation -->
-
-            </tbody>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td id="footer" colspan="3">
-
-        <div id="footer-div">
-            <div class="footer-content">
-                <div class="copyright">
-                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
-                </div>
-                <!--div class="poweredby">
-                </div-->
-            </div>
-        </div>
-
-    </td>
-</tr>
-</tbody></table>
-<script type="text/javascript">
-    if (Function('/*@cc_on return document.documentMode===10@*/')()){
-        document.documentElement.className+=' ie10';
-    }
-</script>
-
-
-
-</body></html>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+         if (Function('/*@cc_on return document.documentMode===10@*/')()){
+             document.documentElement.className+=' ie10';
+         }
+      </script>
+   </body>
+</html>

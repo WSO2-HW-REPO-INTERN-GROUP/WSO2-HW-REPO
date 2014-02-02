@@ -1,0 +1,46 @@
+<%
+
+function addOrder(bookName, authName, bookType) {
+    if (session.get("count") == null) {
+        session.put("count", 0);
+    }
+    var orderIdx = session.get("count");
+
+    var orderO = session.get("orders");
+    if (orderO != null) {
+        //orderIdx = orderO.length;
+        var orderCount = session.get("count");
+        orderCount++;
+        session.put("count", orderCount);
+        orderIdx = orderCount;
+    }
+    var hasBookType = bookdata.indexOf(bookType);
+
+
+    if (hasBookType != null) {
+        var orders;
+        if (orderO != null) {
+            var orderJson = session.get("orders"); // get order array from session
+            orderJson.push(orderIdx);		//push new order to the already retrieved orderlist
+            session.put("orders", orderJson);	// restore order list in session
+        } else {
+            session.put("orders", [0]);
+        }
+        var object = {
+            "ORDER_ID": orderIdx,
+            "BOOK-TYPE": bookType,
+            "NAME": bookName,
+            "AUTHOR": authName,
+        };
+        session.put("o" + orderIdx, object);
+        //order is been taken
+        var result = session.get("o" + orderIdx);
+        print(result);
+    } else {
+        print({
+            "Infor": "Sorry, Book Cannot be added"
+        });
+    }
+}
+
+%>
