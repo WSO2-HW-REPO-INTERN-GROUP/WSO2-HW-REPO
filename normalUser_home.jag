@@ -63,7 +63,7 @@
          };
          
          
-         $("#addDeviceForm").dialog({
+         $("#requestDeviceForm").dialog({
          autoOpen:false,
          height: 500,
          width: 800,
@@ -76,19 +76,21 @@
          
              alert(deviceType+" "+purpose+" "+requirements);
          //                        window.location.href = "test.jag";
-             Hwdrepo.addDevice(deviceType,purpose,requirements);
+             Hwdrepo.requestDevice(deviceType,purpose,requirements);
              $(this).dialog('close');
+
+             Hwdrepo.viewRequests();
          
          }
          }
          });
          
-         $("#addDeviceButton").click(function(event)
+         $("#addRequestButton").click(function(event)
          {
          //Stop any default actions on the button.
          event.preventDefault();
          //Open your dialog.
-         $("#addDeviceForm").dialog("open");
+         $("#requestDeviceForm").dialog("open");
          
          });
          
@@ -247,10 +249,12 @@
                                                 <table id="deviceTable">
                                                     <thead>
                                                         <tr>
-                                                            <th>Device ID</th>
                                                             <th>Device Type</th>
-                                                            <th>Status</th>
-                                                            <th>Health Rating</th>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th>Assigned</th>
+                                                            <th>Revoked</th>
+                                                            <th>Health</th>
                                                             <th>Go to Devicepage</th>
                                                         </tr>
                                                     </thead>
@@ -268,17 +272,17 @@
                                     </br>
                                  </ul>
                               </div>
-                              <!--<button id="addDeviceButton" name="addDeviceButton">Add New Device</button>-->
-                              <input type="button" id="addDeviceButton" class="siteButton" value="Add New Device"/>
+                              <!--<button id="addRequestButton" name="addRequestDevice">Add New Device</button>-->
+                              <input type="button" id="addRequestButton" class="siteButton" value="Request Device"/>
                               <!-- This is the form for adding a new device -->
-                              <div id="addDeviceForm">
+                                 <div id="requestDeviceForm">
                                  <form>
                                     <label id="selectDeviceLbl">Select Device Type</label>
                                     <select id="deviceTypeSelect">
-                                       <option id="option1">Device1</option>
-                                       <option id="option2">Device2</option>
-                                       <option id="option3">Device3</option>
-                                       <option id="option4">Device4</option>
+                                       <option id="option1">pad</option>
+                                       <option id="option2">laptop</option>
+                                       <option id="option3">desktop</option>
+                                       <option id="option4">server</option>
                                     </select>
                                     <br/>
                                     <table id="textAreas" cellspacing="40px">

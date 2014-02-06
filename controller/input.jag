@@ -1,6 +1,8 @@
 <%
 
-var serverPath= "http://localhost:9765/WSO2-HW-REPO";
+include("../model/inputModel.jag");
+
+var serverPath = "http://localhost:9765/WSO2-HW-REPO";
 response.contentType = 'text/javascript';
 
 var verb = request.getMethod();
@@ -9,143 +11,108 @@ var uri = request.getRequestURI();
 
 
 var log = new Log();
-var reqs = {'requests' : [
 
 
-    {'device':"Toshiba",'purpose':"testing",'req':"biz-group"},
-    {'device':"Dell",'purpose':"testing",'req':"dev-group"},
-    {'device':"Lenovo",'purpose':"testing",'req':"QA-group"},
-    {'device':"Apple",'purpose':"testing",'req':"strategy-group"}
+session.put('user-id','1');
 
-]};
-session.put('requests', reqs);
-
-if(request.getParameter('operation') != null){
-var opr=request.getParameter('operation');
-}
-else{
-    var opr=parse(data).operation;
-    var deviceID=parse(data).deviceID;
-    log.info(opr);
+if (request.getParameter('operation') != null) {
+    var opr = request.getParameter('operation');
+} else {
+    var opr = parse(data).operation;
+    var deviceID = parse(data).deviceID;
 }
 
-if(data != null ) {
+if (data != null) {
 
 }
 
 
 
-if(verb == "POST" ) {
+if (verb == "POST") {
 
 
-    if(opr == 'addDevice'){
+    if (opr == 'addDeviceRequest') {
 
-        reqs = session.get("requests");
-       // log.info(session.get("requests"));
-       // log.info(parse(data));
-        var addDeviceObj = parse(data);
-        delete addDeviceObj.operation;
-        //inserts add device to the data strucuture
-         reqs.requests.push(addDeviceObj);
+        var user_id = session.get('user-id');
 
-        //log.info(reqs);
+        var addRequestObj = parse(data).dev;
 
-        session.put('requests', reqs);
+        var viewReqObj={'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
 
-        reqs = session.get("requests");
+        addNewRequest(viewReqObj);
+       
+    } else if (opr == 'getDeviceDetails') {
 
-        print(
+        print(viewDeviceByID(deviceID));
 
-                reqs
-        );
-        //addDevice     */
-    }
 
-    else if(opr=='getDeviceDetails'){
-        getBasicDetails(deviceID);
-    }
+    } else if (opr == 'getAccessories') {
+        print(viewAccessoryByDeviceID(deviceID));
+    } else if (opr == 'upgradeHistory') {
 
-    else if(opr=='getAccessories'){
-        getAccessories(deviceID);
-    }
 
-    else if(opr=='upgradeHistory'){
-        getUpgradeHistory(deviceID);
-    }
-    else if(opr=='getIssues'){
-        getReportedIssues(deviceID);
-    }
-    else if(opr=='addIssue') {
-        print(
-                {'information' : 'issue reported successfully'}
+        print(viewUpgradeHistoryByDeviceID(deviceID));
+    } else if (opr == 'getIssues') {
+
+
+        print(viewIssueHistoryByDeviceID(deviceID));
+    } else if (opr == 'addIssue') {
+
+        var addIssueObj = parse(data);
+
+        addIssue(addIssueObj.issue);
+        print({
+                    'information': 'issue reported successfully'
+                }
 
         );
     }
 
 
-
-} else if(verb == "GET" && opr =='loadRequests') {
-
-    reqs=session.get("requests");
-
-    print(
-            reqs
-
-    );
 }
 
-else if(verb == "GET" && opr =='loadDevices') {
-    print(
-
-            {'devices' : [
+if (verb == "GET") {
 
 
-                {'device':"Toshiba",'purpose':"testing",'req':"biz-group",'health':"3",'id':"11001"},
-                {'device':"Dell",'purpose':"testing",'req':"dev-group",'health':"3",'id':"11002"},
-                {'device':"Lenovo",'purpose':"testing",'req':"QA-group",'health':"3",'id':"11003"},
-                {'device':"Apple",'purpose':"testing",'req':"strategy-group",'health':"3",'id':"11004"}
+    if (opr == 'loadRequests') {
 
-            ]}
+        var user_id = session.get('user-id');
+
+        var result=viewRequestsByUser(user_id);
 
 
-    );
+
+        // if result has multiple entries it is returned as an array View requests results of type
+        // {"requests":[{result1},{result2},{re...}]}
+
+        if( Object.prototype.toString.call(result) === '[object Array]' ) {
+            print({"requests":result});
+        }
+        else{
+            print({"requests":[result]});
+        }
+
+
+
+
+    } else if (opr == 'loadDevices') {
+
+        var user_id = session.get('user-id');
+
+        var result=viewDevicesByUser(user_id);
+
+        // if result has multiple entries it is returned as an array View requests results of type
+        // {"devices":[{result1},{result2},{re...}]}
+
+        if( Object.prototype.toString.call(result) === '[object Array]' ) {
+            print({"devices":result});
+        }
+        else{
+            print({"devices":[result]});
+        }
+
+
+    }
 }
-
-
-function getBasicDetails(deviceID){
-    var basicDetails={"Device ID":deviceID,"Device Serial":"AASD3345FFA1","Make":"Dell","Model":"Vostro","Health Rating":"3"};
-
-    print(JSON.stringify(basicDetails));
-}
-
-function getAccessories(deviceID){
-    var accessories=[{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"},{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"}];
-    print(JSON.stringify(accessories));
-}
-
-function getUpgradeHistory(deviceID){
-
-    var uph=[{"Upgrade Id":1,"Issue Id":23,"Issue Details":"Demo Issue1","Upgrade Details":"Demo Upgrade2"},{"Upgrade Id":2,"Issue Id":34,"Issue Details":"Demo Issue2","Upgrade Details":"Demo Upgrade1"}];
-
-    print(JSON.stringify(uph));
-}
-
-function getReportedIssues(deviceID){
-
-    var reportedIsues=[
-        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
-        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
-        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"},
-        {"Issue ID":"001","Device ID":"0012","Reported Date":"2012/12/12","User Name":"shaminda@wso2.com"}
-    ];
-
-    print(JSON.stringify(reportedIsues));
-
-}
-
-
-
-
-
 
 %>

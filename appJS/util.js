@@ -24,4 +24,4 @@ HwdrepoUtil = new function () {
         });
     };
 
-};
+}
