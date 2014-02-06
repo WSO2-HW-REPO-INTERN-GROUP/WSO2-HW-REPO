@@ -42,6 +42,7 @@
             
                         //read the id value sent via the url
                         readURL()
+                        var warrantyID;
             
                         $("#renewPopup").dialog({
                             autoOpen:false,
@@ -58,12 +59,12 @@
 
                                         //alert("HHH");
 
-                                        $.post("admin_requests_handler.jag",{newEndDate:endDate.value,request:"renewWarranty"},function(data){
-                                                alert(data);
+                                        $.post("admin_devices_updates.jag",{newEndDate:endDate.value,warrantyNum:warrantyID[1],operation:"renewWarranty"},function(data){
+                                                alert(warrantyID);
                                         });
 
 
-                                        $(this).dialog('close');
+                                        $(this).dialog(data);
                                     }
                                     else{
                                         var errSpan=document.getElementById("errSpan");
@@ -86,11 +87,11 @@
             
                         function readURL(){
                             var urlData=window.location.search.substring(1);
-                            var warrantyID=urlData.split("=");
+                            warrantyID=urlData.split("=");
             
                             var i=0;
             
-                            $.post("admin_home_Operations.jag",{warrantyID:warrantyID[1],operation:"getWarrantyDetails"},function(data,status){
+                            $.post("admin_data_get.jag",{warrantyID:warrantyID[1],operation:"getWarrantyDetailsByID"},function(data,status){
             
                                 var object=JSON.parse(data);
             

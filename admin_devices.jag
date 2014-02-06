@@ -11,18 +11,13 @@
             <link href="css/adminDevices.css" rel="stylesheet" type="text/css" media="all">
             <link rel="stylesheet" href="css/carbonFormStyles.css">
             <link rel="stylesheet" href="css/jquery-ui.css">
-            <!--[if gte IE 8]>
-            <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-            <![endif]-->
-            <!--[if gte IE 7]>
-            <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-            <![endif]-->
             <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
             <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
             <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
             <script type="text/javascript" src="js/jquery-ui.js"></script>
             <script type="text/javascript" src="js/customControls.js"></script>
-            <script type="text/javascript" src="js/jquery.ui.dialog.js"></script>
+            <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+            <!--<script type="text/javascript" src="js/jquery.ui.dialog.js"></script>-->
 
             <!-- This script handles the tabbed pane functionality -->
             <script type="text/javascript">
@@ -30,7 +25,11 @@
 
                     var basicFields=new Array();
 
-                    basicFields=[$("#serial"),$("#model"),$('#make'),$("purchaseDate"),$('#supplier'),$('#remarks'),$("#deviceType")];
+                    basicFields=[$("#serial"),$('#make'),$("#model"),$("#rating"),$("#purchaseDate"),$('#supplier'),$('#remarks'),$("#deviceType"),$("#warrantyEndDate")];
+                    var inputData={};
+
+                    var remarks;
+
                     var dropdownSelect="";
                 
                     getAllDevices();
@@ -46,21 +45,36 @@
                             var submitError=false;
                             var deviceType=$('#deviceType').val();
                             var inputJsonObj={};
+                            //var queryType;
 
-                            alert(deviceType);
+                            //alert(deviceType);
 
                                 for(var i=0;i<basicFields.length;i++){
+                                    //alert(basicFields[i].attr('id'));
                                     if(basicFields[i].val()==""){
                                             //alert(deviceType);
                                             basicFields[i].removeClass("inputField");
                                             basicFields[i].addClass("errorInputField");
                                             submitError=true;
+                                            
                                     }
                                     else{
+                                            //alert("HUTAA");
                                             basicFields[i].removeClass("errorInputField");
                                             basicFields[i].addClass("inputField");
+                                            if(i==6){
+                                                remarks=basicFields[i].val();
+                                            }
+                                            else if(i!=7){
+                                                //alert(basicFields[i].attr('id'));
+                                                inputData[basicFields[i].attr('id')]=basicFields[i].val();
+                                            }
+                                            
                                     }
                                 }
+                                //alert(inputData['make']);
+                                //alert(JSON.stringify(inputData));
+                                
 
                                 switch (deviceType){
 
@@ -69,11 +83,12 @@
 
                                     case '1':{
                                         var padFields=new Array();
-                                        var itemsArr={};
+                                        var namesArray=['sn','make','model','rating','date','supplier','screen','touch','cam','vga','remarks'];
+                                        //var itemsArr={};
 
                                         padFields=[$("#padScreen"),$("#padTouch"),$("#padCam"),$("#padVga")];
 
-                                        inputJsonObj["type"]="pad";
+                                        inputJsonObj["type"]="AddPad";
 
                                         for(var i=0;i<padFields.length;i++){
 
@@ -85,11 +100,16 @@
                                             else{
                                                     padFields[i].removeClass("errorInputField");
                                                     padFields[i].addClass("inputField");
-                                                    itemsArr[padFields[i].attr('id')]=padFields[i].val();
+                                                    //temsArr[padFields[i].attr('id')]=padFields[i].val();
+                                                    inputData[padFields[i].attr('id')]=padFields[i].val();
                                             }
                                         }
 
-                                        inputJsonObj["pad"]=itemsArr;
+                                        inputData['remarks']=remarks;
+                                        //queryType="AddPad";
+
+                                        inputJsonObj["padData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
 
                                         break;
                                     }
@@ -98,11 +118,13 @@
 
                                     case '2':{
 
-                                        var desktopsFields=new Array();
-                                        var itemsArr={};
-                                        inputJsonObj["type"]="deskTop";
 
-                                        desktopsFields=[$("#dtProcessor"),$("#dtMemory"),$("#dtVga"),$("#dtHdd")];
+                                        var desktopsFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','cpu','memory','remarks'];
+                                        //var itemsArr={};
+                                        inputJsonObj["type"]="AddDesktop";
+
+                                        desktopsFields=[$("#dtProcessor"),$("#dtMemory")/*,$("#dtVga"),$("#dtHdd")*/];
 
                                         for(var i=0;i<desktopsFields.length;i++){
                                             if(desktopsFields[i].val()==""){
@@ -113,21 +135,30 @@
                                             else{
                                                     desktopsFields[i].removeClass("errorInputField");
                                                     desktopsFields[i].addClass("inputField");
-                                                    itemsArr[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                                    //itemsArr[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                                    inputData[desktopsFields[i].attr('id')]=desktopsFields[i].val();
                                             }
                                         }
-                                        inputJsonObj["deskTop"]=itemsArr;
+                                        //inputJsonObj["deskTop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+                                        //queryType="AddDesktop";
+
+                                        inputJsonObj["desktopData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+
 
                                         break;
                                     }
 
 
-                                    case '3':
+                                    case '3':{
                                         var laptopsFields=new Array();
-                                        var itemsArr={};
-                                        inputJsonObj["type"]="laptop";
+                                        var namesArray=['sn','make','model','rating','date','supplier','screen','cpu','vga','memory','remarks'];
+                                        //var itemsArr={};
+                                        inputJsonObj["type"]="AddLaptop";
 
-                                        laptopsFields=[$("#lapScreen"),$("#lapProcessor"),$("#lapMemory"),$("#lapVga"),$("#lapHdd")];
+                                        laptopsFields=[$("#lapScreen"),$("#lapProcessor"),$("#lapVga"),$("#lapMemory")/*,$("#lapHdd")*/];
                                         for(var i=0;i<laptopsFields.length;i++){
                                             if(laptopsFields[i].val()==""){
                                                 laptopsFields[i].removeClass("inputField");
@@ -137,22 +168,37 @@
                                             else{
                                                     laptopsFields[i].removeClass("errorInputField");
                                                     laptopsFields[i].addClass("inputField");
-                                                    itemsArr[laptopsFields[i].attr('id')]=laptopsFields[i].val();
+                                                    //itemsArr[laptopsFields[i].attr('id')]=laptopsFields[i].val();
+                                                    inputData[laptopsFields[i].attr('id')]=laptopsFields[i].val();
                                             }
                                         }
 
-                                        inputJsonObj["laptop"]=itemsArr;
+                                        //inputJsonObj["laptop"]=itemsArr;
+                                        inputData['remarks']=remarks;
 
-                                    break;
+                                        //queryType="AddLaptop";
+
+                                        inputJsonObj["laptopData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+                                        alert(inputData);
+
+                                        break;
+                                    }
                                 }
 
                                 if(submitError==false){
+                                    //alert(JSON.stringify(inputJsonObj));
 
-                                    $.post("admin_requests_handler.jag",{request:"test",arr:JSON.stringify(inputJsonObj)},function(data){
+
+                                    $.post("admin_devices_updates.jag",{operation:"update",arr:JSON.stringify(inputJsonObj)},function(data){
                                         alert(data);
                                     });
 
                                     //$(this).dialog("close");
+                                }
+                                else{
+                                    inputData={};
                                 }
                             }
                         }
@@ -209,6 +255,7 @@
                 
                     $(function() {
                         $( "#purchaseDate" ).datepicker();
+                        $("#warrantyEndDate").datepicker();
                     });
 
 
@@ -216,18 +263,133 @@
                         var userName=document.getElementById("userName");
                         var serialNum=document.getElementById('serialNum');
                         var deviceTypeSelect=document.getElementById("deviceTypeSelect");
+                        var radioGroup=document.getElementsByName("searchType");
                         var errSpan=document.getElementById("searchErr");
+                        var queryType;
 
-                        if(userName.value=="" && serialNum.value==""){
-                            errSpan.classList.remove(errSpan.className);
-                            errSpan.classList.add("error");
-                            errSpan.textContent="Please insert search Text"
+                        for(var a=0;a<radioGroup.length;a++){
+                            if(radioGroup[a].checked){
+                                if(radioGroup[a].value=="0"){
+                                    if(serialNum.value==""){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=0;
+                                        getSearchedDevices(queryType,serialNum.value);
+                                    }
+                                }
+                                else if(radioGroup[a].value=="1"){
+                                    if(userName.value==""){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=1;
+                                        getSearchedDevices(queryType,userName.value);
+                                    }
+                                }
+                                else if(radioGroup[a].value=="2"){
+                                    if(deviceTypeSelect.value=="0"){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=2;
+                                        getSearchedDevices(queryType,deviceTypeSelect.options[deviceTypeSelect.selectedIndex].text);
+                                    }
+                                }
+                            }
+                            else{
+                                    errSpan.classList.remove(errSpan.className);
+                                    errSpan.classList.add("error");
+                                    errSpan.textContent="Please insert search Text";
+                                }
                         }
-                        else{
 
+
+
+                        // if(userName.value=="" && serialNum.value==""&&deviceTypeSelect.value=="0"){
+                        //     errSpan.classList.remove(errSpan.className);
+                        //     errSpan.classList.add("error");
+                        //     errSpan.textContent="Please insert search Text";
+                        // }
+                        // else{
+
+                        //     var tableArea=document.getElementById('deviceDetailsDiv');
+                        //     var devicesTbl=document.getElementById('devices');
+                        //     var tbody=document.createElement('tbody');
+
+                        //     tableArea.setAttribute("class","datagrid");
+                        //     devicesTbl.style.width="800px";
+
+
+                        //     errSpan.classList.remove(errSpan.className);
+                        //     errSpan.classList.add("hidden");
+
+                        //     while ( devicesTbl.rows.length > 1 )
+                        //     {
+                        //         devicesTbl.deleteRow(1);
+                        //     }
+
+
+                        //     $.post("admin_devices_operations.jag",{operation:"getSearchedDevices",userName:userName.value,serial:serialNum.value,deviceType:deviceTypeSelect.value},function(data,status){
+
+                        //         var objArray=JSON.parse(data);
+
+
+                        //         var i=0;
+
+                        //         for(var i=0;i<objArray.length;i++){
+
+                        //             var deviceId;
+
+                        //             var newRow=document.createElement('tr');
+
+                        //             if(i%2==0){
+                        //                 newRow.setAttribute("class","alt");
+                        //             }
+
+                        //             var object=objArray[i];
+
+                        //             for(var property in object){
+
+                        //                 var td=document.createElement('td');
+
+                        //                 td.appendChild(document.createTextNode(object[property]));
+
+                        //                 newRow.appendChild(td);
+
+                        //                 if(property=="Device ID"){
+                        //                     deviceId=object[property];
+                        //                 }
+                        //             }
+                        //             var link=document.createElement('a');
+                        //             link.setAttribute("href","admin_device_details.jag?id="+deviceId);
+                        //             link.innerHTML="more";
+                        //             var  linkTD=document.createElement("td");
+                        //             linkTD.appendChild(link);
+                        //             newRow.appendChild(linkTD);
+
+                        //             tbody.appendChild(newRow);
+                        //         }
+
+                        //         devicesTbl.appendChild(tbody);
+
+                        //     });
+                        // }
+                    });
+                });
+
+
+                function getSearchedDevices(queryType,searchText){
                             var tableArea=document.getElementById('deviceDetailsDiv');
                             var devicesTbl=document.getElementById('devices');
                             var tbody=document.createElement('tbody');
+                            var errSpan=document.getElementById("searchErr");
 
                             tableArea.setAttribute("class","datagrid");
                             devicesTbl.style.width="800px";
@@ -242,7 +404,9 @@
                             }
 
 
-                            $.post("admin_devices_operations.jag",{operation:"getSearchedDevices",userName:userName.value,serial:serialNum.value,deviceType:deviceTypeSelect.value},function(data,status){
+                            $.post("admin_devices_data_get.jag",{operation:"getSearchedDevices",queryType:queryType,searchText:searchText},function(data,status){
+
+                                alert(data);
 
                                 var objArray=JSON.parse(data);
 
@@ -269,7 +433,7 @@
 
                                         newRow.appendChild(td);
 
-                                        if(property=="Device ID"){
+                                        if(property=="device_id"){
                                             deviceId=object[property];
                                         }
                                     }
@@ -286,9 +450,7 @@
                                 devicesTbl.appendChild(tbody);
 
                             });
-                        }
-                    });
-                });
+                }
                 
                 
                 
@@ -296,15 +458,16 @@
                 
                 function getAllDevices(){
                 
+
                     var tableArea=document.getElementById('deviceDetailsDiv');
                     var devicesTbl=document.getElementById('devices');
                     var tbody=document.createElement('tbody');
                 
                     tableArea.setAttribute("class","datagrid");
-                    devicesTbl.style.width="800px";
-                
-                    $.post("admin_devices_operations.jag",{operation:"getAllDevices"},function(data,status){
-                
+                    devicesTbl.style.width="850px";
+
+                    $.post("admin_devices_data_get.jag",{operation:"getAllDevices"},function(data,status){
+                    
                         var objArray=JSON.parse(data);
                 
                         var i=0;
@@ -328,7 +491,7 @@
                 
                                 td.appendChild(document.createTextNode(object[property]));
 
-                                if(property=="Device ID"){
+                                if(property=="device_id"){
                                     deviceId=object[property];
                                 }
                 
@@ -461,18 +624,33 @@
                                             <div id="devicesSearch">
                                                 <table id="operations" cellspacing="10px">
                                                     <tr>
+
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="0" id="serialBtn">Device Serial Number<br>
+                                                        </td>
                                                         <td>
                                                             <input type="text" placeholder="Serial Number" class="inputField" id="serialNum"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="1" id="userBtn">User Name<br>
                                                         </td>
                                                         <td>
                                                             <input type="text" placeholder="User Name" class="inputField" id="userName"/>
                                                         </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="2" id="deviceTypeBtn">Device Type<br>
+                                                        </td>
                                                         <td>
                                                             <select id="deviceTypeSelect" class="siteButton">
                                                                 <option selected="selected" disabled="disabled" value="0">Select Device Type</option>
-                                                                <option id="dev1" value="1">Device 1</option>
-                                                                <option id="dev2" value="2">Device 2</option>
-                                                                <option id="dev3" value="3">Device 3</option>
+                                                                <option id="dev1" value="1">pad</option>
+                                                                <option id="dev2" value="2">laptop</option>
+                                                                <option id="dev3" value="3">desktop</option>
+                                                                <option id="dev3" value="4">server</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -495,15 +673,18 @@
                                                 <table id="devices">
                                                     <thead>
                                                         <tr>
-                                                            <th>Device ID</th>
-                                                            <th>Device Type</th>
-                                                            <th>Status</th>
-                                                            <th>User</th>
-                                                            <th>Health Rating</th>
+                                                            <th style="width:30px">Device ID</th>
+                                                            <th>Device Serial</th>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th style="width:30px">Rating</th>
+                                                            <th>Purchase Date</th>
+                                                            <th>Type</th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
                                                 </table>
+                                                <div style="height:50px"></div>
                                             </div>
                                             <div id="searchedDeviceDetailsDiv" style="display: none">
                                                 <table id="searchedDevices">
@@ -532,8 +713,14 @@
                                                     <tr>
                                                         <td><label>Make</label></td>
                                                         <td><input type="text" id="make" class="inputField" style="width: 225px"/></td>
+                                                        <td><label>Rating (I to 5)</label></td>
+                                                        <td><input type="text" id="rating" class="inputField" style="width: 225px"/></td>
+                                                    </tr>
+                                                    <tr>
                                                         <td><label>Purchase Date</label></td>
                                                         <td><input type="text" id="purchaseDate" class="inputField" style="width: 225px"/></td>
+                                                        <td><label>Warranty End Date</label></td>
+                                                        <td><input type="text" id="warrantyEndDate" class="inputField" style="width: 225px"/></td>
                                                     </tr>
                                                     <tr>
                                                         <td><label>Supplier</label></td>

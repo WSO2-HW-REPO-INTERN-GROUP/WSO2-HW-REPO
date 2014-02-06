@@ -36,7 +36,7 @@
             
                 getReportedIssues();
             
-            
+    
 
                 alert(issueID);
             });
@@ -44,9 +44,10 @@
             function getReportedIssues(){
 
                 var urlData=window.location.search.substring(1);
-                var issueID=urlData.split("=");
+                var deviceID=urlData.split("=");
+                alert(deviceID);
 
-                $.post("getOperationValues.jag",{operation:"getReportedIssues",},function(data,status){
+                $.post("admin_devices_data_get.jag",{operation:"getReportedIssues",device_id:deviceID[1]},function(data,status){
             
                     alert(data);
             
@@ -58,6 +59,7 @@
                             for(var i=0;i<objArray.length;i++){
             
                                 var cntr=0;
+                                var device_id;
             
                                 var newTable=document.createElement('table');
                                 newTable.style.width='600px';
@@ -83,8 +85,12 @@
                                         newRow.setAttribute("class","alt");
                                     }
             
-                                    if(property=='Upgrade Id'){
-                                        th.appendChild(document.createTextNode("Upgrade ID: "+object[property]));
+                                    if(property=='issue_number'){
+                                        th.appendChild(document.createTextNode("Issue ID: "+object[property]));
+                                    }
+
+                                    if(property=="device_id"){
+                                        device_id=object[property];
                                     }
             
                                     else{
@@ -115,7 +121,7 @@
                                     linkTd.setAttribute("colspan","2");
             
                                     var link=document.createElement('a');
-                                    link.setAttribute("href",object[property]);
+                                    link.setAttribute("href",("admin_issue_details.jag?id="+device_id));
                                     link.innerHTML='more';
                                     linkTd.appendChild(link);
                                     linkRow.appendChild(linkTd);

@@ -1561,8 +1561,10 @@ label.error{
 
 .datagrid table {
     border-collapse: collapse; text-align: center; width: 100%;
+    /*border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;*/
 }
 .datagrid {
+
     font: normal 12px/150% Arial, Helvetica, sans-serif;
     background: #fff;
     overflow: hidden;
@@ -1582,12 +1584,12 @@ label.error{
     font-weight: bold;
     border-left: 1px solid #0070A8;
 }
-.datagrid table thead th:first-child {
+/*.datagrid table thead th:first-child {
     border: none;
-}
+}*/
 .datagrid table tbody td {
     color: #121212;
-    border-left: 2px solid #E1EEF4;
+    border: 2px solid #E1EEF4;
     font-size: 13px;
     font-weight: normal;
 }
@@ -1595,12 +1597,12 @@ label.error{
     background: #E1EEF4;
     color: #121212;
 }
-.datagrid table tbody td:first-child {
+/*.datagrid table tbody td:first-child {
     border-left: none;
 }
 .datagrid table tbody tr:last-child td {
     border-bottom: none;
-}
+}*/
 
 #listContainer{
     margin-top:15px;
@@ -1657,4 +1659,9 @@ label.error{
     border: 2px solid #ff0900;
     border-radius: 7px;
     height: 20px;
+}
+
+.linkLabel{
+    cursor: pointer;
+    color: #3874c1;
 }

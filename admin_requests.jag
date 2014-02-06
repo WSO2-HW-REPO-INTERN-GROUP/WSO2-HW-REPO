@@ -34,21 +34,75 @@
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 loadRequests();
+                prepareList();
             
             });
+
+
+            function prepareList() {
+                            $('#expList').find('li:has(ul)').unbind('click').click(function(event) {
+                                if(this == event.target) {
+                                    $(this).toggleClass('expanded');
+                                    $(this).children('ul').toggle('medium');
+                                }
+                                return false;
+                            }).addClass('collapsed').removeClass('expanded').children('ul').hide();
+            
+                            //Hack to add links inside the cv
+                            $('#expList a').unbind('click').click(function() {
+                                window.open($(this).attr('href'));
+                                return false;
+                            });
+                            //Create the button functionality
+                            $('#expandList').unbind('click').click(function() {
+                                $('.collapsed').addClass('expanded');
+                                $('.collapsed').children().show('medium');
+                            })
+                            $('#collapseList').unbind('click').click(function() {
+                                $('.collapsed').removeClass('expanded');
+                                $('.collapsed').children().hide('medium');
+                            })
+                        }
+
+
+
+            function acceptRejectBtnClick(requestId,action){
+                if(action=="0"){
+                    alert(requestId+"--reject");
+                    // $.post("admin_devices_updates.jag",{operation:"acceptRejcet",value:action,issue_id:requestId},function(data,status){
+
+                    // });
+                }
+                else if(action=="1"){
+                    alert(requestId+"--Accept");
+
+                }
+                $.post("admin_devices_updates.jag",{operation:"acceptRejcetRequest",value:action,req_id:requestId},function(data,status){
+                        alert("jhjfhsj");
+                    });
+                
+            }
+
+
             
             function loadRequests(){
-                $.post("getOperationValues.jag",{operation:"getAllRequests"},function(data,status){
+                $.post("admin_requests_data_get.jag",{operation:"getUnresolved"},function(data,status){
             
                     alert(data);
             
                     var objArray=JSON.parse(data);
             
-                            var tablearea = document.getElementById('requestsDiv');
-                            tablearea.setAttribute("class","datagrid");
+                            var unresolvedTablearea = document.getElementById('unresolvedDiv');
+                            var pendingTablearea = document.getElementById('pendingDiv');
+                            var rejectedTablearea = document.getElementById('rejectedDiv');
+
+                            unresolvedTablearea.setAttribute("class","datagrid");
+                            pendingTablearea.setAttribute("class","datagrid");
+                            rejectedTablearea.setAttribute("class","datagrid");
             
                             for(var i=0;i<objArray.length;i++){
-            
+
+                                var resolvedStatus;
                                 var cntr=0;
             
                                 var newTable=document.createElement('table');
@@ -75,8 +129,29 @@
                                         newRow.setAttribute("class","alt");
                                     }
             
-                                    if(property=='Upgrade Id'){
-                                        th.appendChild(document.createTextNode("Upgrade ID: "+object[property]));
+                                    if(property=='request_id'){
+                                        th.appendChild(document.createTextNode("Request ID: "+object[property]));
+
+                                        var acceptBttn=document.createElement('input');
+                                        var rejectBttn=document.createElement('input');
+                                        acceptBttn.setAttribute("type","button");
+                                        acceptBttn.setAttribute("id",object[property]);
+                                        acceptBttn.setAttribute("value","Accept");
+                                        acceptBttn.setAttribute("class","siteButton");
+                                        acceptBttn.style.marginLeft="25px";
+                    
+                                        rejectBttn.setAttribute("value","Reject");
+                                        rejectBttn.setAttribute("type","button");
+                                        rejectBttn.setAttribute("id",object[property]);
+                                        rejectBttn.setAttribute("class","siteButton");
+                                        rejectBttn.style.marginLeft="25px";
+
+                                        acceptBttn.setAttribute("onClick","acceptRejectBtnClick("+object[property]+",1)");
+                                        rejectBttn.setAttribute("onClick","acceptRejectBtnClick("+object[property]+",0)");
+                                    }
+
+                                    else if(property=="resolved"){
+                                        resolvedStatus=object[property];
                                     }
             
                                     else{
@@ -96,30 +171,65 @@
                                     cntr++;
             
                                 }
-            
+
+
+
                                 var buttonRow=document.createElement('tr');
                                 var buttonTd=document.createElement('td');
-                                var acceptBttn=document.createElement('input');
-                                var rejectBttn=document.createElement('input');
-                                acceptBttn.setAttribute("type","button");
-                                acceptBttn.setAttribute("value","Accept");
-                                acceptBttn.setAttribute("class","siteButton");
-                                acceptBttn.style.marginLeft="25px";
+
+                                var btnDiv=document.createElement('div');
+                                btnDiv.style.marginLeft="25px";
             
-                                rejectBttn.setAttribute("value","Reject");
-                                rejectBttn.setAttribute("type","button");
-                                rejectBttn.setAttribute("class","siteButton");
-                                rejectBttn.style.marginLeft="25px";
+                                // var buttonRow=document.createElement('tr');
+                                // var buttonTd=document.createElement('td');
+                                // var acceptBttn=document.createElement('input');
+                                // var rejectBttn=document.createElement('input');
+                                // acceptBttn.setAttribute("type","button");
+                                // acceptBttn.setAttribute("value","Accept");
+                                // acceptBttn.setAttribute("class","siteButton");
+                                // acceptBttn.style.marginLeft="25px";
             
-                                buttonTd.appendChild(acceptBttn);
-                                buttonTd.appendChild(rejectBttn);
-                                buttonRow.appendChild(buttonTd);
-            
-                                tbody.appendChild(buttonRow);
-            
-                                newTable.appendChild(tbody);
-            
-                                tablearea.appendChild(newTable);
+                                // rejectBttn.setAttribute("value","Reject");
+                                // rejectBttn.setAttribute("type","button");
+                                // rejectBttn.setAttribute("class","siteButton");
+                                // rejectBttn.style.marginLeft="25px";
+
+                                switch (resolvedStatus){
+                                    case "0":{
+                                        // buttonTd.appendChild(acceptBttn);
+                                        // buttonTd.appendChild(rejectBttn);
+                                        // buttonRow.appendChild(buttonTd);
+                    
+                                        // tbody.appendChild(buttonRow);
+                                        btnDiv.appendChild(acceptBttn);
+                                        btnDiv.appendChild(rejectBttn);
+                    
+                                        newTable.appendChild(tbody);
+                                        unresolvedTablearea.appendChild(newTable);
+                                        unresolvedTablearea.appendChild(btnDiv);
+                                        break;
+                                    }
+                                    case "1":{
+                                        newTable.appendChild(tbody);
+                                        pendingTablearea.appendChild(newTable);
+                                        break;
+                                    }
+                                    case "3":{
+                                        // buttonTd.appendChild(acceptBttn);
+                                        // buttonTd.appendChild(rejectBttn);
+                                        // buttonRow.appendChild(buttonTd);
+                    
+                                        // tbody.appendChild(buttonRow);
+
+                                        btnDiv.appendChild(acceptBttn);
+                                        btnDiv.appendChild(rejectBttn);
+                    
+                                        newTable.appendChild(tbody);
+                                        rejectedTablearea.appendChild(newTable);
+                                        rejectedTablearea.appendChild(btnDiv);
+                                        break;
+                                    }
+                                }
                             }
             
                 });
@@ -134,12 +244,6 @@
             &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
             &lt;/div&gt;
         </noscript>
-        <!--[if lte IE 6]>
-        <div class="something-wrong">
-            <div class="title">Did you know that your Internet Explorer is out of date?</div>
-            <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
-        </div>
-        <![endif]-->
         <div id="dcontainer"></div>
         <script type="text/javascript" src="./page2_files/dialog.js"></script>
         <!-- JS imports for collapsible menu -->
@@ -152,13 +256,6 @@
             <tbody>
                 <tr>
                     <td id="header" colspan="3">
-                        <!--[IF IE 7]>
-                        <style>
-                            div#header-div div.right-links{
-                            position:absolute;
-                            }
-                        </style>
-                        <![endif]-->
                         <div id="header-div">
                             <div class="right-logo">Management Console</div>
                             <div class="left-logo">
@@ -234,12 +331,53 @@
                                 </tr>
                                 <!--This is edited for devices grid implementation -->
                                 <tr>
-                                    <td>
+
+
+
+                                <td>   
+                                    <div id="adminRequestsContainer" class="main_container"> 
+                                        <div id="listContainer">
+                                            <ul id="expList">
+
+                                                <li>
+                                                    <h2><span style="color: #00346e">Unresolved Requests</span></h2>
+                                                    <ul></br>
+                                                        <div id="unresolvedDiv">
+                                                        </div>
+                                                    </ul>
+                                                </li></br><hr  style="margin-bottom: 25px"/></br>
+
+                                                <li>
+                                                    <h2><span style="color: #00346e">Pending for User Response</span></h2>
+                                                    <ul></br>
+                                                        <div id="pendingDiv">
+                                                        </div>
+                                                    </ul>
+                                                </li></br><hr  style="margin-bottom: 25px"/></br>
+                                                <li>
+                                                    <h2><span style="color: #00346e">Rejected by User</span></h2>
+                                                    <ul></br>
+                                                        <div id="rejectedDiv">
+                                                        </div>
+                                                    </ul>
+                                                </li></br>
+                                            
+                                          </ul>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+
+
+
+
+                                    <!-- <td>
                                         <h2 style="color: #00346e">Requests</h2>
                                         <br/>
                                         <div id="requestsDiv">
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                                 <!-- End of devices grid generation -->
                             </tbody>

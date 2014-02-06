@@ -12,12 +12,6 @@
         <link rel="stylesheet" href="css/carbonFormStyles.css">
         <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
         <link rel="stylesheet" href="css/jquery-ui.css">
-        <!--[if gte IE 8]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
-        <!--[if gte IE 7]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
         <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
         <!--<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>-->
@@ -46,9 +40,54 @@
             
                         prepareList();
                         loadAllWarranties();
-                        loadIssues();
+                        loadIssues("0","allIssuesDiv",'issuesTable');
+
+
+                        $("#resolvedIssuesPopup").dialog({
+                            autoOpen:false,
+                            height: 600,
+                            width: 700,
+                            modal: true,
+                            buttons:{
+                                'Ok': function() {
+                                    $(this).dialog('close');
+                    
+                                }
+                            }
+                        });
+
+                        $("#userRejectedIssuesPopup").dialog({
+                            autoOpen:false,
+                            height: 600,
+                            width: 700,
+                            modal: true,
+                            buttons:{
+                                'Ok': function() {
+                                    $(this).dialog('close');
+                    
+                                }
+                            }
+                        });
+
+                        $("#adminResolvedLink").click(function(event){
+                            event.preventDefault();
+                            loadIssues("1","resolvedIssuesDiv",'resolvedIssuesTable');
+                            
+                            $("#resolvedIssuesPopup").dialog("open");
+                        });
+
+                        $("#userRejectedLink").click(function(event){
+                            event.preventDefault();
+                            loadIssues("3","rejectedIssuesDiv",'rejectedIssuesTable');
+                            $("#userRejectedIssuesPopup").dialog("open");
+                        });
+
+
+
+
+
             
-                        <!--Get the selected row's first cell value-->
+                        <!--Get the selected rows first cell value-->
                         $(document).ready(function(){
                             $("#issuesTablec").delegate('tr > td:first-child', 'click', function() {
                                 var issueId = $(this).text();
@@ -91,7 +130,7 @@
             
                         function loadAllWarranties(){
             
-                            $.post("admin_home_Operations.jag",{operation:"getAllWarranty"},function(data){
+                            $.post("admin_data_get.jag",{operation:"getAllWarranty"},function(data){
                                 var warrantyTbl=document.getElementById('allWarrantiesTable');
                                 var warrantyArea=document.getElementById("allWarranties");
                                 warrantyArea.setAttribute('class','datagrid');
@@ -113,7 +152,7 @@
                                         var td=document.createElement('td');
                                         td.style.padding='3px 20px';
 
-                                        if(property=="id"){
+                                        if(property=="warranty_number"){
                                             warrantyId=object[property];
                                         }
 
@@ -135,49 +174,66 @@
                             });
                         }
 
-                        function loadIssues(){
-                            $.post("admin_home_Operations.jag",{operation:"getAllissues"},function(data){
-                                var warrantyTbl=document.getElementById('issuesTable');
-                                var warrantyArea=document.getElementById("allIssuesDiv");
-                                warrantyArea.setAttribute('class','datagrid');
+                        function loadIssues(resolved,tableArea,table){
+                            //$.post("admin_home_Operations.jag",{operation:"getAllissues"},function(data){
+                            $.post("admin_data_get.jag",{operation:"getIssueBasicDetails",resolved:resolved},function(data){
+                                var issueTbl=document.getElementById(/*'issuesTable'*/table);
+                                var issueArea=document.getElementById(/*"allIssuesDiv"*/tableArea);
+                                issueArea.setAttribute('class','datagrid');
                                 var tbody=document.createElement('tbody');
 
                                 var objArray=JSON.parse(data);
 
-                                for(var i=0;i<objArray.length;i++){
+                                alert(objArray.length);
 
-                                    var issueId;
+                                if(objArray.length==0){
+                                    issueTbl.style.display="none";
+                                    var noDataField=document.createElement('div');
+                                    noDataField.innerHTML="Sorry No Data Available";
+                                    issueArea.appendChild(noDataField);
+                                }
 
-                                    var object=objArray[i];
-                                    var newRow=document.createElement('tr');
+                                else{
 
-                                    if(i%2==0){
-                                        newRow.setAttribute("class","alt");
-                                    }
+                                    issueTbl.style.display="";
 
-                                    for(var property in object){
-                                        var td=document.createElement('td');
-                                        td.style.padding='3px 20px';
+                                    for(var i=0;i<objArray.length;i++){
 
-                                        if(property=="id"){
-                                            issueId=object[property];
+                                        var issueId;
+
+                                        var object=objArray[i];
+                                        var newRow=document.createElement('tr');
+
+                                        if(i%2==0){
+                                            newRow.setAttribute("class","alt");
                                         }
 
-                                        td.appendChild(document.createTextNode(object[property]));
+                                        for(var property in object){
+                                            var td=document.createElement('td');
+                                            td.style.padding='3px 20px';
 
-                                        newRow.appendChild(td);
+                                            if(property=="issue_number"){
+                                                issueId=object[property];
+                                            }
+
+                                            td.appendChild(document.createTextNode(object[property]));
+
+                                            newRow.appendChild(td);
+                                        }
+
+                                        var linkTd=document.createElement('td');
+                                        var link=document.createElement('a');
+                                        link.setAttribute("href",("admin_issue_details.jag?id="+issueId));
+                                        link.innerHTML='more';
+                                        linkTd.appendChild(link);
+                                        newRow.appendChild(linkTd);
+
+                                        tbody.appendChild(newRow);
                                     }
-
-                                    var linkTd=document.createElement('td');
-                                    var link=document.createElement('a');
-                                    link.setAttribute("href",("admin_issue_details.jag?id="+issueId));
-                                    link.innerHTML='more';
-                                    linkTd.appendChild(link);
-                                    newRow.appendChild(linkTd);
-
-                                    tbody.appendChild(newRow);
+                                    issueTbl.appendChild(tbody);
                                 }
-                                warrantyTbl.appendChild(tbody);
+
+                                
                             });
                         }
             
@@ -200,7 +256,9 @@
 
                                 var allWarrantTable=$("#allWarranties");
 
-                                $.post("admin_requests_handler.jag",{searchText:searchText,filterValue:filterVal,request:"getWarranty"},function(data){
+                                alert(filterVal+searchText);
+
+                                $.post("admin_data_get.jag",{searchText:searchText,filterValue:filterVal,operation:"getCustomWarranty"},function(data){
 
                                     var searchedArea=document.getElementById('allWarranties');
                                     var searchedTable = document.getElementById("allWarrantiesTable");
@@ -232,7 +290,7 @@
                                         var td=document.createElement('td');
                                         td.style.padding='3px 20px';
 
-                                        if(property=="id"){
+                                        if(property=="warranty_number"){
                                             warrantyId=object[property];
                                         }
 
@@ -361,12 +419,6 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <!--<tr>-->
-                                <!--<td id="body">-->
-                                <!--<img src="./page2_files/1px.gif" width="735px" height="1px">-->
-                                <!--</td>-->
-                                <!--</tr>-->
-                                <!--This is edited for tabbed pane implementation -->
                                 <tr>
                                     <td>
                                         <div id="adminHomeListContainer" class="main_container">
@@ -384,11 +436,23 @@
                                                                         <thead>
                                                                             <tr>
                                                                                 <th>Issue ID</th>
-                                                                                <th>Reported Date</th>
+                                                                                <th>Status</th>
+                                                                                <th>Device ID</th>
                                                                                 <th>User Name</th>
+                                                                                <th>Issue Details</th>
                                                                                 <th></th>
                                                                             </tr>
                                                                         </thead>
+                                                                    </table>
+                                                                </div>
+
+                                                                </br><div id="otherRequests">
+                                                                    
+                                                                    <table cellspacing="15px" style="margin-left:-15px">
+                                                                        <tr>
+                                                                            <td><label id="adminResolvedLink" class="linkLabel">Resolved By Admin</label></td>
+                                                                            <td><label id="userRejectedLink" class="linkLabel">User Rejected Resolves</label></td>
+                                                                        </tr>
                                                                     </table>
                                                                 </div>
 
@@ -400,7 +464,7 @@
                                                 </li></br><hr  style="margin-bottom: 25px"/></br>
 
                                                 <li>
-                                                    <h2><span style="color: #00346e">Warranty</span></h2>
+                                                    <h2><span style="color: #00346e;">Warranty</span></h2>
                                                     <ul></br>
                                                         <li>
                                                             <div id="warranty" >
@@ -434,6 +498,7 @@
                                                                                 <tr>
                                                                                     <th>Warranty ID</th>
                                                                                     <th>Status</th>
+                                                                                    <th>Device Id</th>
                                                                                     <th></th>
                                                                                 </tr>
                                                                             </thead>
@@ -443,9 +508,47 @@
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                </li></br><hr/></br>
+                                                </li></br></br>
                                             </ul>
                                         </div>
+
+                                        <div id="resolvedIssuesPopup">
+                                            <h2 style="text-align: center;color: #ffffff;background-color: #005580;margin: 25px auto 25px auto;width: 400px;">Resolved Issues</h2>
+                                            <div id="resolvedIssuesDiv">
+                                                <table id="resolvedIssuesTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Issue ID</th>
+                                                            <th>Status</th>
+                                                            <th>Device ID</th>
+                                                            <th>User Name</th>
+                                                            <th>Issue Details</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div id="userRejectedIssuesPopup">
+                                            <h2 style="text-align: center;color: #ffffff;background-color: #005580;margin: 25px auto 25px auto;width: 400px;">User Rejected resolves</h2>
+                                            <div id="rejectedIssuesDiv">
+                                                <table id="rejectedIssuesTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Issue ID</th>
+                                                            <th>Status</th>
+                                                            <th>Device ID</th>
+                                                            <th>User Name</th>
+                                                            <th>Issue Details</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
                                     </td>
                                 </tr>
 <!-- End of tab pane generation -->

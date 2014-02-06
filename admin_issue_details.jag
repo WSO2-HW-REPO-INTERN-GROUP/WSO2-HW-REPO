@@ -9,12 +9,6 @@
         <link href="css/adminIssueDetails.css" rel="stylesheet" type="text/css" media="all">
         <link rel="stylesheet" href="css/carbonFormStyles.css">
         <link rel="stylesheet" href="css/jquery-ui.css">
-        <!--[if gte IE 8]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
-        <!--[if gte IE 7]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
         <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
         <!--<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>-->
@@ -38,18 +32,19 @@
                     jQuery(document).ready(function(){
             
                         var clickCounter=0;
+                        var deviceID;
+                        var issueID
             
                         //read the id value sent via the url
                         readURL();
-                        operations();
+                        var accesoryRemarks;
+                        //operations();
             
                         function readURL(){
                             var urlData=window.location.search.substring(1);
-                            var issueID=urlData.split("=");
+                            issueID=urlData.split("=");
             
-                            $.post("getOperationValues.jag",{issueID:issueID[1],operation:"getIssueDetails"},function(data,status){
-                                //$("#issueDetailsDiv").append(data);
-            
+                            $.post("admin_data_get.jag",{operation:"getissueDetails",issueID:issueID[1]},function(data,status){
                                 var i=0;
             
                                 var issueDetailsTbl=document.getElementById('issueDetailsTable');
@@ -59,52 +54,65 @@
             
                                 var object=JSON.parse(data);
             
-                                    alert(object);
+                                    alert(data);
             
                                     for(var property in object){
+
+                                        if(property=="device_id"){
+                                            deviceID=object[property];
+                                        }
             
                                         var newRow=document.createElement('tr');
             
                                         if(i%2==0){
                                             newRow.setAttribute("class","alt");
                                         }
+
+                                        if(property=="resolved"){
+                                            if(object[property]=="0"){
+                                                //$("#issueResolve").hide();
+                                                $("#viewUpgrades").hide();
+                                            }
+                                            else if(object[property]=="1"){
+                                                $("#issueReject").hide();
+                                                $("#issueResolve").hide();
+                                            }
+                                        }
+                                        else{
+                                            var td1=document.createElement('td');
+                                            var td2=document.createElement('td');
+                                            td1.style.padding='3px 20px';
+                                            td2.style.padding='3px 20px';
+                
+                                            td1.appendChild(document.createTextNode(property));
+                                            td2.appendChild(document.createTextNode(object[property]));
+                
+                                            newRow.appendChild(td1);
+                                            newRow.appendChild(td2);
+                                            tbody.appendChild(newRow);
+                
+                                            i++;
+                                        }
             
-                                        var td1=document.createElement('td');
-                                        var td2=document.createElement('td');
-                                        td1.style.padding='3px 20px';
-                                        td2.style.padding='3px 20px';
-            
-                                        td1.appendChild(document.createTextNode(property));
-                                        td2.appendChild(document.createTextNode(object[property]));
-            
-                                        newRow.appendChild(td1);
-                                        newRow.appendChild(td2);
-                                        tbody.appendChild(newRow);
-            
-                                        i++;
+                                        
                                     }
-            
-            
                                 issueDetailsTbl.appendChild(tbody);
-            
                             });
                         }
             
-                        function operations(){
-            
-                            $.post("getOperationValues.jag",{selectedTxt:"Device3",operation:"btnHide"},function(data,status){
-            
-                                var parsed=JSON.parse(data);
-                                if(parsed["newIssue"]){
-                                    $("#issueResolve").hide();
-                                    $("#viewUpgrades").hide();
-                                }
-                                else if(!(parsed["newIssue"])){
-                                    $("#issueAccept").hide();
-                                    $("#issueReject").hide();
-                                }
-                            });
-                        }
+                        // function operations(){
+                        //     $.post("getOperationValues.jag",{selectedTxt:"Device3",operation:"btnHide"},function(data,status){
+                        //         var parsed=JSON.parse(data);
+                        //         if(parsed["newIssue"]){
+                        //             $("#issueResolve").hide();
+                        //             $("#viewUpgrades").hide();
+                        //         }
+                        //         else if(!(parsed["newIssue"])){
+                        //             $("#issueAccept").hide();
+                        //             $("#issueReject").hide();
+                        //         }
+                        //     });
+                        // }
             
                         $("#addUpgradeForm").dialog({
                             autoOpen:false,
@@ -113,7 +121,6 @@
                             modal: true,
                             buttons:{
                                 'Confirm': function() {
-
                                     var deviceType=$("#hardwareTypeSelect").val();
                                     var description=$("#upgradeDescriptionArea").val();
                                     var hardware=$("#hardwareSelect").val();
@@ -126,14 +133,9 @@
                                         errSpan.style.display="none";
 
                                         $.post("admin_requests_handler.jag",{deviceType:deviceType,description:description,hardware:hardware,request:"addNewUpgrade"},function(data){
-                                                //alert(data);
-
                                         });
-
-
                                         $(this).dialog('close');
                                     }
-            
                                 }
                             }
                         });
@@ -141,106 +143,146 @@
                         $("#hardwareTypeSelect").change(function() {
             
                             var selectedText=$("#hardwareTypeSelect :selected").text();
+
+                            accesoryRemarks=[];
             
                             //empty the dropdown
-                            $("#hardwareSelect").empty();
+                             $("#hardwareSelect").empty();
             
-                            //send the post for processing
-                            $.post("test3.jag",{selectedTxt:selectedText},function(data,status){
+                            // //send the post for processing
+                            $.post("admin_data_get.jag",{searchText:selectedText,operation:"getAccessory"},function(data,status){
                                 var parsed=JSON.parse(data);
                                 var option="";
             
                                 //add all the available options
-                                for(var key in parsed){
-                                    option="<option value='"+key+"'>"+parsed[key]+"</option>";
+                                $("#hardwareSelect").append('<option value="-1">Select Hardware</option>');
+                                for(var i=0;i< parsed.length;i++){
+                                    var obj=parsed[i];
+                                    accesoryRemarks[i]=obj["remarks"];
+                                    option="<option value='"+i+"'>"+obj["accessory_id"]+"</option>";
                                     $("#hardwareSelect").append(option);
+                                    alert(obj["accessory_id"]);
                                 }
+                                
                             });
                         });
+
+                        $("#hardwareSelect").change(function() {
+
+                            var selectedValue=$("#hardwareSelect :selected").val();
+                            alert("selectedValue--"+selectedValue);
+                            var detailsArea=document.getElementById("componentDetailsArea");
+                            detailsArea.innerHTML=accesoryRemarks[selectedValue];
+
+                        });
+                        
             
                         $("#addUpgrade").click(function(event){
                             event.preventDefault();
                             $("#addUpgradeForm").dialog("open");
                         });
+
+                        $("#issueReject").click(function(){
+                            //reject issue request
+                            alert("reject Clicked");
+                            $.post("admin_devices_updates.jag",{operation:"acceptRejcet",issue_id:issueID[1],value:"3"},function(data,status){
+                                alert(data);
+                            });
+                        });
+
+                        $("#issueResolve").click(function(){
+                            //reject issue request
+                            alert("resolve Clicked");
+                            $.post("admin_devices_updates.jag",{operation:"acceptRejcet",issue_id:issueID[1],value:"1"},function(data,status){
+                                alert(data);
+                            });
+                        });
+
+
             
                         $("#viewUpgrades").click(function(){
-                            //alert("Hello");
-            
-            
-            
                             if(clickCounter==0){
             
-                                $.post("getOperationValues.jag",{operation:"upgradeHistory"},function(data,status){
+                                $.post("admin_data_get.jag",{operation:"upgradeHistory",device_id:deviceID},function(data,status){
             
                                     var objArray=JSON.parse(data);
+
+                                    alert(objArray.length);
             
                                     var tablearea = document.getElementById('upgradeHistoryDiv');
                                     tablearea.setAttribute("class","datagrid");
+
+                                    if(objArray.length==0){
+                                        var noUpgradeDiv=document.getElementById("noUpgradeFoundDiv");
+                                        noUpgradeDiv.style.display="";
+                                    }
+                                    else{
+
+                                        var noUpgradeDiv=document.getElementById("noUpgradeFoundDiv");
+                                        noUpgradeDiv.style.display="none";
             
-                                    for(var i=0;i<objArray.length;i++){
-            
-                                        var cntr=0;
-            
-                                        var newTable=document.createElement('table');
-                                        newTable.style.width='600px';
-                                        newTable.style.margin='0px 0px 15px 50px';
-            
-                                        var thead=document.createElement('thead');
-                                        var htr=document.createElement('tr');
-                                        var th=document.createElement('th');
-                                        var tbody=document.createElement('tbody');
-                                        th.setAttribute('colspan','2');
-                                        th.style.height='15px';
-                                        htr.appendChild(th);
-                                        thead.appendChild(htr);
-                                        newTable.appendChild(thead);
-            
-                                        var object=objArray[i];
-            
-                                        for(var property in object){
-            
-                                            var newRow=document.createElement('tr');
-            
-                                            if(cntr%2==0){
-                                                newRow.setAttribute("class","alt");
+                                        for(var i=0;i<objArray.length;i++){
+                
+                                            var cntr=0;
+                
+                                            var newTable=document.createElement('table');
+                                            newTable.style.width='600px';
+                                            newTable.style.margin='0px 0px 15px 50px';
+                
+                                            var thead=document.createElement('thead');
+                                            var htr=document.createElement('tr');
+                                            var th=document.createElement('th');
+                                            var tbody=document.createElement('tbody');
+                                            th.setAttribute('colspan','2');
+                                            th.style.height='15px';
+                                            htr.appendChild(th);
+                                            thead.appendChild(htr);
+                                            newTable.appendChild(thead);
+                
+                                            var object=objArray[i];
+                
+                                            for(var property in object){
+
+                                                    
+                
+                                                var newRow=document.createElement('tr');
+                
+                                                if(cntr%2==0){
+                                                    newRow.setAttribute("class","alt");
+                                                }
+                
+                                                if(property=='upgrade_id'){
+                                                    th.appendChild(document.createTextNode("Upgrade ID: "+object[property]));
+                                                }
+                
+                                                else{
+                
+                                                    var td1=document.createElement('td');
+                                                    var td2=document.createElement('td');
+                
+                                                    td1.appendChild(document.createTextNode(property));
+                                                    td2.appendChild(document.createTextNode(object[property]));
+                
+                                                    newRow.appendChild(td1);
+                                                    newRow.appendChild(td2);
+                
+                                                    tbody.appendChild(newRow);
+                
+                                                }
+                
+                                                cntr++;
+                
                                             }
-            
-                                            if(property=='Upgrade Id'){
-                                                th.appendChild(document.createTextNode("Upgrade ID: "+object[property]));
-                                            }
-            
-                                            else{
-            
-                                                var td1=document.createElement('td');
-                                                var td2=document.createElement('td');
-            
-                                                td1.appendChild(document.createTextNode(property));
-                                                td2.appendChild(document.createTextNode(object[property]));
-            
-                                                newRow.appendChild(td1);
-                                                newRow.appendChild(td2);
-            
-                                                tbody.appendChild(newRow);
-            
-                                            }
-            
-                                            cntr++;
-            
+                                            newTable.appendChild(tbody);
+                
+                                            tablearea.appendChild(newTable);
                                         }
-                                        newTable.appendChild(tbody);
-            
-                                        tablearea.appendChild(newTable);
                                     }
             
                                     clickCounter++;
                                 });
                             }
                         });
-            
-            
-            
-            
-            
                     });
                 
         </script>
@@ -252,12 +294,7 @@
             &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
             &lt;/div&gt;
         </noscript>
-        <!--[if lte IE 6]>
-        <div class="something-wrong">
-            <div class="title">Did you know that your Internet Explorer is out of date?</div>
-            <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
-        </div>
-        <![endif]-->
+
         <div id="dcontainer"></div>
         <script type="text/javascript" src="./page2_files/dialog.js"></script>
         <!-- JS imports for collapsible menu -->
@@ -270,13 +307,6 @@
             <tbody>
                 <tr>
                     <td id="header" colspan="3">
-                        <!--[IF IE 7]>
-                        <style>
-                            div#header-div div.right-links{
-                            position:absolute;
-                            }
-                        </style>
-                        <![endif]-->
                         <div id="header-div">
                             <div class="right-logo">Management Console</div>
                             <div class="left-logo">
@@ -359,7 +389,8 @@
                                                 </table>
                                             </div>
                                             <div id="issueOperationsDiv">
-                                                <input type="button" id="issueAccept" value="Accept" class="siteButton" /><input type="button" value="Reject" id="issueReject" class="siteButton"/>
+                                                <!-- <input type="button" id="issueAccept" value="Accept" class="siteButton" />-->
+                                                <input type="button" value="Reject" id="issueReject" class="siteButton"/> 
                                                 <input type="button" id="issueResolve" value="Resolve" class="siteButton"/><input type="button" id="addUpgrade" value="New Upgrade" class="siteButton"/>
                                                 </br><a id="viewUpgrades">View Upgrade History</a>
                                             </div>
@@ -371,6 +402,9 @@
                                                         </tr>
                                                     </thead>
                                                 </table>
+                                                <div style="display:none" id="noUpgradeFoundDiv">
+                                                    <span>No Ugrades Were Found Related to this Device</span>
+                                                </div>
                                             </div>
                                             <div id="addUpgradeForm">
                                                 <form>
@@ -380,9 +414,8 @@
                                                             <td>
                                                                 <select id="hardwareTypeSelect" class="siteButton">
                                                                     <option id="option1" selected value="0">--Select Device Type--</option>
-                                                                    <option id="option2" value="1">Device2</option>
-                                                                    <option id="option3" value="2">Device3</option>
-                                                                    <option id="option4" value="3">Device4</option>
+                                                                    <option id="option2" value="1">Battery</option>
+                                                                    <option id="option3" value="2">Ram</option>
                                                                 </select>
                                                             </td>
                                                         </tr>

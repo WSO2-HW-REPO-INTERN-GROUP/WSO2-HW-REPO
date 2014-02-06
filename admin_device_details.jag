@@ -11,13 +11,8 @@
         <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
         <link href="css/adminDeviceDetailsStyle.css" rel="stylesheet" type="text/css" media="all">
         <link rel="stylesheet" href="css/carbonFormStyles.css">
-        <!--[if gte IE 8]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
-        <!--[if gte IE 7]>
-        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
-        <![endif]-->
         <link rel="stylesheet" href="css/jquery-ui.css"/>
+
         <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
         <script type="text/javascript" src="js/jquery.form.js"></script>
         <script type="text/javascript" src="js/jqueryui/jquery-ui.min.js"></script>
@@ -37,9 +32,12 @@
         <script type="text/javascript">
             jQuery(document).ready(function(){
             
+                
+
                 prepareList();
                 readURL();
                 getAccessories();
+                var accesoryRemarks;
             
                 $("#addHardwareForm").dialog({
                     autoOpen:false,
@@ -62,15 +60,19 @@
                             }
                             else{
 
+
+                                var urlData=window.location.search.substring(1);
+                                var devID=urlData.split("=");
+
                                 var newDeviceData={
 
                                     "type":type.options[type.selectedIndex].text,
-                                    "device":devices.options[devices.selectedIndex].text,
-                                    "description":description.value
+                                    "accessory":devices.options[devices.selectedIndex].value,
+                                    "desc":description.value
 
                                 };
 
-                                $.post("admin_requests_handler.jag",{request:"addAccessory",inputs:JSON.stringify(newDeviceData)},function(data){
+                                $.post("admin_devices_updates.jag",{operation:"addNewAccessoryUpdate",deviceID:devID[1],inputs:JSON.stringify(newDeviceData)},function(data,status){
                                     alert(data);
                                 });
 
@@ -99,6 +101,38 @@
                         }
                     }
                 });
+
+
+                $("#assignDevicePopup").dialog({
+                    autoOpen:false,
+                    height: 200,
+                    width: 350,
+                    modal: true,
+                    buttons:{
+                        'Ok': function() {
+
+                            var usernameField=document.getElementById("assignUserInput");
+                            var errField=document.getElementById("errorField");
+                            if(usernameField.value==""){
+
+                                errField.style.display="";
+
+                                alert("hoooo");
+                            }
+
+                            else{
+                                errField.style.display="none";
+                                $(this).dialog('close');
+                            }
+
+
+                            
+            
+                        }
+                    }
+                });
+
+
             
                 $("#addNew").click(function(event)
                 {
@@ -108,25 +142,69 @@
                     $("#addHardwareForm").dialog("open");
             
                 });
-            
+
+
                 $("#hardwareTypeSelect").change(function() {
             
-                    var selectedText=$("#hardwareTypeSelect :selected").text();
+                            var selectedText=$("#hardwareTypeSelect :selected").text();
+
+                            accesoryRemarks=[];
             
-                    //empty the dropdown
-                    $("#hardwareSelect").empty();
+                            //empty the dropdown
+                             $("#hardwareSelect").empty();
             
-                    //send the post for processing
-                    $.post("test3.jag",{selectedTxt:selectedText},function(data,status){
-                        var parsed=JSON.parse(data);
-                        var option="";
+                            // send the post for processing
+                            $.post("admin_data_get.jag",{searchText:selectedText,operation:"getAccessory"},function(data,status){
+                                var parsed=JSON.parse(data);
+                                var option="";
             
-                        //add all the available options
-                        for(var key in parsed){
-                            option="<option value='"+key+"'>"+parsed[key]+"</option>";
-                            $("#hardwareSelect").append(option);
-                        }
-                    });
+                                //add all the available options
+                                $("#hardwareSelect").append('<option value="-1">Select Hardware</option>');
+                                for(var i=0;i< parsed.length;i++){
+                                    var obj=parsed[i];
+                                    accesoryRemarks[i]=obj["remarks"];
+                                    option="<option value='"+obj["accessory_id"]+"'>"+obj["accessory_id"]+"</option>";
+                                    $("#hardwareSelect").append(option);
+                                    alert(obj["accessory_id"]);
+                                }
+                                
+                            });
+                        });
+
+                        $("#hardwareSelect").change(function() {
+
+                            var selectedValue=$("#hardwareSelect :selected").val();
+                            alert("selectedValue--"+selectedValue);
+                            var detailsArea=document.getElementById("componentDetailsArea");
+                            detailsArea.innerHTML=accesoryRemarks[selectedValue];
+
+
+                        });
+
+
+            
+                // $("#hardwareTypeSelect").change(function() {
+            
+                //     var selectedText=$("#hardwareTypeSelect :selected").text();
+            
+                //     //empty the dropdown
+                //     $("#hardwareSelect").empty();
+            
+                //     //send the post for processing
+                //     $.post("test3.jag",{selectedTxt:selectedText},function(data,status){
+                //         var parsed=JSON.parse(data);
+                //         var option="";
+            
+                //         //add all the available options
+                //         for(var key in parsed){
+                //             option="<option value='"+key+"'>"+parsed[key]+"</option>";
+                //             $("#hardwareSelect").append(option);
+                //         }
+                //     });
+                // });
+
+                $("#assign").click(function(){
+                    $("#assignDevicePopup").dialog("open");
                 });
             
             
@@ -135,7 +213,9 @@
                     var urlData=window.location.search.substring(1);
                     var deviceID=urlData.split("=");
             
-                    $.post("getOperationValues.jag",{operation:"upgradeHistory",deviceID:deviceID},function(data,status){
+                    $.post("admin_data_get.jag",{operation:"upgradeHistory",device_id:deviceID[1]},function(data,status){
+
+                        alert("dnfsdfjskjkfjsl---"+data);
             
                             var objArray=JSON.parse(data);
             
@@ -170,7 +250,7 @@
                                         newRow.setAttribute("class","alt");
                                     }
             
-                                    if(property=='Upgrade Id'){
+                                    if(property=='upgrade_id'){
                                         th.appendChild(document.createTextNode("Upgrade ID: "+object[property]));
                                     }
             
@@ -196,13 +276,7 @@
             
                                 tablearea.appendChild(newTable);
                             }
-                        });
-            
-            
-            
-            
-            
-            
+                         });
                     //Stop any default actions on the button.
                     event.preventDefault();
                     //Open your dialog.
@@ -212,46 +286,67 @@
             
             function readURL(){
                     var urlData=window.location.search.substring(1);
-                    var deviceID=urlData.split("=");
+                    deviceID=urlData.split("=");
                     alert(deviceID);
                     var issueHistory=document.getElementById("issueHistoryLink");
                     issueHistory.setAttribute("href","admin_device_issues.jag?id="+deviceID[1]);
             
-                    $.post("admin_device_operations.jag",{deviceID:deviceID[1],operation:"getBasicDetails"},function(data,status){
-                        //$("#issueDetailsDiv").append(data);
+                    $.post("admin_devices_data_get.jag",{device_id:deviceID[1],operation:"getDeviceDetails"},function(data,status){
+
+                        alert(data);
             
                         var i=0;
-            
+
                         var basicDetailsTbl=document.getElementById('basicFeaturesTbl');
                         var basicDetailsArea=document.getElementById("basicDetailsDiv");
+                        var assignBtn=document.getElementById("assign");
+                        var revokeBtn=document.getElementById("revoke");
+
+                        basicDetailsTbl.style.width="600px";
                         basicDetailsArea.setAttribute('class','datagrid');
                         var tbody=document.createElement('tbody');
-            
+
                         var object=JSON.parse(data);
-            
+
                             for(var property in object){
-            
-                                var newRow=document.createElement('tr');
-            
-                                if(i%2==0){
-                                    newRow.setAttribute("class","alt");
+
+                                if(property=="assigned_state" && object[property]=="true"){
+                                    assignBtn.style.visibility="hidden";
+                                    revokeBtn.style.visibility="visible";
                                 }
-            
-                                var td1=document.createElement('td');
-                                var td2=document.createElement('td');
-                                td1.style.padding='3px 20px';
-                                td2.style.padding='3px 20px';
-            
-                                td1.appendChild(document.createTextNode(property));
-                                td2.appendChild(document.createTextNode(object[property]));
-            
-                                newRow.appendChild(td1);
-                                newRow.appendChild(td2);
-                                tbody.appendChild(newRow);
-            
-                                i++;
+                                else if(property=="assigned_state" && object[property]=="false"){
+                                    assignBtn.style.visibility="visible";
+                                    revokeBtn.style.visibility="hidden";
+                                }
+
+                                else{
+
+                                    //if(object[property]!=null){
+                                        var newRow=document.createElement('tr');
+
+                                        if(i%2==0){
+                                            newRow.setAttribute("class","alt");
+                                        }
+
+                                        var td1=document.createElement('td');
+                                        td1.style.width="50px";
+                                        var td2=document.createElement('td');
+                                        td1.style.padding='3px 20px';
+                                        td2.style.padding='3px 20px';
+
+                                        td1.appendChild(document.createTextNode(property));
+                                        td2.appendChild(document.createTextNode(object[property]));
+
+                                        newRow.appendChild(td1);
+                                        newRow.appendChild(td2);
+                                        tbody.appendChild(newRow);
+
+                                        i++;
+                                   // }
+                                    
+                                }
                             }
-            
+
                         basicDetailsTbl.appendChild(tbody);
             
                     });
@@ -270,13 +365,13 @@
                             tablearea.setAttribute("class","datagrid");
             
                             for(var i=0;i<objArray.length;i++){
-            
+
                                 var cntr=0;
-            
+
                                 var newTable=document.createElement('table');
                                 newTable.style.width='600px';
                                 newTable.style.margin='0px 0px 15px 0px';
-            
+
                                 var thead=document.createElement('thead');
                                 var htr=document.createElement('tr');
                                 var th=document.createElement('th');
@@ -290,39 +385,39 @@
                                 newTable.appendChild(thead);
             
                                 var object=objArray[i];
-            
+
                                 for(var property in object){
-            
+
                                     var newRow=document.createElement('tr');
-            
+
                                     if(cntr%2==0){
                                         newRow.setAttribute("class","alt");
                                     }
-            
+
                                     if(property=='ID'){
                                         th.appendChild(document.createTextNode("ID: "+object[property]));
                                     }
-            
+
                                     else{
-            
+
                                         var td1=document.createElement('td');
                                         var td2=document.createElement('td');
-            
+
                                         td1.appendChild(document.createTextNode(property));
                                         td2.appendChild(document.createTextNode(object[property]));
-            
+
                                         newRow.appendChild(td1);
                                         newRow.appendChild(td2);
-            
+
                                         tbody.appendChild(newRow);
-            
+
                                     }
-            
+
                                     cntr++;
-            
+
                                 }
                                 newTable.appendChild(tbody);
-            
+
                                 tablearea.appendChild(newTable);
                             }
                         });
@@ -495,8 +590,6 @@
                                                                     <table cellspacing="10px">
                                                                         <tr>
                                                                             <td><button id="addNew" value="Add" class="siteButton">Add</button></td>
-                                                                            <td><input type="button" id="assign" value="Assign" class="siteButton"/></td>
-                                                                            <td><input type="button" id="revoke" value="Revoke" class="siteButton"/></td>
                                                                         </tr>
                                                                     </table>
                                                                 </div>
@@ -506,6 +599,16 @@
                                                     </br>
                                                     <hr/>
                                                     </br>
+
+                                                    <div>
+                                                    <h2><span style="color: #00346e;margin-left:20px">Operations</span></h2></brs>
+                                                        <table cellspacing="10px" style="margin-left:20pxs">
+                                                            <tr>
+                                                                <td><input type="button" id="assign" value="Assign" class="siteButton"/></td>
+                                                                <td><input type="button" id="revoke" value="Revoke" class="siteButton"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
                                                 </ul>
                                             </div>
                                             <div id="addHardwareForm">
@@ -516,9 +619,8 @@
                                                             <td>
                                                                 <select id="hardwareTypeSelect" class="siteButton">
                                                                     <option id="option1" selected value="0">--Select Device Type--</option>
-                                                                    <option id="option2" value="op1">Device2</option>
-                                                                    <option id="option3" value="op2">Device3</option>
-                                                                    <option id="option4" value="op3">Device4</option>
+                                                                    <option id="option2" value="op1">Battery</option>
+                                                                    <option id="option3" value="op2">Ram</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -533,7 +635,7 @@
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label id="componentDetailsLbl">Hardware Component Description</label><br/><br/>
-                                                                <div id="componentDetailsArea" style="border-color: #0099ff;width: 450px;height: 100px;border: 2px solid"></div>
+                                                                <div id="componentDetailsArea" style="width: 450px;height: 100px;" class="textArea"></div>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -554,6 +656,18 @@
                                         <div id="upgradeHistoryPopup">
                                             <h2 style="text-align: center;color: #ffffff;background-color: #005580;margin: 25px auto 25px auto;width: 400px;">Upgrade History for The Device</h2>
                                         </div>
+
+                                        <div id="assignDevicePopup">
+
+                                        <table cellspacing="25px">
+                                            <tr>
+                                                <td><label>User Name</label></td>
+                                                <td><input type="text" placeholder="User name" id="assignUserInput" class="inputField" /></td>
+                                            </tr>
+                                            <tr><label id="errorField" class="error" style="display:none">Please Enter a USer Name</label></tr>
+                                        </table>
+                                        </div>
+
                                     </td>
                                 </tr>
                                 <!-- End of devices grid generation -->
