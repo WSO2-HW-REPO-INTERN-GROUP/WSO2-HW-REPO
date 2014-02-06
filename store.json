@@ -1,7 +1,7 @@
 {
 
     "urlConfigurations":{
-	"dssUrl":"http://127.0.0.1:9764/services/HardewareRepo/"
+	"dssUrl":"http://10.100.4.57:9763/services/HardewareRepo/"
      }
 
 }

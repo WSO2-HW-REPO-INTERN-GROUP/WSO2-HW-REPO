@@ -3,7 +3,7 @@
       <property name="driverClassName">com.mysql.jdbc.Driver</property>
       <property name="url">jdbc:mysql://127.0.1.1:3306/HWDREPO</property>
       <property name="username">root</property>
-      <property name="password">root</property>
+      <property name="password">1234</property>
    </config>
    <!--Nadeeshaan Edit-->
       <query id="GetAllIssuesAdmin" useConfig="HardwareRepo">
