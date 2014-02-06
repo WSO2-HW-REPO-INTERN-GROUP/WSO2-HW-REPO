@@ -1,0 +1,144 @@
+<%
+
+	var log=new Log();
+	var store=require("store.json");
+	var dssUrl=store.urlConfigurations.dssUrl;
+
+	var operation=request.getParameter('operation');
+
+	if(operation=='update'){
+		var jsonString=request.getParameter('arr');
+		updateDatabase(jsonString);
+	}
+
+	else if(operation=="acceptRejcet"){
+		var issueNum=request.getParameter('issue_id');
+		var val=request.getParameter('value');
+		issueRejectResolve(val,issueNum);
+
+	}
+
+	else if(operation=="acceptRejcetRequest"){
+		var reqNum=request.getParameter('req_id');
+		var val=request.getParameter('value');
+		requestRejectResolve(val,reqNum);
+	}
+
+	else if(operation=="renewWarranty"){
+
+		var newDate=request.getParameter("newEndDate");
+		var warNum=request.getParameter("warrantyNum");
+
+		renewWarranty(newDate,warNum);
+	}
+
+	else if(operation=="addNewAccessoryUpdate"){
+		var inputData=parse(request.getParameter("inputs"));
+		var deviceId=request.getParameter("deviceID");
+
+		addNewUpgradeAccessory(deviceId,inputData);
+		// print(deviceId);
+
+
+	}
+
+	function updateDatabase(jsonString){
+
+		var jsonParsed=parse(jsonString);
+		var type=jsonParsed.type;
+		var arrivedData;
+		var warEndDate;
+
+		if(type=="AddPad"){
+			arrivedData=jsonParsed.padData;
+		}
+
+		else if(type=="AddDesktop"){
+			arrivedData=jsonParsed.desktopData;
+		}
+
+		else if(type=="AddLaptop"){
+			arrivedData=jsonParsed.laptopData;
+		}
+
+		var names=jsonParsed.names;
+		var updateData={};
+		var warrantyData={};
+		var i=0;
+
+		for(var parameter in arrivedData){
+
+			if(parameter=="warrantyEndDate"){
+				warrantyData["end"]=arrivedData[parameter];
+			}
+			else{
+				if(parameter=="purchaseDate" || parameter=="serial"){
+					warrantyData[parameter]=arrivedData[parameter];
+				}
+				updateData[names[i]]=arrivedData[parameter];
+				i++;
+			}
+			
+		}
+
+		var url  = dssUrl+type;
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        warrantyData["duration"]="24";
+
+
+        var warrantyUpdate=post((dssUrl+"AddWarrantyDevice"),warrantyData,headers,'json',function(data,xhr){
+        });
+        
+        print("type");
+
+        
+	}
+
+	function issueRejectResolve(value,issueNum){
+		var updateData={res:value,issue_num:issueNum};
+		var url  = dssUrl+"AdminResolveRejectIssue";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        print("success");
+	}
+
+	function requestRejectResolve(value,reqNum){
+		var updateData={res:value,req_num:reqNum};
+		var url  = dssUrl+"AdminAcceptRejectRequest";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        print("success");
+	}
+
+	function renewWarranty(newEnd,warNum){
+		var updateData={newEnd:newEnd,war_num:warNum};
+		var url  = dssUrl+"RenewWarranty";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        log.info(result);
+
+        print(result);
+	}
+
+	function addNewUpgradeAccessory(deviceID,inputData){
+		var updateData={up_dev_id:deviceID,acc_id:inputData.accessory,desc:inputData.desc};
+		var url  = dssUrl+"AddUpgradeAccessory";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        log.info(result);
+
+        print(deviceID); 
+	}
+
+%>

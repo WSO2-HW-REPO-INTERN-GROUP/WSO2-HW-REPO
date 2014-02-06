@@ -1,0 +1,208 @@
+<%
+
+var log=new Log();
+
+var store=require("store.json");
+var dssUrl=store.urlConfigurations.dssUrl;
+
+
+    var operation=request.getParameter("operation");
+
+    if(operation=="getIssueBasicDetails"){
+        var resolved=request.getParameter("resolved");
+        getAdminHomeIssues(resolved);
+    }
+
+    else if(operation=="getissueDetails"){
+
+        var issueID=request.getParameter("issueID");
+        getIssueDetails(issueID);
+    }
+
+    else if (operation=='upgradeHistory') {
+        var device_id=request.getParameter("device_id")
+        getUpdateHistory(device_id);
+    }
+
+    else if (operation=='getAllWarranty') {
+        getAllWarranty();
+    }
+
+    else if(operation=="getWarrantyDetailsByID"){
+        var war_num=request.getParameter("warrantyID");
+        getWarrantyByID(war_num);
+    }
+
+    else if(operation=="getCustomWarranty"){
+        var searchText=request.getParameter("searchText");
+        var filterVal=request.getParameter("filterValue");
+
+        customWarranty(searchText,filterVal);
+    }
+
+    else if(operation=="getAccessory"){
+        var searchText=request.getParameter("searchText");
+        getAccessories(searchText);
+    }
+
+
+    function getAdminHomeIssues(resolved){
+
+        var url  = dssUrl+"GetAllIssuesAdmin";
+
+        var type = "json";
+        var headers = {"Content-Type": "application/json"};
+        var result=get(url,type,headers);
+
+        var type = "json";
+        var data={resolved:resolved};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{resolved:resolved},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        log.info(dataArray);
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
+
+    function getIssueDetails(issueID){
+        var url  = dssUrl+"GetIssue";
+        var type = "json";
+        var data={issue_num:issueID};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        print(dataArray);
+    }
+
+    function getUpdateHistory(deviceID){
+        var url  = dssUrl+"GetDeviceUpgradeHistory";
+        var type = "json";
+        var data={device_id:deviceID};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+
+        log.info("result");
+
+        var jsonData=result.data;
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        log.info(dataArray);
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
+
+    function getAllWarranty(){
+        var url  = dssUrl+"GetAllWarrantyAdmin";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        print(dataArray);
+    }
+
+    function getWarrantyByID(id){
+        var url  = dssUrl+"GetWarrantyByIDAdmin";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var data={war_num:id};
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        print(dataArray);
+    }
+
+    function customWarranty(searchText,status){
+        var url  =dssUrl+"GetCustomWarrantyAdmin";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var data={status:status,war_num:searchText,device_id:searchText};
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
+
+    function getAccessories(searchText){
+        var url  = dssUrl+"GetAccessory";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var data={acc_type:searchText};
+        var result=post(url,data,headers,"json");
+        
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+         if (dataArray==null) {
+             var forcedArray=new Array();
+             print(forcedArray);
+         }
+         else{
+             if(dataArray.length==null){
+                 var forcedArray=new Array();
+                 forcedArray.push(dataArray);
+                 print(forcedArray);
+             }
+             else{
+                print(dataArray);
+             }
+         }
+    }
+
+
+
+
+%>
