@@ -1,39 +1,31 @@
 <%
 
-var dssUrl = "http://10.100.4.57:9763/services/HardewareRepo/";
+
 
 function viewDeviceByID(deviceID) {
 
     var url = dssUrl + "GetDeviceByID";
-    var rslt = get(url, {
-        "device_id": deviceID
-    }, {
-        "Accept": "application/json"
-    }, "json");
-    log.info(rslt.data.BaseElement.Element);
 
+    var rslt = post(url, {
+        "device_id": deviceID
+    }, {"Content-Type":"application/json","Accept": "application/json"
+    }, "json");
+
+    log.info(rslt)
     return rslt.data.BaseElement.Element;
 }
 
 
 function viewAccessoryByDeviceID(deviceID) {
 
-   /* var url = dssUrl + "GetAccessoryByDeviceID";
+    var url = dssUrl + "GetAccessoriesByDeviceID";
     var rslt = get(url, {
-        "acc_id": deviceID
+        "dev_id": deviceID
     }, {
         "Accept": "application/json"
     }, "json");
-    log.info(rslt.data.BaseElement.Element);
-
 
     return rslt.data.BaseElement.Element;
-
-    */
-
-    var accessories=[{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"},{"ID":"123","Serial":"AGGS5538GS544","Assigned Date":"2012/12/12","Type":"Battery"}];
-
-    return accessories;
 }
 
 function viewUpgradeHistoryByDeviceID(deviceID) {
@@ -53,14 +45,15 @@ function viewUpgradeHistoryByDeviceID(deviceID) {
 
 function viewIssueHistoryByDeviceID(deviceID) {
 
-    var url = dssUrl + "GetIssuesByDeviceID";
+
+    var url = dssUrl + "GetIssuesByDevice";
     var rslt = get(url, {
         "dev_id": deviceID
     }, {
         "Accept": "application/json"
     }, "json");
-    log.info(rslt.data.BaseElement.Element);
 
+    log.info(rslt);
 
     return rslt.data.BaseElement.Element;
 
@@ -69,9 +62,12 @@ function viewIssueHistoryByDeviceID(deviceID) {
 function viewRequestsByUser(user_id) {
 
 
+
     var url = dssUrl+"GetRequestsByEmployee";
+    
     var rslt=get(url,{"emp_id":user_id},{"Accept":"application/json"},"json");
 
+    log.info(stringify(rslt));
     return rslt.data.BaseElement.Element;
 
 }
@@ -96,21 +92,16 @@ function addNewRequest(addReqObj) {
     var headers = {Accept:"application/json" };
     var rslt=get(url,data,headers,'json',function(data,xhr){
     })
-    log.info(rslt);
-
-    //addIssue();
-    //return rslt.data.BaseElement.Element;
 
 }
 
 
-function addIssue() {
+function addIssue(issue) {
+
 
     var url = dssUrl+"AddIssue"
-    var data={'sts':"critical",'dev_id':"1",'emp_id':"1",'desc':"testing post",'date':"2014-01-01"};
-    var headers = {Accept:"application/json" };
-    var rslt=get(url,data,headers,'json',function(data,xhr){
-    });
+    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var rslt=post(url,issue,headers,'json',function(data,xhr){});
     log.info(rslt);
 
 }

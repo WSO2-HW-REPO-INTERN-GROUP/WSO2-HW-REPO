@@ -2,6 +2,10 @@
 
 include("../model/inputModel.jag");
 
+var dataStore=require("../store.json");
+
+
+var dssUrl = dataStore.urlEntries.dssUrl;
 var serverPath = "http://localhost:9765/WSO2-HW-REPO";
 response.contentType = 'text/javascript';
 
@@ -11,7 +15,6 @@ var uri = request.getRequestURI();
 
 
 var log = new Log();
-
 
 session.put('user-id','1');
 
@@ -47,7 +50,16 @@ if (verb == "POST") {
 
 
     } else if (opr == 'getAccessories') {
-        print(viewAccessoryByDeviceID(deviceID));
+
+        var result = viewAccessoryByDeviceID(deviceID);
+
+        if( Object.prototype.toString.call(result) === '[object Array]' ) {
+            print(result);
+        }
+        else{
+            print([result]);
+        }
+
     } else if (opr == 'upgradeHistory') {
 
 
@@ -58,7 +70,11 @@ if (verb == "POST") {
         print(viewIssueHistoryByDeviceID(deviceID));
     } else if (opr == 'addIssue') {
 
+        var user_id = session.get('user-id');
+
         var addIssueObj = parse(data);
+
+        addIssueObj.issue.emp_id=user_id;
 
         addIssue(addIssueObj.issue);
         print({

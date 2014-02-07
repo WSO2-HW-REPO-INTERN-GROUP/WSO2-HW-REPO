@@ -32,8 +32,9 @@ Hwdrepo = new function () {
                         if (property == "serial_number") {
 
                             var link = document.createElement('a');
+
                            link.setAttribute("href", "normal_device_details.jag?id=" + object['device_id']);
-                           link.setAttribute("target", "_blank");
+                           //link.setAttribute("onclick", 'window.open("normal_device_details.jag?id="' + object["device_id"].toString()+')');
 
                             link.innerHTML = object[property];
                             
@@ -141,9 +142,11 @@ Hwdrepo = new function () {
         }),
             function (data) {
 
-                Hwdrepo.fillRequestTable(data);
+                
 
             });
+
+        this.viewRequests();
 
 
     }
@@ -221,19 +224,39 @@ Hwdrepo = new function () {
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "getDeviceDetails",
-            deviceID: deviceID[1]
+            deviceID: deviceID
         }),
             function (data, status) {
                 var i = 0;
 
                 var basicDetailsTbl = document.getElementById('basicFeaturesTbl');
+
                 var basicDetailsArea = document.getElementById("basicDetailsDiv");
                 basicDetailsArea.setAttribute('class', 'datagrid');
+
+
+                var thead = document.createElement('thead');
+                var htr=document.createElement('tr');
+                var th=document.createElement('th');
+
+                htr.setAttribute('style','height: 25px');            
+                th.setAttribute('colspan','2');
+                //th.style.height='15px';
+                //th.style.borderTopLeftRadius="3px";
+                //th.style.borderTopRightRadius="3px";
+
                 var tbody = document.createElement('tbody');
 
                 var object = data;
 
                 for (var property in object) {
+
+
+                                    if(property=='serial_number'){
+                                        th.appendChild(document.createTextNode("Serial Number: "+object[property]));
+                                        //th.appendChild(document.createElement('br'));
+                                        
+                                    }
 
                     var newRow = document.createElement('tr');
 
@@ -256,6 +279,11 @@ Hwdrepo = new function () {
                     i++;
                 }
 
+                htr.appendChild(th);           
+                thead.appendChild(th);
+
+                basicDetailsTbl.innerHTML="";
+                basicDetailsTbl.appendChild(thead);
                 basicDetailsTbl.appendChild(tbody);
             });
 
@@ -265,69 +293,75 @@ Hwdrepo = new function () {
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "getAccessories",
-            deviceID: deviceID[1]
+            deviceID: deviceID
         }),
             function (data, status) {
 
-                var objArray = data;
+                var objArray=data;
+            
+                            var tablearea = document.getElementById('accessoryDiv');
+                            tablearea.setAttribute("class","datagrid");
+            
+                            for(var i=0;i<objArray.length;i++){
 
-                var tablearea = document.getElementById('accessoryDiv');
-                tablearea.setAttribute("class", "datagrid");
+                                var cntr=0;
 
-                for (var i = 0; i < objArray.length; i++) {
+                                var newTable=document.createElement('table');
+                                newTable.style.width='600px';
+                                newTable.style.margin='0px 0px 15px 0px';
 
-                    var cntr = 0;
+                                var thead=document.createElement('thead');
+                                var htr=document.createElement('tr');
+                                var th=document.createElement('th');
+                                var tbody=document.createElement('tbody');
+                                th.setAttribute('colspan','2');
+                                th.style.height='15px';
+                                th.style.borderTopLeftRadius="3px";
+                                th.style.borderTopRightRadius="3px";
+                                htr.appendChild(th);
+                                thead.appendChild(htr);
+                                newTable.appendChild(thead);
+            
+                                var object=objArray[i];
 
-                    var newTable = document.createElement('table');
-                    newTable.style.width = '600px';
-                    newTable.style.margin = '0px 0px 15px 0px';
+                                for(var property in object){
 
-                    var thead = document.createElement('thead');
-                    var htr = document.createElement('tr');
-                    var th = document.createElement('th');
-                    var tbody = document.createElement('tbody');
-                    th.setAttribute('colspan', '2');
-                    th.style.height = '15px';
-                    th.style.borderTopLeftRadius = "3px";
-                    th.style.borderTopRightRadius = "3px";
-                    htr.appendChild(th);
-                    thead.appendChild(htr);
-                    newTable.appendChild(thead);
+                                    var newRow=document.createElement('tr');
 
-                    var object = objArray[i];
+                                    if(cntr%2==0){
+                                        newRow.setAttribute("class","alt");
+                                    }
 
-                    for (var property in object) {
+                                    if(property=='accessory_id'){
+                                        th.appendChild(document.createTextNode("Accessory ID: "+object[property]));
+                                        th.appendChild(document.createElement('br'));
+                                    }
+                                    else if(property=='type'){
+                                        th.appendChild(document.createTextNode("Type: "+object[property]));
+                                    }
 
-                        var newRow = document.createElement('tr');
+                                    else{
 
-                        if (cntr % 2 == 0) {
-                            newRow.setAttribute("class", "alt");
-                        }
+                                        var td1=document.createElement('td');
+                                        var td2=document.createElement('td');
 
-                        if (property == 'ID') {
-                            th.appendChild(document.createTextNode("ID: " + object[property]));
-                        } else {
+                                        td1.appendChild(document.createTextNode(property));
+                                        td2.appendChild(document.createTextNode(object[property]));
 
-                            var td1 = document.createElement('td');
-                            var td2 = document.createElement('td');
+                                        newRow.appendChild(td1);
+                                        newRow.appendChild(td2);
 
-                            td1.appendChild(document.createTextNode(property));
-                            td2.appendChild(document.createTextNode(object[property]));
+                                        tbody.appendChild(newRow);
 
-                            newRow.appendChild(td1);
-                            newRow.appendChild(td2);
+                                    }
 
-                            tbody.appendChild(newRow);
+                                    cntr++;
 
-                        }
+                                }
+                                newTable.appendChild(tbody);
 
-                        cntr++;
-
-                    }
-                    newTable.appendChild(tbody);
-
-                    tablearea.appendChild(newTable);
-                }
+                                tablearea.appendChild(newTable);
+                            }
             });
 
     }
@@ -336,7 +370,7 @@ Hwdrepo = new function () {
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "getIssues",
-            deviceID: deviceID[1]
+            deviceID: deviceID
         }),
             function (data) {
 
@@ -440,6 +474,13 @@ Hwdrepo = new function () {
                 alert(JSON.stringify(data));
                 $("#reportIssueDialog").dialog('close');
             });
+    }
+
+    this.getHardwareComponentDescription=function(deviceID){
+
+
+        return "<p>'{This : Works}'</p>";
+
     }
 
 

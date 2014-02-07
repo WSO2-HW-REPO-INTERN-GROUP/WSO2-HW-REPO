@@ -40,13 +40,26 @@
 
         <!-- This script handles the tabbed pane functionality -->
         <script type="text/javascript">
-            jQuery(document).ready(function(){
+
+        var urlData=window.location.search.substring(1);
+        var deviceID=(urlData.split("="))[1];
+
+            jQuery(document).ready(function() {
             
                 prepareList();
                 readURL();
                 getAccessories();
+
+                
+
+
+                // set date picker in report issue form
+
+                $( "#datepicker" ).datepicker({ dateFormat: "yy-mm-dd" ,gotoCurrent: true});
+                $( "#componentDetailsArea" ).html(Hwdrepo.getHardwareComponentDescription(deviceID));
             
                 $("#reportIssueDialog").dialog({
+
                     autoOpen:false,
                     height: 600,
                     width: 700,
@@ -58,9 +71,12 @@
                             var category=document.getElementById('issueCatSelect');
                             var description=document.getElementById('issueDescription');
                             var errSpan=document.getElementById('addHdwErr');
+                            var date = $( "#datepicker").val();
+                            alert(date);
+                            
 
 
-                            if(type.options[type.selectedIndex].value=="0"||category.options[category.selectedIndex].value=="0"||description.value==""){
+                            if(type.options[type.selectedIndex].value=="0"||date==null||description.value==""){
                                 errSpan.classList.remove(errSpan.className);
                                 errSpan.classList.add("error");
                                 errSpan.textContent="Please Check for Correct device type selection or empty description";
@@ -69,9 +85,10 @@
 
                                 var issueData={
 
-                                    "type":type.options[type.selectedIndex].text,
-                                    "device":category.options[category.selectedIndex].text,
-                                    "description":description.value
+                                    "sts":type.options[type.selectedIndex].text,
+                                    "dev_id":deviceID,
+                                    "desc":description.value,
+                                    "date": date
 
                                 };
 
@@ -126,10 +143,7 @@
 
                $("#issueHistoryLink").click(function(event){
 
-                    var urlData=window.location.search.substring(1);
-                    var deviceID=urlData.split("=");
-
-                    Hwdrepo.loadIssueHistory(deviceID);
+                    Hwdrepo.loadIssueHistory(deviceID[1]);
 
 
 
@@ -165,9 +179,6 @@
 
                 $("#upgradeHistoryLink").click(function(event){
 
-                    var urlData=window.location.search.substring(1);
-                    var deviceID=urlData.split("=");
-
                     Hwdrepo.loadUpgradeHistory(deviceID);
 
 
@@ -183,8 +194,7 @@
             });
 
             function readURL(){
-                    var urlData=window.location.search.substring(1);
-                    var deviceID=urlData.split("=");
+
                    // var issueHistory=document.getElementById("issueHistoryLink");
                   //  issueHistory.setAttribute("href","normal_device_issues.jag?id="+deviceID[1]);
 
@@ -192,10 +202,6 @@
                 }
 
              function getAccessories(){
-
-                var urlData=window.location.search.substring(1);
-                var deviceID=urlData.split("=");
-
 
                 Hwdrepo.getAccssories(deviceID);
 
@@ -213,7 +219,7 @@
                         })
                         .addClass('collapsed')
                         .children('ul').hide();
-            };
+            }
             
             
             
@@ -392,18 +398,21 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><label id="selectIssueCat">Select Issue Category</label></td>
-                                                            <td>
+                                                            <td><p>Date: </p></td>
+                                                            <td><input type="text" id="datepicker" class="inputField" ></td>
+                                                        <!--    <td>
                                                                 <select id="issueCatSelect" class="siteButton">
                                                                     <option id="option11" value="0">--Select Issue Type--</option>
                                                                      <option id="option12" value="1"> Malfunction</option>
                                                                 </select>
-                                                            </td>
+                                                            </td> -->
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label id="componentDetailsLbl">Hardware Component Description</label><br/><br/>
-                                                                <div id="componentDetailsArea" style="border-color: #0099ff;width: 450px;height: 100px;border: 2px solid"></div>
+                                                                <div id="componentDetailsArea" style="border-color: #0099ff;width: 450px;height: 100px;border: 2px solid" class="textArea">
+
+                                                            </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
