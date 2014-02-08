@@ -25,6 +25,8 @@
 
                     var basicFields=new Array();
 
+                    var accHealth;
+
                     basicFields=[$("#serial"),$('#make'),$("#model"),$("#rating"),$("#purchaseDate"),$('#supplier'),$('#remarks'),$("#deviceType"),$("#warrantyEndDate")];
                     var inputData={};
 
@@ -33,6 +35,122 @@
                     var dropdownSelect="";
                 
                     getAllDevices();
+
+
+                    <!--Add the health bar-->
+
+                    var canvas = document.getElementById('canvas');
+                    canvas.width = 150;
+                    canvas.height = 50;
+                    var context = canvas.getContext('2d');
+
+                    var object1 = {
+                        x: 20,
+                        y: 30,
+                        width: 100,
+                        height: 20
+
+                    };
+
+                    var health = 10;
+                    var maxHealth = 10;
+
+                    // Loop
+                    setInterval(onTimerTick, 33);
+
+                    // Render Loop
+                    function onTimerTick() {
+
+                        // Clear the canvas
+                        canvas.width = canvas.width;
+                        
+                        // Calculate health bar percent
+                        var percent = health / maxHealth;
+                        accHealth=health;
+
+                        context.fillStyle = "#9ecaed";
+                        context.font = "18px sans-serif";
+                        context.fillText("Life " +health+"/"+maxHealth+" = " + percent * 100 +"%", 20, 20);
+
+                        context.fillStyle = "#d9d9d9";
+                        context.fillRect(object1.x, object1.y, object1.width, object1.height);
+
+                        context.fillStyle = "#9ecaed";
+                        context.fillRect(object1.x, object1.y, object1.width * percent, object1.height);
+                    }
+
+                    function contains(target, x, y) {
+                        if (x >= target.x && x <= (target.x + target.width) && y >= target.y && y <= (target.y + target.height)) {
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    // Update mouse position
+                    canvas.onmousemove = function (e) {
+                        var mouseX = e.offsetX;
+                        var mouseY = e.offsetY;
+
+                        if (contains(object1, mouseX, mouseY)) {
+                            health = Math.round(((mouseX - object1.x) / object1.width) * maxHealth);
+                        }
+                    }
+
+                    <!--Add the health bar-->
+
+
+
+
+                    $("#addNewAccessory").dialog({
+                        autoOpen:false,
+                        height: 400,
+                        width:550,
+                        modal: true,
+                        buttons:{
+                            'Confirm': function() {
+
+
+                                var accSerial=$("#accSerial").val();
+                                var accType=$('#accType').val();
+                                var remarks=$("#accRemarks").val();
+
+                                if(accSerial=="" || accType=="0" || remarks==""){
+                                    document.getElementById("accError").style.display="";
+                                }
+                                else{
+                                    document.getElementById("accError").style.display="none";
+
+
+                                    var accData={
+                                        "serial":accSerial,
+                                        "accType":accType,
+                                        "remarks":remarks,
+                                        "health":accHealth
+                                    };
+
+                                    $.post("admin_devices_updates.jag",{operation:"addAccessory",inputs:JSON.stringify(accData)},function(data,status){
+                                        alert(data);
+                                    });
+
+
+                                    //alert(accHealth);
+                                }
+
+                                
+
+                            }
+                        }
+                    });
+
+
+
+
+
+
+
+
+
+
                 
                     $("#addDevicePopup").dialog({
                         autoOpen:false,
@@ -205,9 +323,14 @@
                     });
                 
                 
-                    $("#addNewDevice").click(function(){
+                    $("#addNewDevice").click(function(event){
                         event.preventDefault();
                         $("#addDevicePopup").dialog("open");
+                    });
+
+                    $("#addNewAcc").click(function(event){
+                        event.preventDefault();
+                        $("#addNewAccessory").dialog("open");
                     });
                 
                     $('#deviceType').change(function(){
@@ -663,8 +786,12 @@
                                                         <td><span class="hidden" id="searchErr"></span></td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="3">
+                                                        <td>
                                                             <input type="button" value="Add Device" class="siteButton" id="addNewDevice"/>
+
+                                                        <td>
+                                                            <input type="button" value="Add Accessory" class="siteButton" id="addNewAcc"/>
+                                                        </td>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -800,6 +927,40 @@
                                                 </div>
                                             </form>
                                         </div>
+
+
+                                        <div id="addNewAccessory">
+                                            <table id="newAccessoryAddTbl" cellspacing="25px">
+                                                <tr>
+                                                    <td><label>Serail Numbber</label></td>
+                                                    <td><input type="text" class="inputField" placeholder="Serial Number" id="accSerial"/></td>
+                                                    <td><label>Type</label></td>
+                                                    <td><select id="accType" class="siteButton">
+                                                                <option value="0">Select Type</option>
+                                                                <option value="1">Battery</option>
+                                                                <option value="2">Ram</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><label>Health</label></td>
+                                                    <td><canvas id="canvas" style="margin-left:-20px"></canvas></td>
+                                                </tr>
+                                                    
+                                                                                                   
+                                            </table>
+                                            <div style="margin-left:25px">
+                                                <label>Remarks</label></br>
+                                                <textarea rows="6" cols="57" placeholder="Remarks" class="textArea" id="accRemarks"></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label id="accError" class="error" style="display: none">Please fill all the required fields</label>
+                                            </div>
+                                        </div>
+
+
                                     </td>
                                 </tr>
                                 <!-- End of devices grid generation -->

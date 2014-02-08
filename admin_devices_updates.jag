@@ -38,8 +38,31 @@
 
 		addNewUpgradeAccessory(deviceId,inputData);
 		// print(deviceId);
+	}
 
+	else if(operation=="assignDevice"){
+		var inputData=parse(request.getParameter("inputs"));
 
+		addAssignment(inputData.user,inputData.dev);
+
+		// print(inputData);
+	}
+
+	else if(operation=="revokeDevice"){
+		var devId=request.getParameter("device_id");
+		revokeDevice(devId);
+	}
+
+	else if(operation=="addAccessory"){
+		var inputData=JSON.parse(request.getParameter("inputs"));
+
+		addNewAccessoryToDb(inputData);
+	}
+
+	else if(operation=="removeAccessory"){
+		var inputData=JSON.parse(request.getParameter("inputs"));
+		removeAccessory(inputData);
+		// print(inputData)
 	}
 
 	function updateDatabase(jsonString){
@@ -131,14 +154,63 @@
 
 	function addNewUpgradeAccessory(deviceID,inputData){
 		var updateData={up_dev_id:deviceID,acc_id:inputData.accessory,desc:inputData.desc};
-		var url  = dssUrl+"AddUpgradeAccessory";
+		var url1  = dssUrl+"AddUpgradeAccessory";
+		var url2=dssUrl+"AssignAccessory";
+        var headers = {Accept:"application/json" };
+
+		var result1=post(url1,updateData,headers,'json',function(data,xhr){
+        });
+
+        var result2=post(url2,{dev_id:deviceID,acc_id:inputData.accessory},headers,'json',function(data,xhr){
+        });
+
+
+        log.info(result1);
+
+        print(deviceID); 
+	}
+
+	function addAssignment(emp_id,dev_id){
+		var updateData={emp_id:emp_id,dev_id:dev_id};
+		var url  = dssUrl+"AssignDevice";
         var headers = {Accept:"application/json" };
 		var result=post(url,updateData,headers,'json',function(data,xhr){
         });
 
-        log.info(result);
-
-        print(deviceID); 
+        print(emp_id+"------"+dev_id);
 	}
+
+	function revokeDevice(deviceID){
+
+		var updateData={dev_id:deviceID};
+		var url  = dssUrl+"RevokeDevice";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+	}
+
+
+function addNewAccessoryToDb(inputData){
+
+		var updateData={health:inputData.health,remarks:inputData.remarks,type:inputData.accType,sn:inputData.serial};
+		var url  = dssUrl+"AddAccesory";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        print("success");
+	}
+
+	function removeAccessory(inputData){
+		var updateData={acc_id:inputData.accID};
+		var url  = dssUrl+"RemoveAccesory";
+        var headers = {Accept:"application/json" };
+		var result=post(url,updateData,headers,'json',function(data,xhr){
+        });
+
+        print("success");
+	}
+
+
 
 %>

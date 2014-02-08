@@ -58,17 +58,17 @@
             
                                     for(var property in object){
 
-                                        if(property=="device_id"){
-                                            deviceID=object[property];
-                                        }
-            
                                         var newRow=document.createElement('tr');
-            
+
                                         if(i%2==0){
                                             newRow.setAttribute("class","alt");
                                         }
 
-                                        if(property=="resolved"){
+                                        if(property=="device_id"){
+                                            deviceID=object[property];
+                                        }       
+
+                                        else if(property=="resolved"){
                                             if(object[property]=="0"){
                                                 //$("#issueResolve").hide();
                                                 $("#viewUpgrades").hide();
@@ -97,6 +97,10 @@
                                         
                                     }
                                 issueDetailsTbl.appendChild(tbody);
+
+
+
+                                alert(data);
                             });
                         }
             
@@ -113,7 +117,7 @@
                         //         }
                         //     });
                         // }
-            
+        
                         $("#addUpgradeForm").dialog({
                             autoOpen:false,
                             height: 400,
@@ -132,8 +136,25 @@
                                     else{
                                         errSpan.style.display="none";
 
-                                        $.post("admin_requests_handler.jag",{deviceType:deviceType,description:description,hardware:hardware,request:"addNewUpgrade"},function(data){
+                                        // $.post("admin_requests_handler.jag",{deviceType:deviceType,description:description,hardware:hardware,request:"addNewUpgrade"},function(data){
+                                        // });
+
+                                            // alert(deviceID[1]);
+
+                                    
+                                        var newDeviceData={
+                                            "type":deviceType,
+                                            "accessory":hardware,
+                                            "desc":description
+                                        };
+                    
+        
+
+                                        $.post("admin_devices_updates.jag",{operation:"addNewAccessoryUpdate",deviceID:deviceID,inputs:JSON.stringify(newDeviceData)},function(data,status){
+                                            alert(data);
                                         });
+                                        
+
                                         $(this).dialog('close');
                                     }
                                 }
@@ -159,7 +180,7 @@
                                 for(var i=0;i< parsed.length;i++){
                                     var obj=parsed[i];
                                     accesoryRemarks[i]=obj["remarks"];
-                                    option="<option value='"+i+"'>"+obj["accessory_id"]+"</option>";
+                                    option="<option value='"+obj["accessory_id"]+"'>"+obj["accessory_id"]+"</option>";
                                     $("#hardwareSelect").append(option);
                                     alert(obj["accessory_id"]);
                                 }

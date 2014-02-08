@@ -245,7 +245,7 @@
                             var filterVal=state.options[state.selectedIndex].value;
                             var errMsgField=document.getElementById("errMessage");
 
-                            if(searchText==""||filterVal==0){
+                            if(searchText=="" && filterVal==0){
                                 errMsgField.classList.remove(errMsgField.className);
                                 errMsgField.classList.add('error');
                                 errMsgField.textContent="Invalid search Text or Warranty State";
@@ -260,13 +260,13 @@
 
                                 $.post("admin_data_get.jag",{searchText:searchText,filterValue:filterVal,operation:"getCustomWarranty"},function(data){
 
+                                    alert(data);
+
                                     var searchedArea=document.getElementById('allWarranties');
                                     var searchedTable = document.getElementById("allWarrantiesTable");
                                     searchedArea.style.display="";
                                     searchedArea.setAttribute('class','datagrid');
                                     var tbody=document.createElement('tbody');
-
-
 
                                     while ( searchedTable.rows.length > 1 )
                                     {
@@ -437,7 +437,7 @@
                                                                             <tr>
                                                                                 <th>Issue ID</th>
                                                                                 <th>Status</th>
-                                                                                <th>Device ID</th>
+                                                                                <th>Device Serial</th>
                                                                                 <th>User Name</th>
                                                                                 <th>Issue Details</th>
                                                                                 <th></th>
@@ -477,7 +477,7 @@
                                                                                 </td>
                                                                                 <td style="padding: 5px">
                                                                                     <select id="warrantyStateSelect" class="siteButton">
-                                                                                        <option value="0" selected="selected" disabled="disabled">Select State</option>
+                                                                                        <option value="0">Select State</option>
                                                                                         <option value="1" >All</option>
                                                                                         <option value="2" >Critical</option>
                                                                                         <option value="3" >Medium</option>
@@ -498,7 +498,9 @@
                                                                                 <tr>
                                                                                     <th>Warranty ID</th>
                                                                                     <th>Status</th>
-                                                                                    <th>Device Id</th>
+                                                                                    <th>Device Serial</th>
+                                                                                    <th>Start Date</th>
+                                                                                    <th>End Date</th>
                                                                                     <th></th>
                                                                                 </tr>
                                                                             </thead>
@@ -520,7 +522,7 @@
                                                         <tr>
                                                             <th>Issue ID</th>
                                                             <th>Status</th>
-                                                            <th>Device ID</th>
+                                                            <th>Device Serial</th>
                                                             <th>User Name</th>
                                                             <th>Issue Details</th>
                                                             <th></th>

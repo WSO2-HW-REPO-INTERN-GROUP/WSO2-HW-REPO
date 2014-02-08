@@ -37,6 +37,11 @@
 		getIssuesByDeviceID(device_id)
 	}
 
+    else if(operation=="getAccessories"){
+        var deviceId=request.getParameter("deviceID");
+        getDeviceAccessories(deviceId);
+    }
+
 	function getAllBasicDeviceDetails(){
 		var url  = dssUrl+"GetAllDeviceBasicAdmin";
         var type = "json";
@@ -64,7 +69,7 @@
         var assignedState=post((dssUrl+"GetAssigned"),{dev_id:device_id},headers,'json');
         var assignedStateData=assignedState.data;
         var be=assignedStateData["BaseElement"];
-        if(!be["Element"]==null){
+        if(be["Element"]!=null){
             dataArray["assigned_state"]="true";
         }
         else{
@@ -135,6 +140,35 @@
             }
         }
 	}
+
+    function getDeviceAccessories(dev_id){
+        var url  = dssUrl+"GetAccessoryByDeviceID";
+        var type = "json";
+        var data={dev_id:dev_id};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        log.info(jsonData);
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
 
 
 %>
