@@ -29,15 +29,15 @@
       
 
       <script type="text/javascript" src="js/main.js"></script>
-      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+      <!--script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script>
-      <script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>
+      <script type="text/javascript" src="js/jquery.ui.datepicker.js"--></script>
       <!--myscripts-->
       
      
       
-      <!--script src="js/jquery-1.10.2.js"></script>
-      <script src="js/jquery-ui-1.10.4.custom.js"></script-->
+      <script src="js/jquery-1.10.2.js"></script>
+      <script src="js/jquery-ui-1.10.4.custom.js"></script>
       <script type="text/javascript" src="js/jquery.dataTables.js"></script>
       <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
       <script src="js/mustache.js"></script>
@@ -131,6 +131,8 @@
 
 
                  });
+
+          
          
              
                 /* $("#hardwareTypeSelect").change(function() {

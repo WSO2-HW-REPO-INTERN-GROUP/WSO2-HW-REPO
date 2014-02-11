@@ -74,12 +74,46 @@ Hwdrepo = new function () {
     this.viewRequests = function () {
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html) {
 
-            Hwdrepo.fillRequestTable(html);
+            alert(JSON.stringify(html));
+            ss=html.requests;
+            var dataArray = new Array;
+            var aaData=new Array;
+            
+            for(var i=0;i<ss.length;i++){
+
+                var dataObject=ss[i];
+
+for(var o in dataObject) {
+
+    dataArray.push(dataObject[o]);
+}
+ //dataArray.push("<input type='checkbox' name='check"+dataObject['request_id']+"' value='"+dataObject['request_id']+"'>");
+
+       aaData.push(dataArray);
+       dataArray=new Array;
+}
+
+            //Hwdrepo.fillRequestTable(html);
+
+            /********************/
+        $('#example').dataTable( {
+        "aaData": aaData,
+        "aoColumns": [
+            { "sTitle": "Device Type" },
+            { "sTitle": "Purpose" },
+            { "sTitle": "Requirements" },
+            { "sTitle": "Request ID", "sClass": "center" }
+         //  { "sTitle": "Grade", "sClass": "center" }
+        ]
+    } 
+
+    ); 
+/******************************************/
 
         });
 
     }
-
+/*
     this.fillRequestTable = function (html) {
 
 
@@ -92,6 +126,8 @@ Hwdrepo = new function () {
         tbody.innerHTML = '';
 
         var obj = html;
+
+        alert(JSON.stringify(obj));
 
         for (var i = 0; i < obj.requests.length; i++) {
 
@@ -106,19 +142,46 @@ Hwdrepo = new function () {
 
             for (var property in object) {
 
+                if(property=="request_id"){
 
+
+
+                    var tdCheck = document.createElement('td');
+                    var checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.id = "chkbox_"+object[property];
+
+
+                    tdCheck.appendChild(checkbox);
+                    newRow.appendChild(tdCheck);
+
+                }
+                else{
                 var td = document.createElement('td');
 
 
                 td.appendChild(document.createTextNode(object[property]));
                 newRow.appendChild(td);
 
+
+
+
             }
+        }
+
+            
+
+//var label = document.createElement('label')
+//label.htmlFor = "id";
+//
+
+//tdCheck.appendChild(label);
+            
 
 
             tbody.appendChild(newRow);
         }
-    }
+    }*/
 
     this.requestDevice = function (deviceType, purpose, requirement) {
 
@@ -508,6 +571,11 @@ Hwdrepo = new function () {
             function (html) {
                  var userID=html;
             });
+    }
+    this.deleteRequests = function(cb){
+
+       alert(cb);
+
     }
 
 }
