@@ -56,6 +56,7 @@ if (verb == "POST") {
 
     } else if (opr == 'upgradeHistory') {
 
+      log.info(viewUpgradeHistoryByDeviceID(deviceID));
 
       print(viewUpgradeHistoryByDeviceID(deviceID));
     } else if (opr == 'getIssues') {

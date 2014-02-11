@@ -58,6 +58,7 @@
                  getAccessories();
                  Hwdrepo.loadIssueHistory(deviceID);
                  Hwdrepo.loadUpgradeHistory(deviceID);
+                 Hwdrepo.loadWarranties(deviceID);
          
          
                  // set date picker in report issue form
@@ -268,9 +269,7 @@
                                           <ul>
                                              </br>
                                              <li>
-                                                <div id="upgradeDiv">
-                                                   <table id="upgradeTbl">
-                                                   </table>
+                                                <div id="upgradeDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>
@@ -298,7 +297,7 @@
                                           <ul>
                                              </br>
                                              <li>
-                                                <div id="warrantyDiv">
+                                                <div id="warrantyDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>
@@ -315,7 +314,7 @@
                                           <ul>
                                              </br>
                                              <li>
-                                                <div id="accessoryDiv">
+                                                <div id="accessoryDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>

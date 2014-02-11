@@ -2,6 +2,8 @@ var appName = "WSO2-HW-REPO";
 var controllerPath = "/WSO2-HW-REPO/controller/input.jag";
 
 var Issuetemplate;
+var Upgradetemplate;
+var Warrantytemplate;
 var userID;
 
 
@@ -11,7 +13,15 @@ $.get(controllerPath,"operation=getUserID", function(data) {
                         
             },'json');
 
-$.get('templates/template.html', function(template) {
+$.get('templates/upgradeTemplate.html', function(template) {
+                    Upgradetemplate = template;        
+            });
+
+
+$.get('templates/issueTemplate.html', function(template) {
+                    Issuetemplate = template;        
+            });
+$.get('templates/warrantyTemplate.html', function(template) {
                     Issuetemplate = template;        
             });
 
@@ -124,32 +134,6 @@ Hwdrepo = new function () {
 
     this.requestDevice = function (deviceType, purpose, requirement) {
 
-        //code to add device to html table
-        /*
-         var tbody=document.getElementById('requestArea');
-         var newRow=document.createElement('tr');
-
-
-         //  newRow.setAttribute("class","alt");
-
-
-         var td=document.createElement('td');
-         td.appendChild(document.createTextNode(deviceType));
-         newRow.appendChild(td);
-
-         var td=document.createElement('td');
-         td.appendChild(document.createTextNode(purpose));
-         newRow.appendChild(td);
-
-         var td=document.createElement('td');
-         td.appendChild(document.createTextNode(requirement));
-         newRow.appendChild(td);
-
-         tbody.appendChild(newRow);
-
-
-         */
-
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "addDeviceRequest",
             dev: {
@@ -171,71 +155,34 @@ Hwdrepo = new function () {
 
     this.loadUpgradeHistory = function (deviceID) {
 
-        /*HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "upgradeHistory",
             deviceID: deviceID
         }),
 
-            function (data, status) {
+            function (data,status) {
 
                 var objArray = data;
+                //alert(JSON.stringify(objArray));
+                    //var html = Mustache.render(Upgradetemplate,object);
+
 
                 var tablearea = document.getElementById('upgradeDiv');
-                tablearea.setAttribute("class", "datagrid");
+                tablearea.innerHTML='';
+                var formatting="";
 
-                for (var i = 0; i < objArray.length; i++) {
+                    for (var i = 0; i < objArray.length; i++) {
 
-                    var cntr = 0;
+                          var object = objArray[i]; 
+                    
+                          //alert(JSON.stringify(object));
+                    var html = Mustache.render(Upgradetemplate,object);
 
-                    var newTable = document.createElement('table');
-                    newTable.style.width = '600px';
-                    newTable.style.margin = '0px 0px 15px 50px';
-
-                    var thead = document.createElement('thead');
-                    var htr = document.createElement('tr');
-                    var th = document.createElement('th');
-                    var tbody = document.createElement('tbody');
-                    th.setAttribute('colspan', '2');
-                    th.style.height = '15px';
-                    htr.appendChild(th);
-                    thead.appendChild(htr);
-                    newTable.appendChild(thead);
-
-                    var object = objArray[i];
-
-                    for (var property in object) {
-
-                        var newRow = document.createElement('tr');
-
-                        if (cntr % 2 == 0) {
-                            newRow.setAttribute("class", "alt");
-                        }
-
-                        if (property == 'Upgrade Id') {
-                            th.appendChild(document.createTextNode("Upgrade ID: " + object[property]));
-                        } else {
-
-                            var td1 = document.createElement('td');
-                            var td2 = document.createElement('td');
-
-                            td1.appendChild(document.createTextNode(property));
-                            td2.appendChild(document.createTextNode(object[property]));
-
-                            newRow.appendChild(td1);
-                            newRow.appendChild(td2);
-
-                            tbody.appendChild(newRow);
-
-                        }
-
-                        cntr++;
+                   formatting=formatting.concat(html);
 
                     }
-                    newTable.appendChild(tbody);
-
-                    tablearea.appendChild(newTable);
-                }
-            });*/
+                    tablearea.innerHTML = formatting;
+                });
     }
 
     this.getDeviceDetails = function (deviceID) {
@@ -440,6 +387,9 @@ Hwdrepo = new function () {
                 tablearea.innerHTML = formatting;
 
             });
+
+    }
+    this.loadWarranties=function(deviceID){
 
     }
 
