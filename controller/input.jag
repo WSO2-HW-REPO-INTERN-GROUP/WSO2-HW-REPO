@@ -84,15 +84,16 @@ if (verb == "POST") {
     }
     else if(opr =='editIssue'){
 
-        //log.info(data);
 
-       // var editIssueObj = parse(data);
+        var user_id = session.get('user-id');
 
-      //  editIssueObj.issue.emp_id=user_id;
+        var editIssueObj = JSON.parse(data);
 
+        log.info(editIssueObj);
 
-        //editIssue(editIssueObj);
+      editIssueObj.issue.emp_id=user_id;
 
+       editIssue(editIssueObj.issue);
 
 
     }

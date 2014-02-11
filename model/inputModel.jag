@@ -129,10 +129,12 @@ function  returnValue(returnBaseElement){
 
 function editIssue(issue){
 
-    var url = dssUrl+"EditIssue"
-    var headers = {"Content-Type":"application/json","Accept":"application/json" };
-   // var rslt=post(url,issue,headers,'json',function(data,xhr){});
-    //log.info(rslt);
+    //log.info(issue);
+
+   var url = dssUrl+"EditIssue"
+  var headers = {"Content-Type":"application/json","Accept":"application/json" };
+  var rslt=post(url,issue,headers,'json',function(data,xhr){});
+   log.info(rslt);
 }
 
 function addOrder(bookName, authName, bookType) {

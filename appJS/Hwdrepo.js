@@ -399,6 +399,7 @@ Hwdrepo = new function () {
                 var objArray = data;
 
                 var tablearea = document.getElementById('issueDiv');
+                tablearea.innerHTML='';
                 var formatting="";
 
                 for (var i = 0; i < objArray.length; i++) {
@@ -451,7 +452,7 @@ Hwdrepo = new function () {
 
     }
 
-    this.editIssue = function(issue_no,dev_id,status,issue,date,resolve){
+    this.editIssue = function(issue_no,dev_id,status,issue,oldDate,resolve){
 
         Hwdrepo.loadDialogs();
 
@@ -459,10 +460,14 @@ Hwdrepo = new function () {
 
                 $( "#reportIssueDialog" ).dialog({ buttons: [ { text: "Ok", click: function() {
 
+                     var description=document.getElementById('issueDescription').value;
+                    var date = $("#datepicker").val();
+
+
 
             HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "editIssue",
-            issue: {"sts":status,"desc":issue,"date":date,"resolv":resolve,"issue_id":issue_no}
+            issue: {"sts":status,"desc":description,"date":date,"resolv":resolve,"issue_id":issue_no,"dev_id":dev_id}
         }),
             function (data) {
 
@@ -470,13 +475,14 @@ Hwdrepo = new function () {
                 
             });
          
-            Hwdrepo.loadIssueHistory();
+            
          $('#reportIssueDialog').dialog('destroy');
+         Hwdrepo.loadIssueHistory(dev_id);
          $( "#addHdwInfo" ).attr("class","hidden" );
 
           } } ] });
 
-        $( "#datepicker" ).datepicker("setDate",date.split("+")[0]);
+        $( "#datepicker" ).datepicker("setDate",oldDate.split("+")[0]);
         $("#issueDescription").val(issue);
         $( "#reportIssueDialog" ).dialog('option', 'title', 'Edit Issue');
 
@@ -492,11 +498,11 @@ Hwdrepo = new function () {
 
             HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "editIssue",
-            issue: {"sts":status,"desc":issue,"date":date,"resolv":resolve,"issue_id":issue_no,"resolve":3}
+            issue: {"sts":status,"desc":issue,"date":oldDate,"resolv":resolve,"issue_id":issue_no,"resolve":3}
         }),
             function (data) {
                     
-                    Hwdrepo.loadIssueHistory();
+                    Hwdrepo.loadIssueHistory(dev_id);
                 
             });
          
