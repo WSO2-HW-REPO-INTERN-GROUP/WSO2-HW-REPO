@@ -40,11 +40,10 @@
       <!--<script type="text/javascript" src="js/main.js"></script>-->
       <!--<script type="text/javascript" src="js/WSRequest.js"></script>-->
       <!--<script type="text/javascript" src="js/cookies.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>>
-      <script type="text/javascript" src="js/jquery-1.9.1.js"></script-->
-      <script type="text/javascript"src="js/jquery-1.10.2.js"></script>
+      <!--<script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>-->
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script>
-      <!--script type="text/javascript" src="js/customControls.js"></script-->
+      <script type="text/javascript" src="js/customControls.js"></script>
 
       <!--myscripts-->
       <script src="appJS/Hwdrepo.js"></script>
@@ -57,7 +56,8 @@
          jQuery(document).ready(function(){
          
              <!--*******************-->
-
+         
+         
          prepareList();
          
          
@@ -86,7 +86,7 @@
              var purpose=$("#purposeArea").val();
              var requirements=$("#requirementArea").val();
          
-             //(deviceType+" "+purpose+" "+requirements);
+             alert(deviceType+" "+purpose+" "+requirements);
          //                        window.location.href = "test.jag";
              Hwdrepo.requestDevice(deviceType,purpose,requirements);
              $(this).dialog('close');
@@ -96,8 +96,6 @@
          }
          }
          });
-
-          $("#requestDeviceForm").dialog('option', 'title', 'Request a Device');
          
          $("#addRequestButton").click(function(event)
          {
@@ -107,24 +105,13 @@
          $("#requestDeviceForm").dialog("open");
          
          });
-
-         $('#allRequests').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
-         /***********************************/
-
-
-
-
-
-
-
-          /***********************************/
          
-         Hwdrepo.viewRequests();
+        Hwdrepo.viewRequests();
 
          
          Hwdrepo.loadDevices();
-
-});
+         
+         });
          
       </script>
    </head>
@@ -244,25 +231,19 @@
                                           <li>
                                              <div id="allRequests" class="datagrid">
                                                 <!--data is loaded by the javascript function loadAllIssues()-->
-                                             <!--   <table id="requestTable">
+                                                <table id="requestTable">
                                                    '
                                                    <thead>
                                                       <tr>
                                                          <th>Device Type</th>
                                                          <th>Purpose</th>
                                                          <th>Requirement</th>
-                                                         <th>Select</th>
+                                                         <th></th>
                                                       </tr>
                                                    </thead>
                                                    <tbody id="requestArea">
                                                    </tbody>
                                                 </table>
-                                                <div id="linksDiv">
-                                                   <table>
-                                                      <br/><br/>
-                                                      <button id="deleteRequests" class="siteButton"style="margin-left: 150px;" onclick="Hwdrepo.deleteRequests();">Delete </button>
-                                                   </table>
-                                                </div> -->
                                              </div>
                                           </li>
                                        </ul>
@@ -304,12 +285,12 @@
                                  </ul>
                               </div>
                               <!--<button id="addRequestButton" name="addRequestDevice">Add New Device</button>-->
-                              <input type="button" id="addRequestButton" class="siteButton" value="New Device"/>
+                              <input type="button" id="addRequestButton" class="siteButton" value="Request Device"/>
                               <!-- This is the form for adding a new device -->
                                  <div id="requestDeviceForm">
                                  <form>
                                     <label id="selectDeviceLbl">Select Device Type</label>
-                                    <select id="deviceTypeSelect"  class="siteButton">
+                                    <select id="deviceTypeSelect">
                                        <option id="option1">pad</option>
                                        <option id="option2">laptop</option>
                                        <option id="option3">desktop</option>
