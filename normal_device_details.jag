@@ -31,7 +31,7 @@
       <script type="text/javascript" src="js/main.js"></script>
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script>
-      <script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>
+      <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
       <!--myscripts-->
       
      
@@ -62,62 +62,9 @@
          
                  // set date picker in report issue form
          
-                // Hwdrepo.loadDialogs(deviceID);
-
-                 $( "#datepicker" ).datepicker({  autoOpen:false,dateFormat: "yy-mm-dd" ,gotoCurrent: true});
-        $("#issueDescription").val("");
-
-        Hwdrepo.getHardwareComponentDescription(deviceID);
+                Hwdrepo.loadDialogs(deviceID);
 
 
-         $("#reportIssueDialog").dialog({
-                  
-                     autoOpen:false,
-                     height: 650,
-                     width: 700,
-                     modal: true,
-                     buttons:{
-                         'Confirm': function() {
-
-                            //issueTypeSelect is disabled, add if needed
-         
-                            // var type=document.getElementById('issueTypeSelect');
-                             var description=document.getElementById('issueDescription');
-                             var errSpan=document.getElementById('addHdwErr');
-                             //var date = $( "#datepicker").val();
-                             
-                             if(/*type.options[type.selectedIndex].value=="0"||*/date==null||description.value==""){
-                                 errSpan.classList.remove(errSpan.className);
-                                 errSpan.classList.add("ui-widget");       
-                             }
-                             else{
-         
-                                 $( "#addHdwErr" ).attr( "class", "hidden" );
-         
-                                 var issueData={
-         
-                                     "sts": null,/*type.options[type.selectedIndex].text*/
-                                     "dev_id":deviceID,
-                                     "desc":description.value,
-                                     "date": date,
-         
-                                 };
-         
-                                 Hwdrepo.addIssue(issueData);  
-                             }
-                         }
-
-                         , 'close':function(){
-
-
-
-                                $("#reportIssueDialog").dialog('close');
-                         }
-                       
-                     }
-                 });
-            $('#reportIssueDialog').dialog('option', 'title', 'Report Issue');
-             
                 
              
                  $("#reportIssue").click(function(event)
@@ -126,8 +73,9 @@
                      //Stop any default actions on the button.
                      event.preventDefault();
                      //Open your dialog.
+
+                     Hwdrepo.loadDialogs(deviceID);
                      $("#reportIssueDialog").dialog("open");
-             
 
 
                  });
@@ -404,13 +352,13 @@
                                              </td>
                                              <td><input type="text" id="datepicker" class="inputField" ></td>
                                           </tr>
-                                          <tr>
+                                          <!-- <tr>
                                              <td colspan="2">
                                                 <label id="componentDetailsLbl">Hardware Component Description</label><br/><br/>
                                                 <div id="componentDetailsArea" style="border-color: #0099ff;width: 450px;height: 100px;border: 2px solid;" class="textArea">
                                                 </div>
                                              </td>
-                                          </tr>
+                                          </tr> -->
                                           <tr>
                                              <td colspan="2">
                                                 <label id="issueDescriptionLbl">Add Issue Description</label><br/><br/>
@@ -422,7 +370,7 @@
                                                 <div id="addHdwErr" class ="hidden">
                                                    <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
                                                       <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please Select an issue description
+                                                         <strong>Alert:</strong> Please Type an issue description
                                                       </p>
                                                    </div>
                                                 </div>

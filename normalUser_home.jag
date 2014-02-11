@@ -285,12 +285,12 @@
                                  </ul>
                               </div>
                               <!--<button id="addRequestButton" name="addRequestDevice">Add New Device</button>-->
-                              <input type="button" id="addRequestButton" class="siteButton" value="Request Device"/>
+                              <input type="button" id="addRequestButton" class="siteButton" value="New Device"/>
                               <!-- This is the form for adding a new device -->
-                                 <div id="requestDeviceForm">
+                                 <div id="requestDeviceForm" title="Request a device">
                                  <form>
                                     <label id="selectDeviceLbl">Select Device Type</label>
-                                    <select id="deviceTypeSelect">
+                                    <select id="deviceTypeSelect" class="siteButton">
                                        <option id="option1">pad</option>
                                        <option id="option2">laptop</option>
                                        <option id="option3">desktop</option>

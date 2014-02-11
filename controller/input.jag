@@ -66,10 +66,14 @@ if (verb == "POST") {
         print(viewIssueHistoryByDeviceID(deviceID,user_id));
     } else if (opr == 'addIssue') {
 
+         var user_id = session.get('user-id');
+
         
         var addIssueObj = parse(data);
 
         addIssueObj.issue.emp_id=user_id;
+
+        //log.info(addIssueObj);
 
         addIssue(addIssueObj.issue);
         print({

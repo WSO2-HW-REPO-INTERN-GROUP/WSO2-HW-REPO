@@ -97,6 +97,8 @@ function addNewRequest(addReqObj) {
 
 function addIssue(issue) {
 
+    log.info(issue);
+
 
     var url = dssUrl+"AddIssue"
     var headers = {"Content-Type":"application/json","Accept":"application/json" };

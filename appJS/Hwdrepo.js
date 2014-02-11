@@ -82,6 +82,8 @@ Hwdrepo = new function () {
 
     this.fillRequestTable = function (html) {
 
+        //alert(JSON.stringify(html));
+
 
         var reqArea = document.getElementById('requestArea');
         var reqTable = document.getElementById("requestTable");
@@ -403,7 +405,7 @@ Hwdrepo = new function () {
 
                     var object = objArray[i]; 
 
-                    alert(JSON.stringify(object));
+                  //  alert(JSON.stringify(object));
 
                     var html = Mustache.render(Issuetemplate,object);
 
@@ -424,17 +426,21 @@ Hwdrepo = new function () {
             function (data) {
 
                $( "#addHdwInfo" ).attr("class","ui-widget" );
+
                 
             });
     }
 
     this.getHardwareComponentDescription=function(deviceID){
+        alert(deviceID);
 
         $.post(controllerPath,JSON.stringify({
             operation: "getDeviceDetails",
             deviceID: deviceID
         })
         , function(data) {
+
+            
 
 
             $( "#componentDetailsArea" ).html("<p>"+data.remarks+"</p>");
@@ -446,7 +452,9 @@ Hwdrepo = new function () {
     }
 
     this.editIssue = function(issue_no,dev_id,status,issue,date,resolve){
-/*
+
+        Hwdrepo.loadDialogs();
+
         if(resolve==0){
 
                 $( "#reportIssueDialog" ).dialog({ buttons: [ { text: "Ok", click: function() {
@@ -464,6 +472,7 @@ Hwdrepo = new function () {
          
             Hwdrepo.loadIssueHistory();
          $('#reportIssueDialog').dialog('destroy');
+         $( "#addHdwInfo" ).attr("class","hidden" );
 
           } } ] });
 
@@ -492,11 +501,70 @@ Hwdrepo = new function () {
             });
          
                             
-*/
+
 
     }
+}
 
     this.loadDialogs = function(deviceID){
+
+
+         $("#reportIssueDialog").dialog({
+                  
+                     autoOpen:false,
+                     height: 400,
+                     width: 700,
+                     modal: true,
+                     buttons:{
+                         'Confirm': function() {
+
+                            //issueTypeSelect is disabled, add if needed
+         
+                            // var type=document.getElementById('issueTypeSelect');
+                             var description=document.getElementById('issueDescription');
+                             var errSpan=document.getElementById('addHdwErr');
+                             var date = $( "#datepicker").val();
+                             /*type.options[type.selectedIndex].value=="0"||*/
+                             
+                             if(date==null||description.value==""){
+                                 errSpan.classList.remove(errSpan.className);
+                                 errSpan.classList.add("ui-widget");       
+                             }
+                             else{
+         
+                                 $( "#addHdwErr" ).attr( "class", "hidden" );
+         
+                                 var issueData={
+         
+                                     "sts": null,/*type.options[type.selectedIndex].text*/
+                                     "dev_id":deviceID,
+                                     "desc":description.value,
+                                     "date": date,
+         
+                                 };
+         
+                                 Hwdrepo.addIssue(issueData);  
+                             }
+                         }
+
+                         , 'close':function(){
+
+
+
+                                $("#reportIssueDialog").dialog('destroy');
+                                $( "#addHdwInfo" ).attr("class","hidden" );
+                                Hwdrepo.loadIssueHistory(deviceID);
+                         }
+                       
+                     }
+                 });
+            $('#reportIssueDialog').dialog('option', 'title', 'Report Issue');
+
+            $( "#datepicker" ).datepicker({  autoOpen:false,dateFormat: "yy-mm-dd" ,gotoCurrent: true});
+                $("#issueDescription").val("");
+
+             //Hwdrepo.getHardwareComponentDescription(deviceID);
+             
 
        
 
