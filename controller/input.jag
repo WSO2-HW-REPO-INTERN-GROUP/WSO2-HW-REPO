@@ -56,10 +56,21 @@ if (verb == "POST") {
 
     } else if (opr == 'upgradeHistory') {
 
-      log.info(viewUpgradeHistoryByDeviceID(deviceID));
+      //log.info(viewUpgradeHistoryByDeviceID(deviceID));
 
       print(viewUpgradeHistoryByDeviceID(deviceID));
-    } else if (opr == 'getIssues') {
+
+    }
+    else if (opr == 'warrantyHistory') {
+
+        var user_id = session.get('user-id');
+
+     // log.info(viewWarrantyByDeviceID(deviceID));
+
+      print(viewWarrantyByDeviceID(deviceID,user_id));
+
+    }
+     else if (opr == 'getIssues') {
 
     var user_id = session.get('user-id');
 

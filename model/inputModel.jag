@@ -60,6 +60,29 @@ function viewIssueHistoryByDeviceID(deviceID,user_id) {
 
 }
 
+function viewWarrantyByDeviceID(deviceID,user_id){
+
+
+    var url = dssUrl + "GetWarrantyByDeviceID";
+
+    var rslt = get(url, {
+        "dev_id": deviceID
+    }, {
+        "Accept": "application/json"
+    }, "json");
+
+     var url2 = dssUrl + "GetAccessoryWarrantyByDeviceID";
+
+    var rslt2 = get(url2, {
+        "dev_id": deviceID
+    }, {
+        "Accept": "application/json"
+    }, "json");
+
+    return {"device":returnValue(rslt.data.BaseElement),"accessories":returnValue(rslt2.data.BaseElement)}
+
+}
+
 function viewRequestsByUser(user_id) {
 
 

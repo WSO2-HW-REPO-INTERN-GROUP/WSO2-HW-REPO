@@ -58,7 +58,7 @@
                  getAccessories();
                  Hwdrepo.loadIssueHistory(deviceID);
                  Hwdrepo.loadUpgradeHistory(deviceID);
-                 Hwdrepo.loadWarranties(deviceID);
+              //  Hwdrepo.loadWarranties(deviceID);
          
          
                  // set date picker in report issue form
