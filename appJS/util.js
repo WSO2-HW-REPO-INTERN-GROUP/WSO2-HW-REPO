@@ -23,5 +23,4 @@ HwdrepoUtil = new function () {
             success: callback
         });
     };
-
 }

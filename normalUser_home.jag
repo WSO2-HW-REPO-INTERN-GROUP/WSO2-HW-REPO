@@ -12,6 +12,15 @@
       <link rel="stylesheet" href="css/carbonFormStyles.css">
       <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
       <link rel="stylesheet" href="css/jquery-ui.css">
+
+      <!-- My CSS -->
+
+        
+         <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css">
+
+         <link rel="stylesheet" href="css/jquery.dataTables.css">
+
+
       <!--[if gte IE 8]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
@@ -39,6 +48,9 @@
       <!--myscripts-->
       <script src="appJS/Hwdrepo.js"></script>
       <script type="text/javascript" src="appJS/util.js"></script>
+       <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+      <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
       <!-- This script handles the tabbed pane functionality -->
       <script>
          jQuery(document).ready(function(){

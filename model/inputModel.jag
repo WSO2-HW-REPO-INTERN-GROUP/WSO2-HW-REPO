@@ -11,12 +11,13 @@ function viewDeviceByID(deviceID) {
     }, {"Content-Type":"application/json","Accept": "application/json"
     }, "json");
 
-    log.info(rslt)
     return rslt.data.BaseElement.Element;
 }
 
 
 function viewAccessoryByDeviceID(deviceID) {
+
+
 
     var url = dssUrl + "GetAccessoriesByDeviceID";
     var rslt = get(url, {
@@ -25,37 +26,36 @@ function viewAccessoryByDeviceID(deviceID) {
         "Accept": "application/json"
     }, "json");
 
-    return rslt.data.BaseElement.Element;
+    return returnValue(rslt.data.BaseElement);
 }
 
 function viewUpgradeHistoryByDeviceID(deviceID) {
 
-    var url = dssUrl + "GetUpgradeHistoryByDeviceID";
-    var rslt = get(url, {
-        "upgd_id": deviceID
-    }, {
+    var url = dssUrl + "GetDeviceUpgradeHistory";
+    var rslt = post(url, {
+        "device_id": deviceID
+    }, {"Content-Type":"application/json",
         "Accept": "application/json"
     }, "json");
-    log.info(rslt.data.BaseElement.Element);
+    log.info(rslt);
 
-
-    return rslt.data.BaseElement.Element;
+    return returnValue(rslt.data.BaseElement);
 
 }
 
-function viewIssueHistoryByDeviceID(deviceID) {
+function viewIssueHistoryByDeviceID(deviceID,user_id) {
 
 
-    var url = dssUrl + "GetIssuesByDevice";
+    var url = dssUrl + "GetIssuesByDeviceAndEmployee";
+
     var rslt = get(url, {
-        "dev_id": deviceID
+        "dev_id": deviceID,
+        "emp_id": user_id
     }, {
         "Accept": "application/json"
     }, "json");
 
-    log.info(rslt);
-
-    return rslt.data.BaseElement.Element;
+    return returnValue(rslt.data.BaseElement);
 
 }
 
@@ -67,8 +67,7 @@ function viewRequestsByUser(user_id) {
     
     var rslt=get(url,{"emp_id":user_id},{"Accept":"application/json"},"json");
 
-    log.info(stringify(rslt));
-    return rslt.data.BaseElement.Element;
+    return returnValue(rslt.data.BaseElement);
 
 }
 
@@ -77,10 +76,10 @@ function viewDevicesByUser(user_id) {
 
     var url = dssUrl+"GetDevicesByEmployee";
     var rslt=get(url,{"emp_id":user_id},{"Accept":"application/json"},"json");
-    log.info(rslt.data.BaseElement.Element);
 
 
-    return rslt.data.BaseElement.Element;
+
+    return returnValue(rslt.data.BaseElement);
 
 }
 
@@ -104,6 +103,34 @@ function addIssue(issue) {
     var rslt=post(url,issue,headers,'json',function(data,xhr){});
     log.info(rslt);
 
+}
+
+function  returnValue(returnBaseElement){
+
+    //log.info(returnBaseElement);
+    //log.info(returnBaseElement.Element);
+
+    if(returnBaseElement.Element == null){
+        return [{}];
+    }
+    else{
+        if( Object.prototype.toString.call(returnBaseElement.Element) === '[object Array]' ) {
+            return returnBaseElement.Element;
+        }
+        else{
+            return [returnBaseElement.Element];
+        }
+        
+    }
+
+}
+
+function editIssue(issue){
+
+    var url = dssUrl+"EditIssue"
+    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+   // var rslt=post(url,issue,headers,'json',function(data,xhr){});
+    //log.info(rslt);
 }
 
 function addOrder(bookName, authName, bookType) {

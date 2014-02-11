@@ -52,26 +52,21 @@ if (verb == "POST") {
     } else if (opr == 'getAccessories') {
 
         var result = viewAccessoryByDeviceID(deviceID);
-
-        if( Object.prototype.toString.call(result) === '[object Array]' ) {
-            print(result);
-        }
-        else{
-            print([result]);
-        }
+        print(result);
 
     } else if (opr == 'upgradeHistory') {
 
 
-        print(viewUpgradeHistoryByDeviceID(deviceID));
+      print(viewUpgradeHistoryByDeviceID(deviceID));
     } else if (opr == 'getIssues') {
 
+    var user_id = session.get('user-id');
 
-        print(viewIssueHistoryByDeviceID(deviceID));
+    //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
+        print(viewIssueHistoryByDeviceID(deviceID,user_id));
     } else if (opr == 'addIssue') {
 
-        var user_id = session.get('user-id');
-
+        
         var addIssueObj = parse(data);
 
         addIssueObj.issue.emp_id=user_id;
@@ -83,14 +78,34 @@ if (verb == "POST") {
 
         );
     }
+    else if(opr =='editIssue'){
+
+        //log.info(data);
+
+       // var editIssueObj = parse(data);
+
+      //  editIssueObj.issue.emp_id=user_id;
+
+
+        //editIssue(editIssueObj);
+
+
+
+    }
 
 
 }
 
 if (verb == "GET") {
 
+    if(opr == 'getUserID'){
 
-    if (opr == 'loadRequests') {
+        var user_id = session.get('user-id');
+
+       print({'user':user_id});
+
+    }
+    else if (opr == 'loadRequests') {
 
         var user_id = session.get('user-id');
 
@@ -102,13 +117,12 @@ if (verb == "GET") {
         // {"requests":[{result1},{result2},{re...}]}
 
         if( Object.prototype.toString.call(result) === '[object Array]' ) {
+ 
             print({"requests":result});
         }
         else{
             print({"requests":[result]});
         }
-
-
 
 
     } else if (opr == 'loadDevices') {

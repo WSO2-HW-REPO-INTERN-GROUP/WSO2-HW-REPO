@@ -1,10 +1,25 @@
 var appName = "WSO2-HW-REPO";
 var controllerPath = "/WSO2-HW-REPO/controller/input.jag";
 
+var Issuetemplate;
+var userID;
+
+
+$.get(controllerPath,"operation=getUserID", function(data) {
+
+    userID = data.user;
+                        
+            },'json');
+
+$.get('templates/template.html', function(template) {
+                    Issuetemplate = template;        
+            });
+
 Hwdrepo = new function () {
 
 
     this.loadDevices = function () {
+
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadDevices",
             function (html) {
                 var devArea = document.getElementById('deviceArea');
@@ -66,6 +81,7 @@ Hwdrepo = new function () {
     }
 
     this.fillRequestTable = function (html) {
+
 
         var reqArea = document.getElementById('requestArea');
         var reqTable = document.getElementById("requestTable");
@@ -153,16 +169,16 @@ Hwdrepo = new function () {
 
     this.loadUpgradeHistory = function (deviceID) {
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+        /*HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
             operation: "upgradeHistory",
-            deviceID: deviceID[1]
+            deviceID: deviceID
         }),
 
             function (data, status) {
 
                 var objArray = data;
 
-                var tablearea = document.getElementById('upgradeHistoryPopup');
+                var tablearea = document.getElementById('upgradeDiv');
                 tablearea.setAttribute("class", "datagrid");
 
                 for (var i = 0; i < objArray.length; i++) {
@@ -217,7 +233,7 @@ Hwdrepo = new function () {
 
                     tablearea.appendChild(newTable);
                 }
-            });
+            });*/
     }
 
     this.getDeviceDetails = function (deviceID) {
@@ -228,6 +244,8 @@ Hwdrepo = new function () {
         }),
             function (data, status) {
                 var i = 0;
+
+                //alert(JSON.stringify(data));
 
                 var basicDetailsTbl = document.getElementById('basicFeaturesTbl');
 
@@ -250,7 +268,6 @@ Hwdrepo = new function () {
                 var object = data;
 
                 for (var property in object) {
-
 
                                     if(property=='serial_number'){
                                         th.appendChild(document.createTextNode("Serial Number: "+object[property]));
@@ -285,6 +302,8 @@ Hwdrepo = new function () {
                 basicDetailsTbl.innerHTML="";
                 basicDetailsTbl.appendChild(thead);
                 basicDetailsTbl.appendChild(tbody);
+
+                return data;
             });
 
     }
@@ -374,82 +393,23 @@ Hwdrepo = new function () {
         }),
             function (data) {
 
+
                 var objArray = data;
 
-                var tablearea = document.getElementById('deviceIssuesDevision');
-                tablearea.setAttribute("class", "datagrid");
-
-                tablearea.innerHTML = '';
-
+                var tablearea = document.getElementById('issueDiv');
+                var formatting="";
 
                 for (var i = 0; i < objArray.length; i++) {
 
-                    var cntr = 0;
+                    var object = objArray[i]; 
 
-                    var newTable = document.createElement('table');
-                    newTable.style.width = '600px';
-                    newTable.style.margin = '0px 0px 15px 50px';
+                    alert(JSON.stringify(object));
 
-                    var thead = document.createElement('thead');
-                    var htr = document.createElement('tr');
-                    var th = document.createElement('th');
-                    var tbody = document.createElement('tbody');
-                    th.setAttribute('colspan', '2');
-                    th.style.height = '15px';
-                    htr.appendChild(th);
-                    thead.appendChild(htr);
-                    newTable.appendChild(thead);
+                    var html = Mustache.render(Issuetemplate,object);
 
-                    var object = objArray[i];
-
-                    for (var property in object) {
-
-                        var newRow = document.createElement('tr');
-
-                        if (cntr % 2 == 0) {
-                            newRow.setAttribute("class", "alt");
-                        }
-
-                        if (property == 'Upgrade Id') {
-                            th.appendChild(document.createTextNode("Upgrade ID: " + object[property]));
-                        } else {
-
-                            var td1 = document.createElement('td');
-                            var td2 = document.createElement('td');
-
-                            td1.appendChild(document.createTextNode(property));
-                            td2.appendChild(document.createTextNode(object[property]));
-
-                            newRow.appendChild(td1);
-                            newRow.appendChild(td2);
-
-                            tbody.appendChild(newRow);
-
-                        }
-                        cntr++;
-
-                    }
-
-                    var linkRow = document.createElement('tr');
-
-                    if (cntr % 2 == 0) {
-                        linkRow.setAttribute("class", "alt");
-                    }
-
-                    var linkTd = document.createElement('td');
-                    linkTd.setAttribute("colspan", "2");
-
-                    var link = document.createElement('a');
-                    link.setAttribute("href", object[property]);
-                    link.innerHTML = 'more';
-                    linkTd.appendChild(link);
-                    linkRow.appendChild(linkTd);
-                    tbody.appendChild(linkRow);
-
-                    newTable.appendChild(tbody);
-
-                    tablearea.appendChild(newTable);
+                    formatting=formatting.concat(html);
                 }
+                tablearea.innerHTML = formatting;
 
             });
 
@@ -463,25 +423,91 @@ Hwdrepo = new function () {
         }),
             function (data) {
 
-                var errSpan = document.getElementById('addHdwErr');
-
-
-                errSpan.classList.remove(errSpan.className);
-                errSpan.classList.add("error");
-                errSpan.textContent = JSON.stringify(data);
-                // $('#addHdwErr').removeClass( "hidden" ).addClass("error" )
-                // $('#addHdwErr').val(JSON.stringify(html));
-                alert(JSON.stringify(data));
-                $("#reportIssueDialog").dialog('close');
+               $( "#addHdwInfo" ).attr("class","ui-widget" );
+                
             });
     }
 
     this.getHardwareComponentDescription=function(deviceID){
 
+        $.post(controllerPath,JSON.stringify({
+            operation: "getDeviceDetails",
+            deviceID: deviceID
+        })
+        , function(data) {
 
-        return "<p>'{This : Works}'</p>";
+
+            $( "#componentDetailsArea" ).html("<p>"+data.remarks+"</p>");
+
+                                       
+            },'json');
+       
 
     }
 
+    this.editIssue = function(issue_no,dev_id,status,issue,date,resolve){
+/*
+        if(resolve==0){
+
+                $( "#reportIssueDialog" ).dialog({ buttons: [ { text: "Ok", click: function() {
+
+
+            HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+            operation: "editIssue",
+            issue: {"sts":status,"desc":issue,"date":date,"resolv":resolve,"issue_id":issue_no}
+        }),
+            function (data) {
+
+               $( "#addHdwInfo" ).attr("class","ui-widget" );
+                
+            });
+         
+            Hwdrepo.loadIssueHistory();
+         $('#reportIssueDialog').dialog('destroy');
+
+          } } ] });
+
+        $( "#datepicker" ).datepicker("setDate",date.split("+")[0]);
+        $("#issueDescription").val(issue);
+        $( "#reportIssueDialog" ).dialog('option', 'title', 'Edit Issue');
+
+
+                
+
+
+        $("#reportIssueDialog").dialog("open");
+
+    }
+    else{
+
+
+            HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+            operation: "editIssue",
+            issue: {"sts":status,"desc":issue,"date":date,"resolv":resolve,"issue_id":issue_no,"resolve":3}
+        }),
+            function (data) {
+                    
+                    Hwdrepo.loadIssueHistory();
+                
+            });
+         
+                            
+*/
+
+    }
+
+    this.loadDialogs = function(deviceID){
+
+       
+
+    }
+
+    this.getUserID = function(){
+
+        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=getUserID",
+            function (html) {
+                 var userID=html;
+            });
+    }
 
 }
