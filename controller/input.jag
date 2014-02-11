@@ -89,12 +89,25 @@ if (verb == "POST") {
 
         var editIssueObj = JSON.parse(data);
 
-        log.info(editIssueObj);
+        //log.info(editIssueObj);
 
       editIssueObj.issue.emp_id=user_id;
 
        editIssue(editIssueObj.issue);
 
+
+    }
+      else if(opr =='deleteIssue'){
+
+
+        var user_id = session.get('user-id');
+
+        var deleteIssueObj = JSON.parse(data);
+
+      deleteIssueObj.issue.emp_id=user_id;
+      log.info(deleteIssueObj);
+
+       deleteIssue(deleteIssueObj.issue);
 
     }
 

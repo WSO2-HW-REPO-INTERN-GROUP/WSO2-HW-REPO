@@ -406,7 +406,32 @@ Hwdrepo = new function () {
 
                     var object = objArray[i]; 
 
-                  //  alert(JSON.stringify(object));
+
+                    if(object.resolved=="0"){
+                        object.New="true";
+                        object.resolved=null;
+                        object.rejected=null;
+                    }
+                     else if(object.resolved=="1"){
+                        object.New=null;
+                        object.resolved="true";
+                        object.rejected=null;
+                    }
+                    else if(object.resolved=="2"){
+                        object.New=null;
+                        object.resolved=null;
+                        object.rejected="true";
+                    }
+                    else{
+                        object.New=null;
+                        object.resolved=null;
+                        object.rejected=null;
+
+                    }
+
+
+
+                    //alert(JSON.stringify(object));
 
                     var html = Mustache.render(Issuetemplate,object);
 
@@ -493,6 +518,27 @@ Hwdrepo = new function () {
         $("#reportIssueDialog").dialog("open");
 
     }
+    else if(resolve==4){
+
+
+        alert("this will delete the issue, are you sure?");
+
+
+            HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+            operation: "deleteIssue",
+            issue: {"issue_id":issue_no}
+        }),
+            function (data) {
+                    
+                  //  Hwdrepo.loadIssueHistory(dev_id);
+                
+            });
+
+
+            Hwdrepo.loadIssueHistory(dev_id);
+         
+    }
+
     else{
 
 
@@ -502,12 +548,13 @@ Hwdrepo = new function () {
         }),
             function (data) {
                     
-                    Hwdrepo.loadIssueHistory(dev_id);
+                  //  Hwdrepo.loadIssueHistory(dev_id);
                 
             });
-         
-                            
 
+
+            Hwdrepo.loadIssueHistory(dev_id);
+         
 
     }
 }
@@ -518,7 +565,7 @@ Hwdrepo = new function () {
          $("#reportIssueDialog").dialog({
                   
                      autoOpen:false,
-                     height: 400,
+                     height: 500,
                      width: 700,
                      modal: true,
                      buttons:{

@@ -37,13 +37,29 @@
 </td>
 </tr>
 <tr>
+{{#rejected}}
+<td>
+<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Repeat Issue</button>
+</td>
+<td>
+<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button>
+</td>
+{{/rejected}}
+{{#New}}
 <td>
 <button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Edit Issue</button>
 </td>
 <td>
+<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button>
+</td>
+{{/New}}
+{{#resolved}}
+<td>
 <button id='confirmSolved{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",3)'>Confirm Solved</button>
-</td> 
+</td>
+{{/resolved}} 
 </tr>
+
 </tbody>                    
 </table>
 <br/>
