@@ -1,3 +1,4 @@
+{{^status}}
 <table style='width: 700px; margin:0px 0px 15px 50px'>
 <thead>
 <tr>
@@ -38,6 +39,52 @@
 <td>{{removed_date}}
 </td>
 </tr>
-</tbody>                    
+</tbody>
 </table>
 <br/>
+{{/status}} 
+{{#status}}
+<table style='width: 700px;'>
+<thead>
+<tr>
+<th style ='width: 300px;height: 15px' >Accessory Warranty: {{war_time_months}} months
+</th>
+<th style ='height: 15px'>Warranty Status : {{status}}
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class='alt'>
+<td><b>Warranty ID</b>
+</td>
+<td>{{warranty_number}}
+</td>
+</tr>
+<tr>
+<td><b>Serial</b>
+</td>
+<td>{{sn}}
+</td>
+</tr>
+<tr  class='alt'>
+<td><b>Accessory</b>
+</td>
+<td>{{type}}
+</td>
+</tr>
+<tr>
+<td><b>Start date</b>
+</td>
+<td>{{start_date}}
+</td>
+</tr>
+<tr class='alt'>
+<td><b>End Date</b>
+</td>
+<td>{{end_date}}
+</td>
+</tr>
+</tbody>
+</table>
+<br/>
+{{/status}}                   

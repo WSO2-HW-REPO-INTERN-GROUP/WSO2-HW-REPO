@@ -77,8 +77,6 @@ Hwdrepo = new function () {
 
                         }
                     }
-
-
                     tbody.appendChild(newRow);
                 }
 
@@ -131,7 +129,6 @@ Hwdrepo = new function () {
                 newRow.appendChild(td);
 
             }
-
 
             tbody.appendChild(newRow);
         }
@@ -355,22 +352,30 @@ Hwdrepo = new function () {
 
             function (data, status) {
 
-                alert(JSON.stringify(data));
-
                 var deviceArray = data.device;
                 var accessoryArray = data.accessories;
-
-
-                //var html = Mustache.render(Upgradetemplate,object);
-
 
                 var tablearea = document.getElementById('warrantyDiv');
                 tablearea.innerHTML = '';
                 var formatting = "";
 
-                for (var i = 0; i < objArray.length; i++) {
+                for (var i = 0; i < deviceArray.length; i++) {
 
-                    var object = objArray[i];
+                    var object = deviceArray[i];
+
+                    var tempSts;
+
+                    if(object.sts=="0"){
+
+                        tempSts = "Void";
+
+                    }else if(object.sts=="1"){
+                        tempSts = "Valid";
+                    }
+                    else{
+                        tempSts = "Undefined";
+                    }
+                    object.sts=tempSts;
 
                     //alert(JSON.stringify(object));
                     var html = Mustache.render(Warrantytemplate, object);
@@ -379,6 +384,39 @@ Hwdrepo = new function () {
 
                 }
                 tablearea.innerHTML = formatting;
+                //alert(JSON.stringify(accessoryArray));
+
+                var divArea = document.getElementById('accessoryWarrantyDiv');
+                divArea.innerHTML = '';
+                var htmformatting = "";
+
+                 for (var i = 0; i < accessoryArray.length; i++) {
+
+                    var object = accessoryArray[i];
+
+                    var tempStatus;
+
+                    if(object.status=="0"){
+
+                        tempStatus = "Void";
+
+                    }else if(object.status=="1"){
+                        tempStatus = "Valid";
+                    }
+                    else{
+                        tempStatus = "Undefined";
+                    }
+                    object.status=tempStatus;
+
+                    //alert(JSON.stringify(object));
+                    var html = Mustache.render(Accessorytemplate, object);
+
+                    htmformatting = htmformatting.concat(html);
+
+                }
+
+                divArea.innerHTML = htmformatting;
+
             });
 
     }
