@@ -1,5 +1,11 @@
 <%
 
+/* Author - mihil ranathunga
+* email-mihil@wso2.com
+* project-wso2 Hardware Repository
+* interns UOM- 2014
+*/
+
 include("../model/inputModel.jag");
 
 var dataStore=require("../store.json");
@@ -33,6 +39,8 @@ if (data != null) {
 
 if (verb == "POST") {
 
+    log.info(data);
+
 
     if (opr == 'addDeviceRequest') {
 
@@ -49,7 +57,26 @@ if (verb == "POST") {
         print(viewDeviceByID(deviceID));
 
 
-    } else if (opr == 'getAccessories') {
+    } 
+    else if (opr == 'deleteRequest') {
+
+        var request_id = parse(data).req_id;
+
+        print(deleteRequest(request_id));
+
+
+    }
+    else if (opr == 'confirmRequest') {
+
+        var request_id = parse(data).req_id;
+
+        print(confirmRequest(request_id));
+
+    }
+
+
+
+    else if (opr == 'getAccessories') {
 
         var result = viewAccessoryByDeviceID(deviceID);
         print(result);
@@ -76,7 +103,15 @@ if (verb == "POST") {
 
     //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
         print(viewIssueHistoryByDeviceID(deviceID,user_id));
-    } else if (opr == 'addIssue') {
+    } else if(opr == 'getEmpIssues') {
+
+    var user_id = session.get('user-id');
+
+    //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
+        print(viewIssueHistoryByEmp(user_id));
+    }
+
+    else if (opr == 'addIssue') {
 
          var user_id = session.get('user-id');
 
@@ -132,7 +167,7 @@ if (verb == "GET") {
 
         var user_id = session.get('user-id');
 
-       print({'user':user_id});
+       print({'user_id':user_id});
 
     }
     else if (opr == 'loadRequests') {

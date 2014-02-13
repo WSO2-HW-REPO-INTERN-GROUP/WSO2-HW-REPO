@@ -1,5 +1,11 @@
 <%
 
+/* Author - mihil ranathunga
+* email-mihil@wso2.com
+* project-wso2 Hardware Repository
+* interns UOM- 2014
+*/
+
 
 
 function viewDeviceByID(deviceID) {
@@ -59,6 +65,20 @@ function viewIssueHistoryByDeviceID(deviceID,user_id) {
     return returnValue(rslt.data.BaseElement);
 
 }
+function viewIssueHistoryByEmp(user_id) {
+
+
+    var url = dssUrl + "GetIssuesByEmployee";
+
+    var rslt = get(url, {
+        "emp_num": user_id
+    }, {
+        "Accept": "application/json"
+    }, "json");
+
+    return returnValue(rslt.data.BaseElement);
+
+}
 
 function viewWarrantyByDeviceID(deviceID,user_id){
 
@@ -84,8 +104,6 @@ function viewWarrantyByDeviceID(deviceID,user_id){
 }
 
 function viewRequestsByUser(user_id) {
-
-
 
     var url = dssUrl+"GetRequestsByEmployee";
     
@@ -170,47 +188,25 @@ function deleteIssue(issue){
  //  log.info(rslt);
 }
 
-
-function addOrder(bookName, authName, bookType) {
-    if (session.get("count") == null) {
-        session.put("count", 0);
-    }
-    var orderIdx = session.get("count");
-
-    var orderO = session.get("orders");
-    if (orderO != null) {
-        //orderIdx = orderO.length;
-        var orderCount = session.get("count");
-        orderCount++;
-        session.put("count", orderCount);
-        orderIdx = orderCount;
-    }
-    var hasBookType = bookdata.indexOf(bookType);
+function deleteRequest(requestID) {
 
 
-    if (hasBookType != null) {
-        var orders;
-        if (orderO != null) {
-            var orderJson = session.get("orders"); // get order array from session
-            orderJson.push(orderIdx); //push new order to the already retrieved orderlist
-            session.put("orders", orderJson); // restore order list in session
-        } else {
-            session.put("orders", [0]);
-        }
-        var object = {
-            "ORDER_ID": orderIdx,
-            "BOOK-TYPE": bookType,
-            "NAME": bookName,
-            "AUTHOR": authName,
-        };
-        session.put("o" + orderIdx, object);
-        //order is been taken
-        var result = session.get("o" + orderIdx);
-        print(result);
-    } else {
-        print({
-            "Infor": "Sorry, Book Cannot be added"
-        });
-    }
+    var url = dssUrl+"DeleteRequestFromID"
+    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
+   // log.info(rslt);
+
 }
+
+function confirmRequest(requestID) {
+
+
+    var url = dssUrl+"MarkRequestResolved"
+    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
+   // log.info(rslt);
+
+}
+
+
 %>

@@ -20,10 +20,11 @@ div#header-div {
 }
 
 div#header-div div.left-logo {
-	background-image: url(../images/app-server-header-logo.gif);
+	background-image: url(../images/app-server-header-logo.png);
 	margin-left: 69px;
 	margin-top: 36px;
-	width: 200px;
+	width: 225px;
+	height: 45px;
 }
 
 div#header-div div.right-logo {

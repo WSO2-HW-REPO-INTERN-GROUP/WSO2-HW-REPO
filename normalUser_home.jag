@@ -1,3 +1,13 @@
+<!-- Author - Mihil Ranathunga 
+*** Email - mihil@wso2.com
+*** project-wso2 Hardware Repository
+*** interns UOM-2014 -->  
+
+<%
+  // var userName=session.get('LOGGED_IN_USER');
+%>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,18 +39,7 @@
       <![endif]-->
       <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
       <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-      <!--<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.form.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery-ui.min.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.validate.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.cookie.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.ui.core.min.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.ui.tabs.min.js"></script>-->
-      <!--<script type="text/javascript" src="js/main.js"></script>-->
-      <!--<script type="text/javascript" src="js/WSRequest.js"></script>-->
-      <!--<script type="text/javascript" src="js/cookies.js"></script>-->
-      <!--<script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>-->
+
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script>
       <script type="text/javascript" src="js/customControls.js"></script>
@@ -53,27 +52,38 @@
 
       <!-- This script handles the tabbed pane functionality -->
       <script>
+
          jQuery(document).ready(function(){
          
              <!--*******************-->
          
          
-         prepareList();
-         
-         
-         function prepareList() {
-         $('#expList').find('li:has(ul)')
-             .click( function(event) {
-                 if (this == event.target) {
-                     $(this).toggleClass('expanded');
-                     $(this).children('ul').toggle('medium');
-                 }
-                 return false;
-             })
-             .addClass('collapsed')
-             .children('ul').hide();
-         };
-         
+         $(function prepareList() {
+   $('#expList').find('li:has(ul)').unbind('click').click(function(event) {
+      if(this == event.target) {
+         $(this).removeClass('expanded');
+         $(this).addClass('collapsed');
+         $(this).children('ul').toggle('medium');
+      }
+      return false;
+   }).addClass('expanded').removeClass('collapsed').children('ul').show();
+ 
+   //Hack to add links inside the cv
+   $('#expList a').unbind('click').click(function() {
+      window.open($(this).attr('href'));
+      return false;
+   });
+   //Create the button functionality
+   $('#expandList').unbind('click').click(function() {
+      $('.collapsed').addClass('expanded');
+      $('.collapsed').children().show('medium');
+   })
+   $('#collapseList').unbind('click').click(function() {
+      $('.collapsed').removeClass('expanded');
+      $('.collapsed').children().hide('medium');
+   })
+});
+                
          
          $("#requestDeviceForm").dialog({
          autoOpen:false,
@@ -86,12 +96,10 @@
              var purpose=$("#purposeArea").val();
              var requirements=$("#requirementArea").val();
          
-             alert(deviceType+" "+purpose+" "+requirements);
+             //alert(This will request a new device from Admin. Confirm? Cancel to Abort!!);
          //                        window.location.href = "test.jag";
              Hwdrepo.requestDevice(deviceType,purpose,requirements);
-             $(this).dialog('close');
-
-             Hwdrepo.viewRequests();
+             $(this).dialog('close');        
          
          }
          }
@@ -103,12 +111,11 @@
          event.preventDefault();
          //Open your dialog.
          $("#requestDeviceForm").dialog("open");
+         Hwdrepo.viewRequests(0);
          
          });
-         
-        Hwdrepo.viewRequests();
-
-         
+             
+         Hwdrepo.viewRequests(0); 
          Hwdrepo.loadDevices();
          
          });
@@ -129,13 +136,7 @@
       </div>
       <![endif]-->
       <div id="dcontainer"></div>
-      <script type="text/javascript" src="./page2_files/dialog.js"></script>
-      <!-- JS imports for collapsible menu -->
-      <script src="./page2_files/yahoo-dom-event.js" type="text/javascript"></script>
-      <script src="./page2_files/animation-min.js" type="text/javascript"></script>
-      <script src="./page2_files/template.js" type="text/javascript"></script>
-      <script src="./page2_files/yahoo-min.js" type="text/javascript"></script>
-      <script src="./page2_files/selector-min.js" type="text/javascript"></script>
+
       <table id="main-table" border="0" cellspacing="0">
          <tbody>
             <tr>
@@ -148,7 +149,7 @@
                   </style>
                   <![endif]-->
                   <div id="header-div">
-                     <div class="right-logo">Admin Home</div>
+                     <div class="right-logo">User Home</div>
                      <div class="left-logo">
                      </div>
                      <div class="middle-ad">
@@ -158,20 +159,20 @@
                            <ul>
                               <li class="middle">
                                  <label id="logged-user">
-                                 <strong>Signed-in as:</strong>&nbsp;admin@carbon.super
+                                 <strong>Signed-in as:</strong>&nbsp; <%//userName%>
                                  </label>
                               </li>
                               <li class="middle">|</li>
                               <li class="right">
-                                 <a href="https://localhost:9443/carbon/admin/logout_action.jsp">Sign-out</a>
+                                 <a href="logout">Sign-out</a>
                               </li>
                               <li class="middle">|</li>
                               <li class="middle">
-                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
+                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a> 
                               </li>
                               <li class="middle">|</li>
                               <li class="left">
-                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a> 
                               </li>
                            </ul>
                         </div>
@@ -184,7 +185,7 @@
                   <div id='mainMenu'>
                      <ul>
                         <li><a href='normalUser_home.jag'><span>Home</span></a></li>
-                        <li><a href='admin_requests.jag'><span>Requests</span></a></li>
+                        <li><a href='normalUser_requests.jag'><span>Requests</span></a></li>
                         <li class='last'><a href='#'><span>Report Generation</span></a></li>
                      </ul>
                   </div>
@@ -229,21 +230,9 @@
                                        <ul>
                                           </br>
                                           <li>
-                                             <div id="allRequests" class="datagrid">
+                                             <div id="requestArea" class="datagrid">
                                                 <!--data is loaded by the javascript function loadAllIssues()-->
-                                                <table id="requestTable">
-                                                   '
-                                                   <thead>
-                                                      <tr>
-                                                         <th>Device Type</th>
-                                                         <th>Purpose</th>
-                                                         <th>Requirement</th>
-                                                         <th></th>
-                                                      </tr>
-                                                   </thead>
-                                                   <tbody id="requestArea">
-                                                   </tbody>
-                                                </table>
+                                                
                                              </div>
                                           </li>
                                        </ul>
@@ -256,25 +245,8 @@
                                        <ul>
                                           </br>
                                           <li>
-                                             <div id="allDevices" class="datagrid">
-
-                                                <table id="deviceTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Device Type</th>
-                                                            <th>Make</th>
-                                                            <th>Model</th>
-                                                            <th>Assigned</th>
-                                                            <th>Revoked</th>
-                                                            <th>Health</th>
-                                                            <th>Go to Devicepage</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                       <tbody id="deviceArea">
-                                                   </tbody>
-                                                </table>
-
+                                             <div id="deviceArea" class="datagrid">
+                                      
                                              </div>
                                           </li>
                                        </ul>

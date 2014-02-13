@@ -1,3 +1,10 @@
+/* Author - Taken from CoffeeShop Sample in jaggery Samples- util.js
+* 
+* project-wso2 Hardware Repository
+* 
+*/
+
+
 HwdrepoUtil = new function () {
 
     this.makeRequest = function(type, u, d, callback) {

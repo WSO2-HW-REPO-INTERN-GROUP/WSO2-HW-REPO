@@ -1,18 +1,27 @@
-var appName = "WSO2-HW-REPO";
+/* Author - mihil ranathunga
+* email-mihil@wso2.com
+* project-wso2 Hardware Repository
+* interns UOM- 2014
+*/
 var controllerPath = "/WSO2-HW-REPO/controller/input.jag";
 
 var Issuetemplate;
 var Upgradetemplate;
 var Warrantytemplate;
 var Accessorytemplate;
+var Requestemplate;
 var userID;
 
 
 $.get(controllerPath, "operation=getUserID", function (data) {
 
-    userID = data.user;
+    userID = data.user_id;
 
 }, 'json');
+
+ $.get('templates/requestTemplate.html', function (template) {
+                     Requestemplate = template;
+         });
 
 $.get('templates/upgradeTemplate.html', function (template) {
     Upgradetemplate = template;
@@ -37,11 +46,42 @@ Hwdrepo = new function () {
 
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadDevices",
             function (html) {
+
                 var devArea = document.getElementById('deviceArea');
-                var devTable = document.getElementById("deviceTable");
+                var devTable=document.createElement("table");
+                var thead=document.createElement("thead");
+                var tbody=document.createElement("tbody");
+
+                var headtr=document.createElement("tr");
+
+                var th1 = document.createElement("th");
+                var th2 = document.createElement("th");
+                var th2 = document.createElement("th");
+                var th3 = document.createElement("th");
+                var th4 = document.createElement("th");
+                var th5 = document.createElement("th");
+                var th6 = document.createElement("th");
+                var th7 = document.createElement("th");
+                th1.appendChild(document.createTextNode("Device Type"));
+                th2.appendChild(document.createTextNode("Make"));
+                th3.appendChild(document.createTextNode("Model"));
+                th4.appendChild(document.createTextNode("Assigned"));
+                th5.appendChild(document.createTextNode("Revoked"));
+                th6.appendChild(document.createTextNode("Health"));
+                th7.appendChild(document.createTextNode("Go to Devicepage"));
+                headtr.appendChild(th1);
+                headtr.appendChild(th2);
+                headtr.appendChild(th3);
+                headtr.appendChild(th4);
+                headtr.appendChild(th5);
+                headtr.appendChild(th6);
+                headtr.appendChild(th7);
+
+                thead.appendChild(headtr);
+                devTable.appendChild(thead);
+
                 devArea.style.display = "";
                 devArea.setAttribute('class', 'datagrid');
-                var tbody = devArea;
 
                 var obj = html;
 
@@ -80,37 +120,72 @@ Hwdrepo = new function () {
                     tbody.appendChild(newRow);
                 }
 
+                devTable.appendChild(tbody);
+                devArea.appendChild(devTable);
+
 
             });
 
     }
-    this.viewRequests = function () {
-        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html) {
+    this.viewRequests = function (index) {
+        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html){
 
+            alert(JSON.stringify(html));
+
+               if(index==0){ 
             Hwdrepo.fillRequestTable(html);
+        }
+        else if(index==1){
+            Hwdrepo.fillRequestPage(html);
+    }
 
         });
 
+      
     }
 
     this.fillRequestTable = function (html) {
 
-        //alert(JSON.stringify(html));
 
+          var reqArea = document.getElementById('requestArea');
+          var reqTable=document.createElement("table");
+                var thead=document.createElement("thead");
+                var tbody=document.createElement("tbody");
 
-        var reqArea = document.getElementById('requestArea');
-        var reqTable = document.getElementById("requestTable");
-        reqArea.style.display = "";
-        reqArea.setAttribute('class', 'datagrid');
-        var tbody = reqArea;
+                var headtr=document.createElement("tr");
 
-        tbody.innerHTML = '';
+                var th1 = document.createElement("th");
+                var th2 = document.createElement("th");
+                var th2 = document.createElement("th");
+                var th3 = document.createElement("th");
+                var th4 = document.createElement("th");
+                var th5 = document.createElement("th");
+                var th6 = document.createElement("th");
+                var th7 = document.createElement("th");
+                th1.appendChild(document.createTextNode("Device Type"));
+                th2.appendChild(document.createTextNode("Purpose"));
+                th3.appendChild(document.createTextNode("Requirement"));
+                th4.appendChild(document.createTextNode("Request Date"));
+                headtr.appendChild(th1);
+                headtr.appendChild(th2);
+                headtr.appendChild(th3);
+                headtr.appendChild(th4);
+
+                thead.appendChild(headtr);
+                reqTable.appendChild(thead);
+
+                reqArea.style.display = "";
+                reqArea.setAttribute('class', 'datagrid');
+
+                reqArea.innerHTML = '';
 
         var obj = html;
 
         for (var i = 0; i < obj.requests.length; i++) {
 
             var object = obj.requests[i];
+
+            if(object.resolved == 0|object.resolved == 1){
             var newRow = document.createElement('tr');
 
 
@@ -122,16 +197,87 @@ Hwdrepo = new function () {
             for (var property in object) {
 
 
+                if(property!="request_id" && property!="resolved"){   
+
                 var td = document.createElement('td');
 
-
+            
                 td.appendChild(document.createTextNode(object[property]));
                 newRow.appendChild(td);
+            }
 
             }
 
             tbody.appendChild(newRow);
         }
+        }
+             reqTable.appendChild(tbody);
+             reqArea.appendChild(reqTable);
+
+    }
+    this.fillRequestPage = function(html){
+        // alert(JSON.stringify(html));
+         
+            var objArray = html.requests;
+         
+                 var tablearea1 = document.getElementById('newRequestDiv');
+                 var tablearea2 = document.getElementById('rejectRequestDiv');
+                 var tablearea3 = document.getElementById('resolvedRequestDiv');
+                 tablearea1.innerHTML = '';
+                 tablearea2.innerHTML = '';
+                 tablearea3.innerHTML = '';
+                 var formatting1 = "";
+                 var formatting2 = "";
+                 var formatting3 = "";
+         
+                 for (var i = 0; i < objArray.length; i++) {
+         
+                     var object = objArray[i];
+         
+         
+                     if (object.resolved == "0") {
+                         object.status="Pending";
+                         object.New = "true";
+                         object.resolved = null;
+                         object.rejected = null;
+
+                         var html = Mustache.render(Requestemplate, object);
+         
+                        formatting1 = formatting1.concat(html);
+
+                     } else if (object.resolved == "1") {
+                         object.status="Device Added";
+                         object.New = null;
+                         object.resolved = "true";
+                         object.rejected = null;
+
+                         var html = Mustache.render(Requestemplate, object);
+         
+                        formatting3 = formatting3.concat(html);
+                     } else if (object.resolved == "2") {
+                         object.status="Marked As Unable At The Current Time ";
+                         object.New = null;
+                         object.resolved = null;
+                         object.rejected = "true";
+
+                         var html = Mustache.render(Requestemplate, object);
+         
+                     formatting2 = formatting2.concat(html);
+
+                     } else {
+                         object.status=null;
+                         object.New = null;
+                         object.resolved = null;
+                         object.rejected = null;
+                     }
+         
+                     //alert(JSON.stringify(object));
+         
+                 }
+                 tablearea1.innerHTML = formatting1;
+                 tablearea2.innerHTML = formatting2;
+                 tablearea3.innerHTML = formatting3;
+
     }
 
     this.requestDevice = function (deviceType, purpose, requirement) {
@@ -144,14 +290,13 @@ Hwdrepo = new function () {
                     req: requirement
                 }
             }),
-            function (data) {
+            function (data) { 
 
-
-
+                    Hwdrepo.viewRequests(0);
+                  
             });
 
-        this.viewRequests();
-
+            Hwdrepo.viewRequests(0);
 
     }
 
@@ -619,13 +764,29 @@ Hwdrepo = new function () {
 
 
     }
+    this.getUserID=function(){
 
-    this.getUserID = function () {
-
-        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=getUserID",
+        return userID;
+    }
+    this.deleteRequest = function(request_id){
+          HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({operation :"deleteRequest",req_id:request_id}),
             function (html) {
-                var userID = html;
+
+                this.viewRequests(1);
+
             });
+
+          this.viewRequests(1);
+
+    }
+    this.confirmRequest = function(request_id){
+          HwdrepoUtil.makeJsonRequest("POST", controllerPath,JSON.stringify({operation :"confirmRequest",req_id:request_id}),
+            function (html) {
+
+                this.viewRequests(1);
+
+            });
+
     }
 
 }
