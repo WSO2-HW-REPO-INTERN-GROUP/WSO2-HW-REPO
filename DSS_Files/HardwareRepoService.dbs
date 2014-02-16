@@ -1,0 +1,691 @@
+<data name="HardewareRepo">
+   <config id="HardwareRepo">
+      <property name="driverClassName">com.mysql.jdbc.Driver</property>
+      <property name="url">jdbc:mysql://127.0.1.1:3306/HWDREPO</property>
+      <property name="username">root</property>
+      <property name="password">1234</property>
+   </config>
+   <!--Nadeeshaan Edit-->
+      <query id="GetAllIssuesAdmin" useConfig="HardwareRepo">
+         <sql>select issue_number,status,device_id,employee_employee_id, issue_info from issue where issue.resolved=0</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="issue_number" name="issue_number" xsdType="integer"/>
+            <element column="status" name="status" xsdType="string"/>
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+            <element column="issue_info" name="issue_info" xsdType="string"/>
+         </result>
+         <param name="resolved" sqlType="INTEGER"/>
+      </query>
+      <query id="GetDeviceUpgradeHistory" useConfig="HardwareRepo">
+         <sql>select upgrade_id,upgraded_accessory_id,description from upgrade where upgraded_device_id=:device_id</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="upgrade_id" name="upgrade_id" xsdType="integer"/>
+            <element column="upgraded_accessory_id" name="upgraded_accessory_id" xsdType="integer"/>
+            <element column="description" name="device_id" xsdType="description"/>
+         </result>
+         <param name="device_id" sqlType="INTEGER"/>
+      </query>
+      <query id="GetAllWarrantyAdmin" useConfig="HardwareRepo">
+         <sql>select warranty_number,status,device_id from warranty_card</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="warranty_number" name="warranty_number" xsdType="integer"/>
+            <element column="status" name="status" xsdType="integer"/>
+            <element column="device_id" name="device_id" xsdType="integer"/>
+         </result>
+      </query>
+      <query id="GetWarrantyByIDAdmin" useConfig="HardwareRepo">
+         <sql>select * from warranty_card where warranty_number=:war_num</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="warranty_number" name="warranty_number" xsdType="integer"/>
+            <element column="start_date" name="start_date" xsdType="datetime"/>
+            <element column="end_date" name="end_date" xsdType="datetime"/>
+            <element column="status" name="status" xsdType="integer"/>
+            <element column="device_id" name="device_id" xsdType="integer"/>
+         </result>
+         <param name="war_num" sqlType="INTEGER"/>
+      </query>
+      <query id="GetCustomWarrantyAdmin" useConfig="HardwareRepo">
+         <sql>select warranty_number,status,device_id from warranty_card where (status=:status and warranty_number=:war_num) or (status=:status and device_id=:device_id)</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="warranty_number" name="warranty_number" xsdType="integer"/>
+            <element column="status" name="status" xsdType="integer"/>
+            <element column="device_id" name="device_id" xsdType="integer"/>
+         </result>
+         <param name="status" sqlType="INTEGER"/>
+         <param name="war_num" sqlType="INTEGER"/>
+         <param name="device_id" sqlType="INTEGER"/>
+      </query>
+      <query id="GetAllDeviceBasicAdmin" useConfig="HardwareRepo">
+         <sql>select device_id,serial_number,make,model,rating,purchase_date,type from device</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="serial_number" name="serial_number" xsdType="string"/>
+            <element column="make" name="make" xsdType="string"/>
+            <element column="model" name="model" xsdType="string"/>
+            <element column="rating" name="rating" xsdType="integer"/>
+            <element column="purchase_date" name="purchase_date" xsdType="date"/>
+            <element column="type" name="type" xsdType="string"/>
+         </result>
+      </query>
+      <query id="GetDeviceByID" useConfig="HardwareRepo">
+         <sql>select * from device where device_id=:device_id</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="serial_number" name="serial_number" xsdType="string"/>
+            <element column="make" name="make" xsdType="string"/>
+            <element column="model" name="model" xsdType="string"/>
+            <element column="rating" name="rating" xsdType="integer"/>
+            <element column="purchase_date" name="purchase_date" xsdType="date"/>
+            <element column="supplier" name="supplier" xsdType="string"/>
+            <element column="type" name="type" xsdType="string"/>
+            <element column="screen_size" name="screen_size" xsdType="float"/>
+            <element column="touch_type" name="touch_type" xsdType="string"/>
+            <element column="camera" name="camera" xsdType="string"/>
+            <element column="cpu" name="cpu" xsdType="string"/>
+            <element column="core_count" name="core_count" xsdType="integer"/>
+            <element column="storage" name="storage" xsdType="string"/>
+            <element column="network_controller" name="network_controller" xsdType="string"/>
+            <element column="remarks" name="remarks" xsdType="string"/>
+            <element column="vga" name="vga" xsdType="string"/>
+            <element column="memory" name="memory" xsdType="string"/>
+            <element column="serial_number" name="serial_number" xsdType="string"/>
+         </result>
+         <param name="device_id" sqlType="INTEGER"/>
+      </query>
+      <query id="GetDeviceBasicBySN" useConfig="HardwareRepo">
+         <sql>select device_id,serial_number,make,model,rating,purchase_date,type from device where serial_number=:sn</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="serial_number" name="serial_number" xsdType="string"/>
+            <element column="make" name="make" xsdType="string"/>
+            <element column="model" name="model" xsdType="string"/>
+            <element column="rating" name="rating" xsdType="integer"/>
+            <element column="purchase_date" name="purchase_date" xsdType="date"/>
+            <element column="type" name="type" xsdType="string"/>
+         </result>
+         <param name="sn" sqlType="STRING"/>
+      </query>
+      <query id="GetDeviceBasicByType" useConfig="HardwareRepo">
+         <sql>select device_id,serial_number,make,model,rating,purchase_date,type from device where type=:dev_type</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="serial_number" name="serial_number" xsdType="string"/>
+            <element column="make" name="make" xsdType="string"/>
+            <element column="model" name="model" xsdType="string"/>
+            <element column="rating" name="rating" xsdType="integer"/>
+            <element column="purchase_date" name="purchase_date" xsdType="date"/>
+            <element column="type" name="type" xsdType="string"/>
+         </result>
+         <param name="dev_type" sqlType="STRING"/>
+      </query>
+      <query id="GetIssuesByDeviceID" useConfig="HardwareRepo">
+         <sql>select issue_number,status,device_id,employee_employee_id, issue_info from issue where device_id=:dev_id</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="issue_number" name="issue_number" xsdType="integer"/>
+            <element column="status" name="status" xsdType="string"/>
+            <element column="device_id" name="device_id" xsdType="integer"/>
+            <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+            <element column="issue_info" name="issue_info" xsdType="string"/>
+         </result>
+         <param name="dev_id" sqlType="INTEGER"/>
+      </query>
+      <query id="GetUnresolvedRequests" useConfig="HardwareRepo">
+         <sql>select request_id,device_type,purpose,requirements,employee_employee_id,resolved  from request where resolved=0 or resolved=3 or resolved=1</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="request_id" name="request_id" xsdType="integer"/>
+            <element column="device_type" name="device_type" xsdType="string"/>
+            <element column="purpose" name="purpose" xsdType="string"/>
+            <element column="requirements" name="requirements" xsdType="string"/>
+            <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+            <element column="resolved" name="resolved" xsdType="integer"/>
+         </result>
+      </query>
+      <query id="AdminResolveRejectIssue" useConfig="HardwareRepo">
+         <sql>UPDATE issue Set resolved=:res WHERE issue_number=:issue_num</sql>
+         <param name="res" sqlType="INTEGER"/>
+         <param name="issue_num" sqlType="INTEGER"/>
+      </query>
+      <query id="AddWarrantyDevice" useConfig="HardwareRepo">
+         <sql>INSERT INTO warranty_card(start_date, end_date, duration_in_months, status, device_id) SELECT:purchaseDate as start_date,:end as end_date,:duration as duration_in_months,1 as status,device_id FROM device WHERE device.serial_number = :serial</sql>
+         <param name="purchaseDate" sqlType="DATE"/>
+         <param name="end" sqlType="DATE"/>
+         <param name="duration" sqlType="INTEGER"/>
+         <param name="serial" sqlType="STRING"/>
+      </query>
+      <query id="RenewWarranty" useConfig="HardwareRepo">
+         <sql>UPDATE warranty_card Set end_date=:newEnd WHERE warranty_number=:war_num</sql>
+         <param name="newEnd" sqlType="DATE"/>
+         <param name="war_num" sqlType="INTEGER"/>
+      </query>
+      <query id="GetAssigned" useConfig="HardwareRepo">
+         <sql>select assignment_id from assignment where device_id=:dev_id </sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="assignment_id" name="assignment_id" xsdType="integer"/>
+         </result>
+         <param name="dev_id" sqlType="INTEGER"/>
+      </query>
+      <query id="AdminAcceptRejectRequest" useConfig="HardwareRepo">
+         <sql>UPDATE request Set resolved=:res WHERE request_id=:req_num</sql>
+         <param name="req_num" sqlType="INTEGER"/>
+         <param name="res" sqlType="INTEGER"/>
+      </query>
+      <query id="GetAccessory" useConfig="HardwareRepo">
+         <sql>select accessory_id,remarks  from accessory where assigned=0 and accessory_type=:acc_type</sql>
+         <result element="BaseElement" rowName="Element">
+            <element column="accessory_id" name="accessory_id" xsdType="integer"/>
+            <element column="remarks" name="remarks" xsdType="string"/>
+         </result>
+         <param name="acc_type" sqlType="STRING"/>
+      </query>
+      <query id="AddUpgradeAccessory" useConfig="HardwareRepo">
+         <sql>INSERT INTO upgrade(upgraded_device_id,upgraded_accessory_id,description) VALUES (:up_dev_id,:acc_id,:desc)</sql>
+         <param name="up_dev_id" sqlType="INTEGER"/>
+         <param name="acc_id" sqlType="INTEGER"/>
+         <param name="desc" sqlType="STRING"/>
+      </query>
+      <!--Nadeeshaan Edit-->
+         <query id="GetAllPadInfo" useConfig="HardwareRepo">
+            <sql>select device_id, serial_number, make, model, rating,purchase_date, supplier, screen_size, touch_type, camera, vga from device</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="make" name="make" xsdType="string"/>
+               <element column="model" name="model" xsdType="string"/>
+               <element column="rating" name="rating" xsdType="string"/>
+               <element column="purchase_date" name="purchase_date" xsdType="dateTime"/>
+               <element column="supplier" name="supplier" xsdType="string"/>
+               <element column="screen_size" name="screen_size" xsdType="float"/>
+               <element column="touch_type" name="touch_type" xsdType="string"/>
+               <element column="camera" name="camera" xsdType="string"/>
+               <element column="vga" name="vga" xsdType="string"/>
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+            </result>
+         </query>
+         <query id="GetPadInfo" useConfig="HardwareRepo">
+            <sql>select device_id,serial_number, make, model, rating,purchase_date, supplier, screen_size, touch_type, camera, vga from device where device_id=:pad_num and type="pad"</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="make" name="make" xsdType="string"/>
+               <element column="model" name="model" xsdType="string"/>
+               <element column="rating" name="rating" xsdType="string"/>
+               <element column="purchase_date" name="purchase_date" xsdType="dateTime"/>
+               <element column="supplier" name="supplier" xsdType="string"/>
+               <element column="screen_size" name="screen_size" xsdType="float"/>
+               <element column="touch_type" name="touch_type" xsdType="string"/>
+               <element column="camera" name="camera" xsdType="string"/>
+               <element column="vga" name="vga" xsdType="string"/>
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+            </result>
+            <param name="pad_num" sqlType="INTEGER"/>
+         </query>
+         <query id="GetIssue" useConfig="HardwareRepo">
+            <sql>select * from issue where issue_number=:issue_num</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="issue_number" name="issue_number" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+               <element column="issue_info" name="issue_info" xsdType="string"/>
+               <element column="date" name="date" xsdType="date"/>
+               <element column="resolved" name="resolved" xsdType="integer"/>
+            </result>
+            <param name="issue_num" sqlType="INTEGER"/>
+         </query>
+         <query id="GetIssuesByDescription" useConfig="HardwareRepo">
+            <sql>SELECT * FROM issue where issue_info like :description</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="issue_number" name="issue_number" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+               <element column="issue_info" name="issue_info" xsdType="string"/>
+               <element column="date" name="date" xsdType="date"/>
+            </result>
+            <param name="description" sqlType="STRING"/>
+         </query>
+         <query id="GetIssuesByDevice" useConfig="HardwareRepo">
+            <sql>SELECT device.serial_number, issue.issue_number, issue.status, issue.device_id, issue.employee_employee_id, issue.issue_info, issue.date FROM issue,device where issue.device_id=:dev_id and issue.device_id=device.device_id</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+               <element column="issue_number" name="issue_number" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+               <element column="issue_info" name="issue_info" xsdType="string"/>
+               <element column="date" name="date" xsdType="date"/>
+            </result>
+            <param name="dev_id" sqlType="INTEGER"/>
+         </query>
+         <query id="GetIssuesByEmployee" useConfig="HardwareRepo">
+            <sql>SELECT * FROM issue where employee_employee_id=:emp_num</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="issue_number" name="issue_number" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+               <element column="issue_info" name="issue_info" xsdType="string"/>
+               <element column="date" name="date" xsdType="date"/>
+            </result>
+            <param name="emp_num" sqlType="INTEGER"/>
+         </query>
+         <query id="GetIssuesByStatus" useConfig="HardwareRepo">
+            <sql>SELECT * FROM issue where status=:status</sql>
+            <result element="BaseElement" rowName="customer">
+               <element column="issue_number" name="issue_number" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="employee_employee_id" name="employee_employee_id" xsdType="integer"/>
+               <element column="issue_info" name="issue_info" xsdType="string"/>
+               <element column="date" name="date" xsdType="date"/>
+            </result>
+            <param name="status" sqlType="STRING"/>
+         </query>
+         <query id="GetAllDevice" useConfig="HardwareRepo">
+            <sql>select * from device</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="make" name="make" xsdType="string"/>
+               <element column="model" name="model" xsdType="string"/>
+               <element column="rating" name="rating" xsdType="integer"/>
+               <element column="purchase_date" name="purchase_date" xsdType="date"/>
+               <element column="supplier" name="supplier" xsdType="string"/>
+               <element column="type" name="type" xsdType="string"/>
+               <element column="screen_size" name="screen_size" xsdType="float"/>
+               <element column="touch_type" name="touch_type" xsdType="string"/>
+               <element column="camera" name="camera" xsdType="string"/>
+               <element column="cpu" name="cpu" xsdType="string"/>
+               <element column="core_count" name="core_count" xsdType="integer"/>
+               <element column="storage" name="storage" xsdType="string"/>
+               <element column="network_controller" name="network_controller" xsdType="string"/>
+               <element column="remarks" name="remarks" xsdType="string"/>
+               <element column="vga" name="vga" xsdType="string"/>
+               <element column="memory" name="memory" xsdType="string"/>
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+            </result>
+         </query>
+         <query id="GetDeviceBySN" useConfig="HardwareRepo">
+            <sql>select * from device where serial_number=:sn</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="make" name="make" xsdType="string"/>
+               <element column="model" name="model" xsdType="string"/>
+               <element column="rating" name="rating" xsdType="integer"/>
+               <element column="purchase_date" name="purchase_date" xsdType="date"/>
+               <element column="supplier" name="supplier" xsdType="string"/>
+               <element column="type" name="type" xsdType="string"/>
+               <element column="screen_size" name="screen_size" xsdType="float"/>
+               <element column="touch_type" name="touch_type" xsdType="string"/>
+               <element column="camera" name="camera" xsdType="string"/>
+               <element column="cpu" name="cpu" xsdType="string"/>
+               <element column="core_count" name="core_count" xsdType="integer"/>
+               <element column="storage" name="storage" xsdType="string"/>
+               <element column="network_controller" name="network_controller" xsdType="string"/>
+               <element column="remarks" name="remarks" xsdType="string"/>
+               <element column="vga" name="vga" xsdType="string"/>
+               <element column="memory" name="memory" xsdType="string"/>
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+            </result>
+            <param name="sn" sqlType="STRING"/>
+         </query>
+         <query id="GetDeviceByType" useConfig="HardwareRepo">
+            <sql>select * from device where type=:dev_type</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="make" name="make" xsdType="string"/>
+               <element column="model" name="model" xsdType="string"/>
+               <element column="rating" name="rating" xsdType="integer"/>
+               <element column="purchase_date" name="purchase_date" xsdType="date"/>
+               <element column="supplier" name="supplier" xsdType="string"/>
+               <element column="type" name="type" xsdType="string"/>
+               <element column="screen_size" name="screen_size" xsdType="float"/>
+               <element column="touch_type" name="touch_type" xsdType="string"/>
+               <element column="camera" name="camera" xsdType="string"/>
+               <element column="cpu" name="cpu" xsdType="string"/>
+               <element column="core_count" name="core_count" xsdType="integer"/>
+               <element column="storage" name="storage" xsdType="string"/>
+               <element column="network_controller" name="network_controller" xsdType="string"/>
+               <element column="remarks" name="remarks" xsdType="string"/>
+               <element column="vga" name="vga" xsdType="string"/>
+               <element column="memory" name="memory" xsdType="string"/>
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+            </result>
+            <param name="dev_type" sqlType="STRING"/>
+         </query>
+         <query id="GetDeviceWarranty" useConfig="HardwareRepo">
+            <sql>select device.serial_number, warranty_card.warranty_number, warranty_card.start_date, warranty_card.duration_in_months, warranty_card.status, warranty_card.device_id, warranty_card.accessory_id from warranty_card, device where device.serial_number=:dev_sn and device.device_id=warranty_card.device_id</sql>
+            <result element="BaseElement" rowName="customer">
+               <element column="serial_number" name="serial_number" xsdType="string"/>
+               <element column="warranty_number" name="warranty_number" xsdType="integer"/>
+               <element column="start_date" name="start_date" xsdType="date"/>
+               <element column="duration_in_months" name="duration_in_months" xsdType="integer"/>
+               <element column="status" name="status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="accessory_id" name="accessory_id" xsdType="integer"/>
+            </result>
+            <param name="dev_sn" sqlType="STRING"/>
+         </query>
+         <query id="GetWarrantybyStatus" useConfig="HardwareRepo">
+            <sql>select warranty_number, start_date, duration_in_months, status, device_id, accessory_id from warranty_card where status=:sts</sql>
+            <result element="BaseElement" rowName="Element">
+               <element column="warranty_number" name="warranty_number" xsdType="integer"/>
+               <element column="start_date" name="start_date" xsdType="date"/>
+               <element column="duration_in_months" name="duration_in_months" xsdType="integer"/>
+               <element column="status" name="Status" xsdType="string"/>
+               <element column="device_id" name="device_id" xsdType="integer"/>
+               <element column="accessory_id" name="accessory_id" xsdType="integer"/>
+            </result>
+            <param name="sts" sqlType="STRING"/>
+         </query>
+         <query id="AddIssue" useConfig="HardwareRepo">
+            <sql>INSERT INTO issue (status, device_id, employee_employee_id, issue_info, date) VALUES (:sts,:dev_id,:emp_id,:desc,:date)</sql>
+            <param name="sts" sqlType="STRING"/>
+            <param name="dev_id" sqlType="INTEGER"/>
+            <param name="emp_id" sqlType="INTEGER"/>
+            <param name="desc" sqlType="STRING"/>
+            <param name="date" sqlType="DATE"/>
+         </query>
+         <query id="AddPad" useConfig="HardwareRepo">
+            <sql>INSERT INTO device(serial_number, make, model, rating, purchase_date, supplier, type, screen_size, touch_type, camera, vga, remarks) VALUES (:sn,:make,:model,:rating,:date,:supplier,"pad",:screen,:touch,:cam,:vga, :remarks)</sql>
+            <param name="sn" sqlType="STRING"/>
+            <param name="make" sqlType="STRING"/>
+            <param name="model" sqlType="STRING"/>
+            <param name="rating" sqlType="INTEGER"/>
+            <param name="date" sqlType="DATE"/>
+            <param name="supplier" sqlType="INTEGER"/>
+            <param name="screen" sqlType="REAL"/>
+            <param name="touch" sqlType="STRING"/>
+            <param name="cam" sqlType="STRING"/>
+            <param name="vga" sqlType="STRING"/>
+            <param defaultValue="Not available" name="remarks" sqlType="STRING"/>
+         </query>
+         <query id="AddDesktop" useConfig="HardwareRepo">
+            <sql>INSERT INTO device(serial_number, make, model, rating, purchase_date, supplier, type, cpu, memory, remarks) VALUES (:sn,:make,:model,:rating,:date,:supplier, "desktop", :cpu, :memory, :remarks)</sql>
+            <param name="sn" sqlType="STRING"/>
+            <param name="make" sqlType="STRING"/>
+            <param name="model" sqlType="STRING"/>
+            <param name="rating" sqlType="INTEGER"/>
+            <param name="date" sqlType="DATE"/>
+            <param name="supplier" sqlType="INTEGER"/>
+            <param name="cpu" sqlType="STRING"/>
+            <param name="memory" sqlType="STRING"/>
+            <param defaultValue="Not available" name="remarks" sqlType="STRING"/>
+         </query>
+         <query id="AddLaptop" useConfig="HardwareRepo">
+            <sql>INSERT INTO device(serial_number, make, model, rating, purchase_date, supplier, type, screen_size, cpu, vga, memory, remarks) VALUES (:sn,:make,:model,:rating,:date,:supplier, "laptop", :screen_size, :cpu, :vga, :memory, :remarks)</sql>
+            <param name="sn" sqlType="STRING"/>
+            <param name="make" sqlType="STRING"/>
+            <param name="model" sqlType="STRING"/>
+            <param name="rating" sqlType="INTEGER"/>
+            <param name="date" sqlType="DATE"/>
+            <param name="supplier" sqlType="INTEGER"/>
+            <param name="cpu" sqlType="STRING"/>
+            <param name="vga" sqlType="STRING"/>
+            <param name="memory" sqlType="STRING"/>
+            <param defaultValue="Not available" name="remarks" sqlType="STRING"/>
+            <param name="screen_size" sqlType="REAL"/>
+         </query>
+         <query id="AddServer" useConfig="HardwareRepo">
+            <sql>INSERT INTO device(serial_number, make, model, rating, purchase_date, supplier, type, cpu, core_count, storage, network_controller, remarks) VALUES (:sn,:make,:model,:rating,:date,:supplier, "server", :cpu, :core_count, :storage, :network_controller, :remarks)</sql>
+            <param name="sn" sqlType="STRING"/>
+            <param name="make" sqlType="STRING"/>
+            <param name="model" sqlType="STRING"/>
+            <param name="rating" sqlType="INTEGER"/>
+            <param name="date" sqlType="DATE"/>
+            <param name="supplier" sqlType="INTEGER"/>
+            <param name="cpu" sqlType="STRING"/>
+            <param name="core_count" sqlType="INTEGER"/>
+            <param name="storage" sqlType="STRING"/>
+            <param name="network_controller" sqlType="STRING"/>
+            <param defaultValue="Not available" name="remarks" sqlType="STRING"/>
+         </query>
+         <operation name="GetAccessory">
+            <description>Get the Accessories</description>
+            <call-query href="GetAccessory">
+               <with-param name="acc_type" query-param="acc_type"/>
+            </call-query>
+         </operation>
+         <!--Nadeeshaan Edit-->
+            <operation name="AddWarrantyDevice">
+               <description>Adds warranty to a device    </description>
+               <call-query href="AddWarrantyDevice">
+                  <with-param name="purchaseDate" query-param="purchaseDate"/>
+                  <with-param name="end" query-param="end"/>
+                  <with-param name="duration" query-param="duration"/>
+                  <with-param name="serial" query-param="serial"/>
+               </call-query>
+            </operation>
+            <operation name="GetAllIssuesAdmin">
+               <description>Get information of all pads</description>
+               <call-query href="GetAllIssuesAdmin">
+                  <with-param name="resolved" query-param="resolved"/>
+               </call-query>
+            </operation>
+            <operation name="GetDeviceUpgradeHistory">
+               <description>Get information of all pads</description>
+               <call-query href="GetDeviceUpgradeHistory">
+                  <with-param name="device_id" query-param="device_id"/>
+               </call-query>
+            </operation>
+            <operation name="GetAllWarrantyAdmin">
+               <description>Get information of all Warranties</description>
+               <call-query href="GetAllWarrantyAdmin"/>
+            </operation>
+            <operation name="GetWarrantyByIDAdmin">
+               <description>Get information of all complete warranty details</description>
+               <call-query href="GetWarrantyByIDAdmin">
+                  <with-param name="war_num" query-param="war_num"/>
+               </call-query>
+            </operation>
+            <operation name="GetCustomWarrantyAdmin">
+               <description>Get information of custom warranty details</description>
+               <call-query href="GetCustomWarrantyAdmin">
+                  <with-param name="status" query-param="status"/>
+                  <with-param name="war_num" query-param="war_num"/>
+                  <with-param name="device_id" query-param="device_id"/>
+               </call-query>
+            </operation>
+            <operation name="GetAllDeviceBasicAdmin">
+               <description>Get information of all devices                        </description>
+               <call-query href="GetAllDeviceBasicAdmin"/>
+            </operation>
+            <operation name="GetDeviceByID">
+               <description>Get Device by the requested serial number                                                                     </description>
+               <call-query href="GetDeviceByID">
+                  <with-param name="device_id" query-param="device_id"/>
+               </call-query>
+            </operation>
+            <operation name="GetDeviceBasicBySN">
+               <description>Get Device by the requested serial number                                                                     </description>
+               <call-query href="GetDeviceBasicBySN">
+                  <with-param name="sn" query-param="sn"/>
+               </call-query>
+            </operation>
+            <operation name="GetDeviceBasicByType">
+               <description>Get Device by the requested serial number                                                                     </description>
+               <call-query href="GetDeviceBasicByType">
+                  <with-param name="dev_type" query-param="dev_type"/>
+               </call-query>
+            </operation>
+            <operation name="GetIssuesByDeviceID">
+               <description>Get issue by requested device ID                                          </description>
+               <call-query href="GetIssuesByDeviceID">
+                  <with-param name="dev_id" query-param="dev_id"/>
+               </call-query>
+            </operation>
+            <operation name="GetUnresolvedRequests">
+               <description>Get the requests which are new, unaccepted by user and pending for user acceptance</description>
+               <call-query href="GetUnresolvedRequests"/>
+            </operation>
+            <operation name="RenewWarranty">
+               <description>Renew Warranty                                                                                                            </description>
+               <call-query href="RenewWarranty">
+                  <with-param name="newEnd" query-param="newEnd"/>
+                  <with-param name="war_num" query-param="war_num"/>
+               </call-query>
+            </operation>
+            <operation name="AdminResolveRejectIssue">
+               <description>Resolve/reject issue by admin                                                                                                            </description>
+               <call-query href="AdminResolveRejectIssue">
+                  <with-param name="res" query-param="res"/>
+                  <with-param name="issue_num" query-param="issue_num"/>
+               </call-query>
+            </operation>
+            <operation name="GetAssigned">
+               <description>Get Assigned devices by ID</description>
+               <call-query href="GetAssigned">
+                  <with-param name="dev_id" query-param="dev_id"/>
+               </call-query>
+            </operation>
+            <operation name="AdminAcceptRejectRequest">
+               <description>Resolve/reject request by admin</description>
+               <call-query href="AdminAcceptRejectRequest">
+                  <with-param name="res" query-param="res"/>
+                  <with-param name="req_num" query-param="req_num"/>
+               </call-query>
+            </operation>
+            <operation name="AddUpgradeAccessory">
+               <description>Adds an upgrade to a device</description>
+               <call-query href="AddUpgradeAccessory">
+                  <with-param name="up_dev_id" query-param="up_dev_id"/>
+                  <with-param name="acc_id" query-param="acc_id"/>
+                  <with-param name="desc" query-param="desc"/>
+               </call-query>
+            </operation>
+            <!--Nadeeshaan Edit-->
+               <operation name="GetAllPadInfo">
+                  <description>Get information of all pads</description>
+                  <call-query href="GetAllPadInfo"/>
+               </operation>
+               <operation name="GetPadInfo">
+                  <description>Get pad info by requested pad ID                                    </description>
+                  <call-query href="GetPadInfo">
+                     <with-param name="pad_num" query-param="pad_num"/>
+                  </call-query>
+               </operation>
+               <operation name="GetIssue">
+                  <description>Get issue by requested issue ID                                    </description>
+                  <call-query href="GetIssue">
+                     <with-param name="issue_num" query-param="issue_num"/>
+                  </call-query>
+               </operation>
+               <operation name="GetIssuesByDescription">
+                  <description>Get issue by requested description. This matches the users description with the description available in the database.                                                    </description>
+                  <call-query href="GetIssuesByDescription">
+                     <with-param name="description" query-param="description"/>
+                  </call-query>
+               </operation>
+               <operation name="GetIssuesByDevice">
+                  <description>Get issue by requested device ID                                          </description>
+                  <call-query href="GetIssuesByDevice">
+                     <with-param name="dev_id" query-param="dev_id"/>
+                  </call-query>
+               </operation>
+               <operation name="GetIssuesByEmployee">
+                  <description>Get issue by requested employee ID                                    </description>
+                  <call-query href="GetIssuesByEmployee">
+                     <with-param name="emp_num" query-param="emp_num"/>
+                  </call-query>
+               </operation>
+               <operation name="GetIssuesByStatus">
+                  <description>Get issues by the requested status                                 </description>
+                  <call-query href="GetIssuesByStatus">
+                     <with-param name="status" query-param="status"/>
+                  </call-query>
+               </operation>
+               <operation name="GetAllDevice">
+                  <description>Get information of all devices                        </description>
+                  <call-query href="GetAllDevice"/>
+               </operation>
+               <operation name="GetDeviceBySN">
+                  <description>Get Device by the requested serial number                                                                     </description>
+                  <call-query href="GetDeviceBySN">
+                     <with-param name="sn" query-param="sn"/>
+                  </call-query>
+               </operation>
+               <operation name="GetDeviceByType">
+                  <description>Get Device by the requested serial number                                                                     </description>
+                  <call-query href="GetDeviceByType">
+                     <with-param name="dev_type" query-param="dev_type"/>
+                  </call-query>
+               </operation>
+               <operation name="GetDeviceWarranty">
+                  <description>Get warranty of a requested device(with device serial number) </description>
+                  <call-query href="GetDeviceWarranty">
+                     <with-param name="dev_sn" query-param="dev_sn"/>
+                  </call-query>
+               </operation>
+               <operation name="GetWarrantybyStatus">
+                  <call-query href="GetWarrantybyStatus">
+                     <with-param name="sts" query-param="sts"/>
+                  </call-query>
+               </operation>
+               <operation name="AddIssue">
+                  <call-query href="AddIssue">
+                     <with-param name="sts" query-param="sts"/>
+                     <with-param name="dev_id" query-param="dev_id"/>
+                     <with-param name="emp_id" query-param="emp_id"/>
+                     <with-param name="desc" query-param="desc"/>
+                     <with-param name="date" query-param="date"/>
+                  </call-query>
+               </operation>
+               <operation name="AddPad">
+                  <call-query href="AddPad">
+                     <with-param name="sn" query-param="sn"/>
+                     <with-param name="make" query-param="make"/>
+                     <with-param name="model" query-param="model"/>
+                     <with-param name="rating" query-param="rating"/>
+                     <with-param name="date" query-param="date"/>
+                     <with-param name="supplier" query-param="supplier"/>
+                     <with-param name="screen" query-param="screen"/>
+                     <with-param name="touch" query-param="touch"/>
+                     <with-param name="cam" query-param="cam"/>
+                     <with-param name="vga" query-param="vga"/>
+                     <with-param name="remarks" query-param="remarks"/>
+                  </call-query>
+               </operation>
+               <operation name="AddDesktop">
+                  <call-query href="AddDesktop">
+                     <with-param name="sn" query-param="sn"/>
+                     <with-param name="make" query-param="make"/>
+                     <with-param name="model" query-param="model"/>
+                     <with-param name="rating" query-param="rating"/>
+                     <with-param name="date" query-param="date"/>
+                     <with-param name="supplier" query-param="supplier"/>
+                     <with-param name="cpu" query-param="cpu"/>
+                     <with-param name="memory" query-param="memory"/>
+                     <with-param name="remarks" query-param="remarks"/>
+                  </call-query>
+               </operation>
+               <operation name="AddLaptop">
+                  <description>Add a Laptop to the database                                                                        </description>
+                  <call-query href="AddLaptop">
+                     <with-param name="sn" query-param="sn"/>
+                     <with-param name="make" query-param="make"/>
+                     <with-param name="model" query-param="model"/>
+                     <with-param name="rating" query-param="rating"/>
+                     <with-param name="date" query-param="date"/>
+                     <with-param name="supplier" query-param="supplier"/>
+                     <with-param name="cpu" query-param="cpu"/>
+                     <with-param name="vga" query-param="vga"/>
+                     <with-param name="memory" query-param="memory"/>
+                     <with-param name="remarks" query-param="remarks"/>
+                     <with-param name="screen_size" query-param="screen_size"/>
+                  </call-query>
+               </operation>
+               <operation name="AddServer">
+                  <description>Add a server to database                                                                </description>
+                  <call-query href="AddServer">
+                     <with-param name="sn" query-param="sn"/>
+                     <with-param name="make" query-param="make"/>
+                     <with-param name="model" query-param="model"/>
+                     <with-param name="rating" query-param="rating"/>
+                     <with-param name="date" query-param="date"/>
+                     <with-param name="supplier" query-param="supplier"/>
+                     <with-param name="cpu" query-param="cpu"/>
+                     <with-param name="core_count" query-param="core_count"/>
+                     <with-param name="storage" query-param="storage"/>
+                     <with-param name="network_controller" query-param="network_controller"/>
+                     <with-param name="remarks" query-param="remarks"/>
+                  </call-query>
+               </operation>
+            </data>

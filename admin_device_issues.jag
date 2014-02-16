@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Admin:Home</title>
+        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="css/carbonFormStyles.css">
+        <!--[if gte IE 8]>
+        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+        <![endif]-->
+        <!--[if gte IE 7]>
+        <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+        <![endif]-->
+        <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.form.js"></script>
+        <script type="text/javascript" src="js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.js"></script>
+        <script type="text/javascript" src="js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.core.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.tabs.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/WSRequest.js"></script>
+        <script type="text/javascript" src="js/cookies.js"></script>
+        <script type="text/javascript" src="js/customControls.js"></script>
+        <!-- This script handles the tabbed pane functionality -->
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+            
+                getReportedIssues();
+            
+    
+
+                alert(issueID);
+            });
+            
+            function getReportedIssues(){
+
+                var urlData=window.location.search.substring(1);
+                var deviceID=urlData.split("=");
+                alert(deviceID);
+
+                $.post("admin_devices_data_get.jag",{operation:"getReportedIssues",device_id:deviceID[1]},function(data,status){
+            
+                    alert(data);
+            
+                    var objArray=JSON.parse(data);
+            
+                            var tablearea = document.getElementById('deviceIssuesDevision');
+                            tablearea.setAttribute("class","datagrid");
+            
+                            for(var i=0;i<objArray.length;i++){
+            
+                                var cntr=0;
+                                var device_id;
+            
+                                var newTable=document.createElement('table');
+                                newTable.style.width='600px';
+                                newTable.style.margin='0px 0px 15px 50px';
+            
+                                var thead=document.createElement('thead');
+                                var htr=document.createElement('tr');
+                                var th=document.createElement('th');
+                                var tbody=document.createElement('tbody');
+                                th.setAttribute('colspan','2');
+                                th.style.height='15px';
+                                htr.appendChild(th);
+                                thead.appendChild(htr);
+                                newTable.appendChild(thead);
+            
+                                var object=objArray[i];
+            
+                                for(var property in object){
+            
+                                    var newRow=document.createElement('tr');
+            
+                                    if(cntr%2==0){
+                                        newRow.setAttribute("class","alt");
+                                    }
+            
+                                    if(property=='issue_number'){
+                                        th.appendChild(document.createTextNode("Issue ID: "+object[property]));
+                                    }
+
+                                    if(property=="device_id"){
+                                        device_id=object[property];
+                                    }
+            
+                                    else{
+            
+                                        var td1=document.createElement('td');
+                                        var td2=document.createElement('td');
+            
+                                        td1.appendChild(document.createTextNode(property));
+                                        td2.appendChild(document.createTextNode(object[property]));
+            
+                                        newRow.appendChild(td1);
+                                        newRow.appendChild(td2);
+            
+                                        tbody.appendChild(newRow);
+            
+                                    }
+                                    cntr++;
+            
+                                }
+            
+                                    var linkRow=document.createElement('tr');
+            
+                                    if(cntr%2==0){
+                                        linkRow.setAttribute("class","alt");
+                                    }
+            
+                                    var linkTd=document.createElement('td');
+                                    linkTd.setAttribute("colspan","2");
+            
+                                    var link=document.createElement('a');
+                                    link.setAttribute("href",("admin_issue_details.jag?id="+device_id));
+                                    link.innerHTML='more';
+                                    linkTd.appendChild(link);
+                                    linkRow.appendChild(linkTd);
+                                    tbody.appendChild(linkRow);
+            
+                                newTable.appendChild(tbody);
+            
+                                tablearea.appendChild(newTable);
+                            }
+            
+                });
+            }
+            
+        </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+        <!--[if lte IE 6]>
+        <div class="something-wrong">
+            <div class="title">Did you know that your Internet Explorer is out of date?</div>
+            <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
+        </div>
+        <![endif]-->
+        <div id="dcontainer"></div>
+        <script type="text/javascript" src="./page2_files/dialog.js"></script>
+        <!-- JS imports for collapsible menu -->
+        <script src="./page2_files/yahoo-dom-event.js" type="text/javascript"></script>
+        <script src="./page2_files/animation-min.js" type="text/javascript"></script>
+        <script src="./page2_files/template.js" type="text/javascript"></script>
+        <script src="./page2_files/yahoo-min.js" type="text/javascript"></script>
+        <script src="./page2_files/selector-min.js" type="text/javascript"></script>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <!--[IF IE 7]>
+                        <style>
+                            div#header-div div.right-links{
+                            position:absolute;
+                            }
+                        </style>
+                        <![endif]-->
+                        <div id="header-div">
+                            <div class="right-logo">Management Console</div>
+                            <div class="left-logo">
+                                <a href="https://localhost:9443/carbon/admin/index.jsp" class="header-home"><img src="./page2_files/1px.gif" width="300px" height="32px"></a>
+                            </div>
+                            <div class="middle-ad">
+                            </div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong>&nbsp;admin@carbon.super
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="https://localhost:9443/carbon/admin/logout_action.jsp">Sign-out</a>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="middle">
+                                            <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="left">
+                                            <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top" height="400px">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='admin_home.jag'><span>Home</span></a></li>
+                                <li><a href='admin_devices.jag'><span>Devices</span></a></li>
+                                <li><a href='admin_requests.jag'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="body">
+                                        <img src="./page2_files/1px.gif" width="735px" height="1px">
+                                    </td>
+                                </tr>
+                                <!--This is edited for devices grid implementation -->
+                                <tr>
+                                    <td>
+                                        <div id="issuesMainContainer" class="main_container">
+                                            <h2 style="margin:50px 0px 0px 50px;color: #00346e">Reported Issues</h2>
+                                            <br/>
+                                            <div id="deviceIssuesDevision">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- End of devices grid generation -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                                <!--div class="poweredby">
+                                    </div-->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()){
+                document.documentElement.className+=' ie10';
+            }
+        </script>
+    </body>
+</html>

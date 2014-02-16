@@ -1597,11 +1597,14 @@ label.error{
     background: #E1EEF4;
     color: #121212;
 }
+<<<<<<< HEAD
 
 .err td{
     background: #F54C4C;
     color: #121212;
 }
+=======
+>>>>>>> master
 /*.datagrid table tbody td:first-child {
     border-left: none;
 }
@@ -1669,6 +1672,7 @@ label.error{
 .linkLabel{
     cursor: pointer;
     color: #3874c1;
+
 }
 
 /* ------------- Table Styled Left -------- */

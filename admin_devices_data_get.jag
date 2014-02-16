@@ -1,0 +1,174 @@
+<%
+	var log=new Log();
+    var store=require("store.json");
+    var dssUrl=store.urlConfigurations.dssUrl;
+	var operation=request.getParameter("operation");
+
+	if (operation=="getAllDevices") {
+		getAllBasicDeviceDetails();
+	}
+
+	else if(operation=="getDeviceDetails"){
+		var deviceId=request.getParameter("device_id");
+		getDeviceByID(deviceId);
+	}
+
+	else if(operation=="getSearchedDevices"){
+		var queryType=request.getParameter("queryType");
+		var searchText=request.getParameter("searchText");
+		if(queryType=="0"){
+			var url=dssUrl+"GetDeviceBasicBySN";
+			var data={sn:searchText};
+			print(getSearchedDevices(url,data));
+		}
+		else if(queryType=="1"){
+
+		}
+		else if(queryType=="2"){
+			var url=dssUrl+"GetDeviceBasicByType";
+
+			var data={dev_type:searchText};
+			print(getSearchedDevices(url,data));
+		}
+	}
+
+	else if(operation=="getReportedIssues"){
+		var device_id=request.getParameter("device_id");
+		getIssuesByDeviceID(device_id)
+	}
+
+    else if(operation=="getAccessories"){
+        var deviceId=request.getParameter("deviceID");
+        getDeviceAccessories(deviceId);
+    }
+
+	function getAllBasicDeviceDetails(){
+		var url  = dssUrl+"GetAllDeviceBasicAdmin";
+        var type = "json";
+        //var data={issue_num:issueID};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        print(dataArray);
+	}
+
+	function getDeviceByID(device_id){
+		var url  = dssUrl+"GetDeviceByID";
+        var type = "json";
+        var data={device_id:device_id};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+
+        var assignedState=post((dssUrl+"GetAssigned"),{dev_id:device_id},headers,'json');
+        var assignedStateData=assignedState.data;
+        var be=assignedStateData["BaseElement"];
+        if(be["Element"]!=null){
+            dataArray["assigned_state"]="true";
+        }
+        else{
+            dataArray["assigned_state"]="false";
+        }
+
+
+        // var assigned=post(url,data,headers,"json");
+
+        
+        print(dataArray);
+	}
+
+	function getSearchedDevices(url,data){
+		var type = "json";
+		var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        log.info(jsonData);
+        
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+            return forcedArray;
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                return forcedArray;
+            }
+            else{
+                return dataArray;
+            }
+        }
+	}
+
+
+	function getIssuesByDeviceID(device_id){
+		var url  = dssUrl+"GetIssuesByDeviceID";
+        var type = "json";
+        var data={dev_id:device_id};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        log.info(jsonData);
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+	}
+
+    function getDeviceAccessories(dev_id){
+        var url  = dssUrl+"GetAccessoryByDeviceID";
+        var type = "json";
+        var data={dev_id:dev_id};
+        var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        log.info(jsonData);
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
+
+
+%>
