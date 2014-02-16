@@ -47,7 +47,20 @@ Hwdrepo = new function () {
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadDevices",
             function (html) {
 
+               // alert(JSON.stringify(html));
+
                 var devArea = document.getElementById('deviceArea');
+                devArea.innerHTML='';
+
+                if(Hwdrepo.nullCheck(html.devices[0])){
+
+                devArea.innerHTML='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No Devices have been assigned to you yet!</span></div>';
+                
+            }
+
+         else{
+
+                
                 var devTable=document.createElement("table");
                 var thead=document.createElement("thead");
                 var tbody=document.createElement("tbody");
@@ -101,7 +114,7 @@ Hwdrepo = new function () {
 
                         if (property == "serial_number") {
 
-                            var link = document.createElement('p');
+                            var link = document.createElement('span');
                             link.onclick=function(){window.open('userdevice?id='+object['device_id']);};
                             var str = object[property];
                             var result = str.link("userdevice?id=" + object['device_id']);
@@ -122,6 +135,7 @@ Hwdrepo = new function () {
 
                 devTable.appendChild(tbody);
                 devArea.appendChild(devTable);
+            }
 
 
             });
@@ -130,7 +144,7 @@ Hwdrepo = new function () {
     this.viewRequests = function (index) {
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html){
 
-           // alert(JSON.stringify(html));
+            //alert(JSON.stringify(html));
 
                if(index==0){ 
             Hwdrepo.fillRequestTable(html);
@@ -146,9 +160,18 @@ Hwdrepo = new function () {
 
     this.fillRequestTable = function (html) {
 
+                //alert(JSON.stringify(html.requests[0]));
+            var reqArea = document.getElementById('requestArea');    
+            reqArea.innerHTML = '';
 
-          var reqArea = document.getElementById('requestArea');
-          var reqTable=document.createElement("table");
+            if(Hwdrepo.nullCheck(html.requests[0])){
+
+                reqArea.innerHTML='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No Requests yet from you!</span></div>';
+                
+            }
+
+         else{
+                var reqTable=document.createElement("table");
                 var thead=document.createElement("thead");
                 var tbody=document.createElement("tbody");
 
@@ -177,7 +200,7 @@ Hwdrepo = new function () {
                 reqArea.style.display = "";
                 reqArea.setAttribute('class', 'datagrid');
 
-                reqArea.innerHTML = '';
+                
 
         var obj = html;
 
@@ -213,10 +236,12 @@ Hwdrepo = new function () {
         }
              reqTable.appendChild(tbody);
              reqArea.appendChild(reqTable);
-
+         }
+             
+         
     }
     this.fillRequestPage = function(html){
-        // alert(JSON.stringify(html));
+            // alert(JSON.stringify(html));
          
             var objArray = html.requests;
          
@@ -229,6 +254,15 @@ Hwdrepo = new function () {
                  var formatting1 = "";
                  var formatting2 = "";
                  var formatting3 = "";
+
+                 if(Hwdrepo.nullCheck(html.requests[0])){
+
+                formatting1='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No new device requests from you yet!</span></div>';
+                formatting2='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your device requests have been rejected yet!</span></div>';
+                formatting3='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any resolved device requests!</span></div>';
+            }
+
+         else{
          
                  for (var i = 0; i < objArray.length; i++) {
          
@@ -274,6 +308,17 @@ Hwdrepo = new function () {
                      //alert(JSON.stringify(object));
          
                  }
+
+                 if(Hwdrepo.nullCheck(formatting1)){
+                formatting1='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No new device requests from you yet!</span></div>';    
+             }
+             if(Hwdrepo.nullCheck(formatting2)){
+                formatting2='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your device requests have been rejected yet!</span></div>';
+             }
+             if(Hwdrepo.nullCheck(formatting3)){
+                formatting3='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any resolved device requests!</span></div>';  
+             }
+             }
                  tablearea1.innerHTML = formatting1;
                  tablearea2.innerHTML = formatting2;
                  tablearea3.innerHTML = formatting3;
@@ -377,7 +422,7 @@ Hwdrepo = new function () {
 
                     if (property == 'serial_number') {
 
-                        var thd=document.createElement('p');
+                        var thd=document.createElement('span');
                         thd.appendChild(document.createTextNode("Serial Number: " + object[property]));
                         thd.setAttribute('style','float:right;width:30 px');
                         th.appendChild(thd);
@@ -385,7 +430,7 @@ Hwdrepo = new function () {
                     }else if (property == 'make') {
 
 
-                        var thd=document.createElement('p');
+                        var thd=document.createElement('span');
                         thd.setAttribute('style','float:left;width:30 px');
                         thd.appendChild(document.createTextNode(object[property]));
                         th.appendChild(thd);
@@ -408,7 +453,7 @@ Hwdrepo = new function () {
 
                     td1.appendChild(document.createTextNode(property));
 
-                    if(typeof(object[property])=='object'){
+                    if(Hwdrepo.nullCheck(object[property])){
                         td2.appendChild(document.createTextNode(' '));
                         
                }else{
@@ -507,7 +552,6 @@ Hwdrepo = new function () {
 
                     var object = objArray[i];
 
-
                     if (object.resolved == "0") {
                         object.New = "true";
                         object.resolved = null;
@@ -553,7 +597,7 @@ Hwdrepo = new function () {
 
             function (data, status) {
 
-                 //alert(JSON.stringify(data));
+               //  alert(JSON.stringify(data));
 
                 var deviceArray = data.device;
                 var accessoryArray = data.accessories;
@@ -562,11 +606,11 @@ Hwdrepo = new function () {
                 tablearea.innerHTML = '';
                 var formatting = "";
 
-                if(deviceArray[0] == null){
+                if(Hwdrepo.nullCheck(deviceArray[0])){
 
                     var object={"war_id":null};
 
-                     if(accessoryArray[0]==null){
+                     if(Hwdrepo.nullCheck(accessoryArray[0])){
                         object.hasAccessories=null;
                     }
                     else{
@@ -672,7 +716,7 @@ Hwdrepo = new function () {
             });
     }
 
-    this.getHardwareComponentDescription = function (deviceID) {
+/*    this.getHardwareComponentDescription = function (deviceID) {
         alert(deviceID);
 
         $.post(controllerPath, JSON.stringify({
@@ -690,22 +734,21 @@ Hwdrepo = new function () {
 
 
     }
-
+*/
     this.editIssue = function (issue_no, dev_id, status, issue, oldDate, resolve) {
 
-        Hwdrepo.loadDialogs();
+            
+        if (resolve == 0) { 
 
-        if (resolve == 0) {
+        $( "#editIssueDialog" ).dialog( "option", "buttons", [
 
-            $("#reportIssueDialog").dialog({
-                buttons: [{
+
+            {
                     text: "Ok",
                     click: function () {
 
-                        var description = document.getElementById('issueDescription').value;
-                        var date = $("#datepicker").val();
-
-
+                        var description =  $("#editIssueDescription").val();
+                        var date = $("#editDatepicker").val();
 
                         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                                 operation: "editIssue",
@@ -720,30 +763,34 @@ Hwdrepo = new function () {
                             }),
                             function (data) {
 
-                                $("#addHdwInfo").attr("class", "ui-widget");
+                                $("#editIssErr1").attr("class", "ui-widget");
 
                             });
 
+                        $('#editIssueDialog').dialog('close');
+                        $("#editIssErr1").attr("class", "hidden");
 
-                        $('#reportIssueDialog').dialog('destroy');
-                        Hwdrepo.loadIssueHistory(dev_id);
-                        $("#addHdwInfo").attr("class", "hidden");
-
+                             if(Hwdrepo.nullCheck(document.getElementById('issueDiv'))){
+            Hwdrepo.getUserIssues();
+        }
+        else{
+           
+            Hwdrepo.loadIssueHistory(dev_id);
+        }
                     }
-                }]
-            });
+                }]);
 
-            $("#datepicker").datepicker("setDate", oldDate.split("+")[0]);
-            $("#issueDescription").val(issue);
-            $("#reportIssueDialog").dialog('option', 'title', 'Edit Issue');
+        $("#editIssueDialog").dialog('option', 'title', 'Edit Issue');
 
-
-
-
-            $("#reportIssueDialog").dialog("open");
+        $("#editDatepicker").datepicker({
+            autoOpen: false,
+            dateFormat: "yy-mm-dd",
+        });
+            $("#editDatepicker").datepicker("setDate", oldDate.split("+")[0]);
+            $("#editIssueDescription").val(issue);     
+            $("#editIssueDialog").dialog("open");
 
         } else if (resolve == 4) {
-
 
             alert("this will delete the issue, are you sure?");
 
@@ -756,12 +803,15 @@ Hwdrepo = new function () {
                 }),
                 function (data) {
 
-                    //  Hwdrepo.loadIssueHistory(dev_id);
+                    if(Hwdrepo.nullCheck(document.getElementById('issueDiv'))){
+            Hwdrepo.getUserIssues();
+        }
+        else{
+           
+            Hwdrepo.loadIssueHistory(dev_id);
+        }
 
                 });
-
-
-            Hwdrepo.loadIssueHistory(dev_id);
 
         } else {
 
@@ -779,15 +829,18 @@ Hwdrepo = new function () {
                 }),
                 function (data) {
 
-                    //  Hwdrepo.loadIssueHistory(dev_id);
+                    if(Hwdrepo.nullCheck(document.getElementById('issueDiv'))){
+            Hwdrepo.getUserIssues();
+        }
+        else{
+           
+            Hwdrepo.loadIssueHistory(dev_id);
+        }
 
                 });
 
-
-            Hwdrepo.loadIssueHistory(dev_id);
-
-
         }
+
     }
 
     this.loadDialogs = function (deviceID) {
@@ -810,10 +863,21 @@ Hwdrepo = new function () {
                     var date = $("#datepicker").val();
                     /*type.options[type.selectedIndex].value=="0"||*/
 
-                    if (date == null || description.value == "") {
+                    var errText1= '<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span><strong>Alert:</strong> Please provide an issue description</p></div>';
+                    var errText2= '<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span><strong>Alert:</strong> Please Select a date</p></div>';
+
+                    if (Hwdrepo.nullCheck(description.value)) {
+                        errSpan.innerHTML=errText1;
                         errSpan.classList.remove(errSpan.className);
                         errSpan.classList.add("ui-widget");
-                    } else {
+                    }
+                    else if(Hwdrepo.nullCheck(date)){
+
+                        errSpan.innerHTML=errText2;
+                        errSpan.classList.remove(errSpan.className);
+                        errSpan.classList.add("ui-widget");
+                    } 
+                    else {
 
                         $("#addHdwErr").attr("class", "hidden");
 
@@ -828,19 +892,12 @@ Hwdrepo = new function () {
                         };
 
                         Hwdrepo.addIssue(issueData);
+                        $("#reportIssueDialog").dialog('close');
+                        $("#addHdwInfo").attr("class", "hidden");
+                        Hwdrepo.loadIssueHistory(deviceID);
                     }
+
                 }
-
-                ,
-                'close': function () {
-
-
-
-                    $("#reportIssueDialog").dialog('destroy');
-                    $("#addHdwInfo").attr("class", "hidden");
-                    Hwdrepo.loadIssueHistory(deviceID);
-                }
-
             }
         });
         $('#reportIssueDialog').dialog('option', 'title', 'Report Issue');
@@ -850,10 +907,9 @@ Hwdrepo = new function () {
             dateFormat: "yy-mm-dd",
             gotoCurrent: true
         });
-        $("#issueDescription").val("");
+        $("#issueDescription").val();
 
-        //Hwdrepo.getHardwareComponentDescription(deviceID);
-
+        //Hwdrepo.getHardwareComponentDescription(deviceID);       
 
     }
     this.getUserID=function(){
@@ -879,6 +935,125 @@ Hwdrepo = new function () {
 
             });
 
+    }
+    this.nullCheck = function(value){
+
+    //   alert(JSON.stringify(typeof(value)));
+
+        if(value =='null'){
+            return true;
+        }
+        else if(value == ''){
+            return true;
+        }
+        else if(value == null){
+            return true;
+        }
+        else if(typeof(value)=='object'){
+            //alert(JSON.stringify(Object.keys(value)[0]));
+
+            if(Object.keys(value)[0] =='@nil'){
+                return true;
+            }
+            else{
+                return false;
+            }
+           
+        }
+        else{
+            return false;
+        }
+    }
+    this.getUserIssues = function(){
+
+
+        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadUserIssues",
+            function (html) {
+
+               // alert(JSON.stringify(html));
+
+            var objArray = html.issues;
+         
+                 var tablearea1 = document.getElementById('newIssueDiv');
+                 var tablearea2 = document.getElementById('rejectIssueDiv');
+                 var tablearea3 = document.getElementById('resolvedIssueDiv');
+                 var tablearea4 = document.getElementById('pastIssueDiv');
+                 tablearea1.innerHTML = '';
+                 tablearea2.innerHTML = '';
+                 tablearea3.innerHTML = '';
+                 tablearea4.innerHTML = '';
+                 var formatting1 = "";
+                 var formatting2 = "";
+                 var formatting3 = "";
+                 var formatting4 = "";
+
+              if(Hwdrepo.nullCheck(html.issues[0])){
+
+               formatting1='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your devices have issues just yet!</span></div>';
+                formatting2='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your reported issues have been rejected yet!</span></div>';
+                formatting3='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any resolved device issues!</span></div>';
+                formatting4='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any reported any device issues in the past!</span></div>';
+          } 
+
+            else{
+         
+                 for (var i = 0; i < objArray.length; i++) {
+         
+                     var object = objArray[i];
+         
+         
+                     if (object.resolved == "0") {
+                        object.New = "true";
+                        object.resolved = null;
+                        object.rejected = null;
+
+                        var html = Mustache.render(Issuetemplate, object);
+                        formatting1 = formatting1.concat(html);
+                    } else if (object.resolved == "1") {
+                        object.New = null;
+                        object.resolved = "true";
+                        object.rejected = null;
+
+                        var html = Mustache.render(Issuetemplate, object);
+                        formatting3 = formatting3.concat(html);
+                    } else if (object.resolved == "2") {
+                        object.New = null;
+                        object.resolved = null;
+                        object.rejected = "true";
+
+                        var html = Mustache.render(Issuetemplate, object);
+                        formatting2 = formatting2.concat(html);
+                    } else {
+                        object.New = null;
+                        object.resolved = null;
+                        object.rejected = null;
+
+                        var html = Mustache.render(Issuetemplate, object);
+                        formatting4 = formatting4.concat(html);
+                    }
+         
+                     //alert(JSON.stringify(object));
+         
+                 }
+             if(Hwdrepo.nullCheck(formatting1)){
+                formatting1='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your devices have issues just yet!</span></div>';
+             }
+             if(Hwdrepo.nullCheck(formatting2)){
+                formatting2='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> None of your reported issues have been rejected yet!</span></div>';
+             }
+             if(Hwdrepo.nullCheck(formatting3)){
+                formatting3='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any resolved device issues!</span></div>';    
+             }
+             if(Hwdrepo.nullCheck(formatting4)){
+                formatting4='<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> You don\'t have any reported any device issues in the past!</span></div>';           
+             }
+         }
+                 tablearea1.innerHTML = formatting1;
+                 tablearea2.innerHTML = formatting2;
+                 tablearea3.innerHTML = formatting3;
+                 tablearea4.innerHTML = formatting4;
+
+    });
     }
 
 }

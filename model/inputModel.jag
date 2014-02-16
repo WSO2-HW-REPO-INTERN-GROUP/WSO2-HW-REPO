@@ -128,6 +128,16 @@ function viewDevicesByUser(user_id) {
     return returnValue(rslt.data.BaseElement);
 
 }
+function viewIssuesByUser(user_id) {
+
+    var url = dssUrl+"GetIssuesByEmployee";
+    var rslt=get(url,{"emp_num":user_id},{"Accept":"application/json"},"json");
+
+
+
+    return returnValue(rslt.data.BaseElement);
+
+}
 
 function addNewRequest(addReqObj) {
 

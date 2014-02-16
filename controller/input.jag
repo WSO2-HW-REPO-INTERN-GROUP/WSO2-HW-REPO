@@ -185,6 +185,22 @@ if (verb == "GET") {
 
 
     }
+    else if (opr == 'loadUserIssues') {
+
+        var result=viewIssuesByUser(user_id);
+
+        // if result has multiple entries it is returned as an array View issues results of type
+        // {"issues":[{result1},{result2},{re...}]}
+
+        if( Object.prototype.toString.call(result) === '[object Array]' ) {
+            print({"issues":result});
+        }
+        else{
+            print({"issues":[result]});
+        }
+
+
+    }
 }
 
 %>

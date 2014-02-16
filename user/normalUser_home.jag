@@ -23,6 +23,7 @@
       <link rel="stylesheet" href="css/carbonFormStyles.css">
       <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
       <link rel="stylesheet" href="css/jquery-ui.css">
+      <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
 
       <!-- My CSS -->
 
@@ -38,11 +39,12 @@
       <!--[if gte IE 7]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
-      <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-      <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+      <!--link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+      <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon"-->
 
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script>
+       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
 
       <!--myscripts-->
       <script src="appJS/Hwdrepo.js"></script>
@@ -232,6 +234,7 @@
                                           <li>
                                              <div id="requestArea" class="datagrid">
                                                 <!--data is loaded by the javascript function loadAllIssues()-->
+                                              
                                                 
                                              </div>
                                           </li>

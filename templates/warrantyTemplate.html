@@ -2,8 +2,8 @@
 *** Email - mihil@wso2.com
 *** project-wso2 Hardware Repository
 *** interns UOM-2014 -->  
-
 <table style='width: 700px; margin:0px 0px 15px 50px'>
+{{#war_id}}
 <thead>
 <tr>
 <th style ='width: 300px;height: 15px' >Device Warranty : {{war_time_months}} months
@@ -31,6 +31,21 @@
 <td>{{end_date}}
 </td>
 </tr>
+{{/war_id}}
+{{^war_id}}
+<tbody>
+<tr >
+<td colspan="2">
+	<div id="addHdwErr" class="ui-widget">
+                                                   <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                                                      <span><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+                                                         <strong>Alert:</strong> No Warranty For this Device!
+                                                      </span>
+                                                   </div>
+                                                </div>
+</td>
+</tr>
+{{/war_id}}
 {{#hasAccessories}}
 <tr >
 <td colspan="2" bgcolor="#FF0000">
@@ -49,3 +64,4 @@
 </tbody>                    
 </table>
 <br/>
+
