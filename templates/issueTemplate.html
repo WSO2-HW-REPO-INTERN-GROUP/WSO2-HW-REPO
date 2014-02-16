@@ -2,14 +2,20 @@
 *** Email - mihil@wso2.com
 *** project-wso2 Hardware Repository
 *** interns UOM-2014 -->  
-
+{{#issue_number}}
 <table style='width: 600px; margin:0px 0px 15px 50px'>
 <thead>
 <tr>
 <th style ='width: 100px;height: 15px' >{{issue_number}}
 </th>
+{{#status}}
 <th style ='height: 15px'>{{status}}
 </th>
+{{/status}}
+{{^status}}
+<th style ='height: 15px'>New
+</th>
+{{/status}}
 </tr>
 </thead>
 <tbody>
@@ -68,3 +74,10 @@
 </tbody>                    
 </table>
 <br/>
+{{/issue_number}}
+{{^issue_number}}
+<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+		<strong>Information:</strong> No Issues For this device</p>
+	</div>
+{{/issue_number}}

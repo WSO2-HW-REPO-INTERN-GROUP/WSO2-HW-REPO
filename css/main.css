@@ -20,11 +20,12 @@ div#header-div {
 }
 
 div#header-div div.left-logo {
-	background-image: url(../images/app-server-header-logo.png);
+	background-image: url(../images/hwRepoLogo.png);
 	margin-left: 69px;
-	margin-top: 36px;
-	width: 225px;
+	margin-top: 25px;
+	width: 250px;
 	height: 45px;
+	background-repeat: no-repeat;
 }
 
 div#header-div div.right-logo {

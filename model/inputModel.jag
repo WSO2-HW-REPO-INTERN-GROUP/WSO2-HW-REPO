@@ -62,6 +62,8 @@ function viewIssueHistoryByDeviceID(deviceID,user_id) {
         "Accept": "application/json"
     }, "json");
 
+  //log.info(rslt);
+
     return returnValue(rslt.data.BaseElement);
 
 }
@@ -75,6 +77,8 @@ function viewIssueHistoryByEmp(user_id) {
     }, {
         "Accept": "application/json"
     }, "json");
+
+    // log.info(rslt);
 
     return returnValue(rslt.data.BaseElement);
 
@@ -130,8 +134,8 @@ function addNewRequest(addReqObj) {
     log.info(stringify(addReqObj));
     var url = dssUrl+"AddDeviceRequest"
     var data=addReqObj;
-    var headers = {Accept:"application/json" };
-    var rslt=get(url,data,headers,'json',function(data,xhr){
+    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var rslt=post(url,data,headers,'json',function(data,xhr){
     })
 
 }
@@ -139,22 +143,21 @@ function addNewRequest(addReqObj) {
 
 function addIssue(issue) {
 
-    log.info(issue);
-
+     //log.info(issue);
 
     var url = dssUrl+"AddIssue"
     var headers = {"Content-Type":"application/json","Accept":"application/json" };
     var rslt=post(url,issue,headers,'json',function(data,xhr){});
-   // log.info(rslt);
+    //log.info(rslt);
 
 }
 
 function  returnValue(returnBaseElement){
 
-    //log.info(returnBaseElement);
+   // log.info(returnBaseElement);
     //log.info(returnBaseElement.Element);
 
-    if(returnBaseElement.Element == null){
+    if(returnBaseElement == null){
         return [];
     }
     else{
@@ -166,6 +169,7 @@ function  returnValue(returnBaseElement){
         }
         
     }
+    
 
 }
 

@@ -11,7 +11,7 @@ include("../model/inputModel.jag");
 var dataStore=require("../store.json");
 
 
-var dssUrl = dataStore.urlEntries.dssUrl;
+var dssUrl = dataStore.urlConfigurations.dssUrl;
 var serverPath = "http://localhost:9765/WSO2-HW-REPO";
 response.contentType = 'text/javascript';
 
@@ -22,7 +22,7 @@ var uri = request.getRequestURI();
 
 var log = new Log();
 
-session.put('user-id','1');
+var user_id = session.get("LOGGED_IN_USER");
 
 if (request.getParameter('operation') != null) {
     var opr = request.getParameter('operation');
@@ -36,15 +36,11 @@ if (data != null) {
 }
 
 
-
 if (verb == "POST") {
-
-    log.info(data);
 
 
     if (opr == 'addDeviceRequest') {
 
-        var user_id = session.get('user-id');
 
         var addRequestObj = parse(data).dev;
 
@@ -90,8 +86,6 @@ if (verb == "POST") {
     }
     else if (opr == 'warrantyHistory') {
 
-        var user_id = session.get('user-id');
-
      // log.info(viewWarrantyByDeviceID(deviceID));
 
       print(viewWarrantyByDeviceID(deviceID,user_id));
@@ -99,22 +93,15 @@ if (verb == "POST") {
     }
      else if (opr == 'getIssues') {
 
-    var user_id = session.get('user-id');
-
     //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
         print(viewIssueHistoryByDeviceID(deviceID,user_id));
     } else if(opr == 'getEmpIssues') {
-
-    var user_id = session.get('user-id');
 
     //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
         print(viewIssueHistoryByEmp(user_id));
     }
 
     else if (opr == 'addIssue') {
-
-         var user_id = session.get('user-id');
-
         
         var addIssueObj = parse(data);
 
@@ -132,8 +119,6 @@ if (verb == "POST") {
     else if(opr =='editIssue'){
 
 
-        var user_id = session.get('user-id');
-
         var editIssueObj = JSON.parse(data);
 
         //log.info(editIssueObj);
@@ -146,8 +131,6 @@ if (verb == "POST") {
     }
       else if(opr =='deleteIssue'){
 
-
-        var user_id = session.get('user-id');
 
         var deleteIssueObj = JSON.parse(data);
 
@@ -165,14 +148,10 @@ if (verb == "GET") {
 
     if(opr == 'getUserID'){
 
-        var user_id = session.get('user-id');
-
        print({'user_id':user_id});
 
     }
     else if (opr == 'loadRequests') {
-
-        var user_id = session.get('user-id');
 
         var result=viewRequestsByUser(user_id);
 
@@ -191,8 +170,6 @@ if (verb == "GET") {
 
 
     } else if (opr == 'loadDevices') {
-
-        var user_id = session.get('user-id');
 
         var result=viewDevicesByUser(user_id);
 

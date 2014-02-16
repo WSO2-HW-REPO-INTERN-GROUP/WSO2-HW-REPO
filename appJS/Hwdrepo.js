@@ -101,12 +101,12 @@ Hwdrepo = new function () {
 
                         if (property == "serial_number") {
 
-                            var link = document.createElement('a');
+                            var link = document.createElement('p');
+                            link.onclick=function(){window.open('userdevice?id='+object['device_id']);};
+                            var str = object[property];
+                            var result = str.link("userdevice?id=" + object['device_id']);
 
-                            link.setAttribute("href", "normal_device_details.jag?id=" + object['device_id']);
-                            //link.setAttribute("onclick", 'window.open("normal_device_details.jag?id="' + object["device_id"].toString()+')');
-
-                            link.innerHTML = object[property];
+                            link.innerHTML = result;
 
                             td.appendChild(link);
                             newRow.appendChild(td);
@@ -130,7 +130,7 @@ Hwdrepo = new function () {
     this.viewRequests = function (index) {
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html){
 
-            alert(JSON.stringify(html));
+           // alert(JSON.stringify(html));
 
                if(index==0){ 
             Hwdrepo.fillRequestTable(html);
@@ -318,6 +318,14 @@ Hwdrepo = new function () {
                 tablearea.innerHTML = '';
                 var formatting = "";
 
+                if(objArray[0]==null){
+
+                    var html = Mustache.render(Upgradetemplate, objArray[0]);
+
+                    formatting = formatting.concat(html);
+                    
+                }else{
+
                 for (var i = 0; i < objArray.length; i++) {
 
                     var object = objArray[i];
@@ -328,8 +336,10 @@ Hwdrepo = new function () {
                     formatting = formatting.concat(html);
 
                 }
+            }
                 tablearea.innerHTML = formatting;
-            });
+            
+        });
     }
 
     this.getDeviceDetails = function (deviceID) {
@@ -366,11 +376,25 @@ Hwdrepo = new function () {
                 for (var property in object) {
 
                     if (property == 'serial_number') {
-                        th.appendChild(document.createTextNode("Serial Number: " + object[property]));
+
+                        var thd=document.createElement('p');
+                        thd.appendChild(document.createTextNode("Serial Number: " + object[property]));
+                        thd.setAttribute('style','float:right;width:30 px');
+                        th.appendChild(thd);
+
+                    }else if (property == 'make') {
+
+
+                        var thd=document.createElement('p');
+                        thd.setAttribute('style','float:left;width:30 px');
+                        thd.appendChild(document.createTextNode(object[property]));
+                        th.appendChild(thd);
+
+                    }else if (property == 'model') {
+                        th.appendChild(document.createTextNode(object[property]));
                         //th.appendChild(document.createElement('br'));
 
                     }
-
                     var newRow = document.createElement('tr');
 
                     if (i % 2 == 0) {
@@ -383,7 +407,13 @@ Hwdrepo = new function () {
                     td2.style.padding = '3px 20px';
 
                     td1.appendChild(document.createTextNode(property));
+
+                    if(typeof(object[property])=='object'){
+                        td2.appendChild(document.createTextNode(' '));
+                        
+               }else{
                     td2.appendChild(document.createTextNode(object[property]));
+                }
 
                     newRow.appendChild(td1);
                     newRow.appendChild(td2);
@@ -410,7 +440,7 @@ Hwdrepo = new function () {
                 operation: "getAccessories",
                 deviceID: deviceID
             }),
-            function (data, status) {
+            function (data,status) {
 
                 var objArray = data;
 
@@ -418,7 +448,16 @@ Hwdrepo = new function () {
                 tablearea.innerHTML = '';
                 var formatting = "";
 
-                // alert(JSON.stringify(objArray));
+                if(objArray[0]==null){
+
+                    //alert(objArray[0]);
+                    var html = Mustache.render(Accessorytemplate, objArray[0]);
+
+                    formatting = formatting.concat(html);
+
+                }else{
+
+                 //alert(JSON.stringify(objArray));
 
                 for (var i = 0; i < objArray.length; i++) {
 
@@ -430,8 +469,11 @@ Hwdrepo = new function () {
 
                     formatting = formatting.concat(html);
                 }
+
+            }
                 tablearea.innerHTML = formatting;
-            });
+            
+        });
 
     }
 
@@ -443,12 +485,23 @@ Hwdrepo = new function () {
             }),
             function (data) {
 
+                //alert(JSON.stringify(data));
+
 
                 var objArray = data;
 
                 var tablearea = document.getElementById('issueDiv');
                 tablearea.innerHTML = '';
                 var formatting = "";
+
+                if(objArray[0]==null){
+
+
+                    var html = Mustache.render(Issuetemplate, objArray[0]);
+
+                    formatting = formatting.concat(html);
+
+                }else{
 
                 for (var i = 0; i < objArray.length; i++) {
 
@@ -474,14 +527,17 @@ Hwdrepo = new function () {
 
                     }
 
+                    //if(object)
 
 
-                    //alert(JSON.stringify(object));
+
+                   // alert(JSON.stringify(object));
 
                     var html = Mustache.render(Issuetemplate, object);
 
                     formatting = formatting.concat(html);
                 }
+            }
                 tablearea.innerHTML = formatting;
 
             });
@@ -497,12 +553,31 @@ Hwdrepo = new function () {
 
             function (data, status) {
 
+                 //alert(JSON.stringify(data));
+
                 var deviceArray = data.device;
                 var accessoryArray = data.accessories;
 
                 var tablearea = document.getElementById('warrantyDiv');
                 tablearea.innerHTML = '';
                 var formatting = "";
+
+                if(deviceArray[0] == null){
+
+                    var object={"war_id":null};
+
+                     if(accessoryArray[0]==null){
+                        object.hasAccessories=null;
+                    }
+                    else{
+                        object.hasAccessories=true;
+                    }
+
+                     var html = Mustache.render(Warrantytemplate,object);
+
+                    formatting = formatting.concat(html);
+
+                }else{
 
                 for (var i = 0; i < deviceArray.length; i++) {
 
@@ -522,18 +597,34 @@ Hwdrepo = new function () {
                     }
                     object.sts=tempSts;
 
-                    //alert(JSON.stringify(object));
+                    if(accessoryArray[0]==null){
+                        object.hasAccessories=null;
+                    }
+                    else{
+                        object.hasAccessories=true;
+                    }
+
                     var html = Mustache.render(Warrantytemplate, object);
 
                     formatting = formatting.concat(html);
 
                 }
+            }
                 tablearea.innerHTML = formatting;
-                //alert(JSON.stringify(accessoryArray));
+
 
                 var divArea = document.getElementById('accessoryWarrantyDiv');
                 divArea.innerHTML = '';
                 var htmformatting = "";
+
+                if(accessoryArray[0]==null){
+
+                    var html = Mustache.render(Accessorytemplate,accessoryArray[0]);
+
+                    formatting = formatting.concat(html);
+
+                }
+                else{
 
                  for (var i = 0; i < accessoryArray.length; i++) {
 
@@ -559,6 +650,7 @@ Hwdrepo = new function () {
                     htmformatting = htmformatting.concat(html);
 
                 }
+            }
 
                 divArea.innerHTML = htmformatting;
 
@@ -727,9 +819,9 @@ Hwdrepo = new function () {
 
                         var issueData = {
 
-                            "sts": null,
+                            //"sts": 'New',
                             /*type.options[type.selectedIndex].text*/
-                                "dev_id": deviceID,
+                            "dev_id": deviceID,
                             "desc": description.value,
                             "date": date,
 
