@@ -1,0 +1,274 @@
+<data name="WSO2_HWDREPO_SERVICE">
+   <config id="WSO2_HWDREPO_SERVICE">
+      <property name="driverClassName">com.mysql.jdbc.Driver</property>
+      <property name="url">jdbc:mysql://127.0.0.1:3306/WSO2_HWDREPO</property>
+      <property name="username">root</property>
+      <property name="password">1234</property>
+   </config>
+   <query id="GetDeviceByID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select * from device where device_id=:device_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="device_id" name="device_id" xsdType="integer"/>
+         <element column="make" name="make" xsdType="string"/>
+         <element column="model" name="model" xsdType="string"/>
+         <element column="rating" name="rating" xsdType="integer"/>
+         <element column="purchase_date" name="purchase_date" xsdType="date"/>
+         <element column="supplier" name="supplier" xsdType="string"/>
+         <element column="type" name="type" xsdType="string"/>
+         <element column="screen_size" name="screen_size" xsdType="float"/>
+         <element column="touch_type" name="touch_type" xsdType="string"/>
+         <element column="camera" name="camera" xsdType="string"/>
+         <element column="cpu" name="cpu" xsdType="string"/>
+         <element column="core_count" name="core_count" xsdType="integer"/>
+         <element column="storage" name="storage" xsdType="string"/>
+         <element column="network_controller" name="network_controller" xsdType="string"/>
+         <element column="remarks" name="remarks" xsdType="string"/>
+         <element column="vga" name="vga" xsdType="string"/>
+         <element column="memory" name="memory" xsdType="string"/>
+         <element column="serial_number" name="serial_number" xsdType="string"/>
+      </result>
+      <param name="device_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetIssuesByDeviceID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select issue_number,status,device_id,employee_employee_id, issue_info,resolved,date from issue where device_id=:dev_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="issue_number" name="issue_number" xsdType="integer"/>
+         <element column="status" name="status" xsdType="string"/>
+         <element column="device_id" name="device_id" xsdType="integer"/>
+         <element column="employee_employee_id" name="employee_employee_id" xsdType="string"/>
+         <element column="issue_info" name="issue_info" xsdType="string"/>
+         <element column="date" name="date" xsdType="date"/>
+      </result>
+      <param name="dev_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetAccessoryByDeviceID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select * from accessory where assigned_device_id=:dev_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="accessory_id" name="accessory_id" xsdType="integer"/>
+         <element column="health" name="health" xsdType="string"/>
+         <element column="remarks" name="remarks" xsdType="string"/>
+         <element column="type" name="type" xsdType="string"/>
+         <element column="serial_number" name="serial_number" xsdType="string"/>
+         <element column="assigned_date" name="assigned_date" xsdType="date"/>
+         <element column="removed_date" name="removed_date" xsdType="string"/>
+      </result>
+      <param name="dev_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetRequestsByEmployee" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select * from request where employee_employee_id =:emp_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="device_type" name="device_type" xsdType="string"/>
+         <element column="purpose" name="purpose" xsdType="string"/>
+         <element column="requirements" name="requirements" xsdType="string"/>
+         <element column="request_id" name="request_id" xsdType="integer"/>
+         <element column="resolved" name="resolved" xsdType="integer"/>
+         <element column="request_date" name="request_date" xsdType="date"/>
+      </result>
+      <param name="emp_id" sqlType="STRING"/>
+   </query>
+   <query id="GetDevicesByEmployee" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select serial_number,make,model,type,assigned_date,revokation_date,health,assignment.device_id from assignment,device where assignment.device_id=device.device_id AND assignment.employee_id=:emp_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="type" name="type" xsdType="string"/>
+         <element column="make" name="make" xsdType="string"/>
+         <element column="model" name="model" xsdType="string"/>
+         <element column="assigned_date" name="assigned_date" xsdType="date"/>
+         <element column="revokation_date" name="revokation_date" xsdType="date"/>
+         <element column="health" name="health" xsdType="string"/>
+         <element column="serial_number" name="serial_number" xsdType="string"/>
+         <element column="device_id" name="device_id" xsdType="integer"/>
+      </result>
+      <param name="emp_id" sqlType="STRING"/>
+   </query>
+   <query id="AddIssue" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>INSERT INTO issue (status, device_id, employee_employee_id, issue_info, date) VALUES ('New',:dev_id,:emp_id,:desc,:date)</sql>
+      <param name="dev_id" sqlType="INTEGER"/>
+      <param name="emp_id" sqlType="STRING"/>
+      <param name="desc" sqlType="STRING"/>
+      <param name="date" sqlType="DATE"/>
+   </query>
+   <query id="AddDeviceRequest" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>INSERT INTO request (device_type, purpose, requirements, employee_employee_id,request_date) VALUES (:device_type,:purpose,:req,:emp_id,curdate())</sql>
+      <param name="device_type" sqlType="STRING"/>
+      <param name="purpose" sqlType="STRING"/>
+      <param name="req" sqlType="STRING"/>
+      <param name="emp_id" sqlType="STRING"/>
+   </query>
+   <query id="EditIssue" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>update issue set status=:sts,employee_employee_id=:emp_id,issue_info=:desc,date=:date,resolved=:resolv where issue_number=:issue_id</sql>
+      <param name="sts" sqlType="STRING"/>
+      <param name="desc" sqlType="STRING"/>
+      <param name="date" sqlType="DATE"/>
+      <param name="resolv" sqlType="INTEGER"/>
+      <param name="issue_id" sqlType="INTEGER"/>
+      <param name="emp_id" sqlType="STRING"/>
+   </query>
+   <query id="GetIssuesByDeviceIDAndEmployee" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select issue_number,status,device_id,employee_employee_id, issue_info,resolved,date from issue where issue.device_id=:dev_id and issue.employee_employee_id=:emp_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="issue_number" name="issue_number" xsdType="integer"/>
+         <element column="status" name="status" xsdType="string"/>
+         <element column="device_id" name="device_id" xsdType="integer"/>
+         <element column="employee_employee_id" name="employee_employee_id" xsdType="string"/>
+         <element column="issue_info" name="issue_info" xsdType="string"/>
+         <element column="date" name="date" xsdType="date"/>
+         <element column="resolved" name="resolved" xsdType="integer"/>
+      </result>
+      <param name="dev_id" sqlType="INTEGER"/>
+      <param name="emp_id" sqlType="STRING"/>
+   </query>
+   <query id="DeleteIssueFromIssueEmpID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>delete from issue where issue_number=:issue_id and employee_employee_id=:emp_id</sql>
+      <param name="emp_id" sqlType="STRING"/>
+      <param name="issue_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetWarrantyByDeviceID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select * from warranty_card where device_id=:dev_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="warranty_number" name="war_id" xsdType="integer"/>
+         <element column="start_date" name="start_date" xsdType="date"/>
+         <element column="end_date" name="end_date" xsdType="date"/>
+         <element column="duration_in_months" name="war_time_months" xsdType="integer"/>
+         <element column="status" name="sts" xsdType="integer"/>
+      </result>
+      <param name="dev_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetAccessoryWarrantyByDeviceID_User" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>select warranty_card.warranty_number,warranty_card.start_date, warranty_card.end_date,warranty_card.duration_in_months, warranty_card.status, warranty_card.accessory_id,accessory.serial_number,accessory.type from warranty_card, accessory where warranty_card.accessory_id=accessory.accessory_id and accessory.assigned_device_id=:dev_id</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="warranty_number" name="warranty_number" xsdType="string"/>
+         <element column="start_date" name="start_date" xsdType="date"/>
+         <element column="end_date" name="end_date" xsdType="date"/>
+         <element column="status" name="status" xsdType="integer"/>
+         <element column="accessory_id" name="accessory_id" xsdType="integer"/>
+         <element column="duration_in_months" name="war_time_months" xsdType="integer"/>
+         <element column="type" name="type" xsdType="string"/>
+         <element column="serial_number" name="sn" xsdType="string"/>
+      </result>
+      <param name="dev_id" sqlType="INTEGER"/>
+   </query>
+   <query id="DeleteRequestFromID" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>delete from request where request_id=:req_id and (resolved&lt;&gt;1 and resolved&lt;&gt;3)</sql>
+      <param name="req_id" sqlType="INTEGER"/>
+   </query>
+   <query id="MarkConfirmRequestResolve" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>update request set resolved=3 where request_id=:req_id and resolved=1</sql>
+      <param name="req_id" sqlType="INTEGER"/>
+   </query>
+   <query id="GetIssuesByEmployee" useConfig="WSO2_HWDREPO_SERVICE">
+      <sql>SELECT * FROM issue where employee_employee_id=:emp_num</sql>
+      <result element="BaseElement" rowName="Element">
+         <element column="issue_number" name="issue_number" xsdType="integer"/>
+         <element column="status" name="status" xsdType="string"/>
+         <element column="device_id" name="device_id" xsdType="integer"/>
+         <element column="employee_employee_id" name="employee_employee_id" xsdType="string"/>
+         <element column="issue_info" name="issue_info" xsdType="string"/>
+         <element column="date" name="date" xsdType="date"/>
+         <element column="resolved" name="resolved" xsdType="integer"/>
+      </result>
+      <param name="emp_num" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="GetDeviceByID">
+      <description>Get device details by providing id                                                                                                                                                </description>
+      <call-query href="GetDeviceByID">
+         <with-param name="device_id" query-param="device_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetIssuesByDevice">
+      <description>Get issues of a device                                                                                                            </description>
+      <call-query href="GetIssuesByDeviceID">
+         <with-param name="dev_id" query-param="dev_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetRequestsByEmployee">
+      <description>Get device requests of an user(not admin)                                                                                                            </description>
+      <call-query href="GetRequestsByEmployee">
+         <with-param name="emp_id" query-param="emp_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetDevicesByEmployee">
+      <description>Get devices assigned to an employee                                                                        </description>
+      <call-query href="GetDevicesByEmployee">
+         <with-param name="emp_id" query-param="emp_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetAccessoriesByDeviceID">
+      <description>Get accessories assigned to device                                                                        </description>
+      <call-query href="GetAccessoryByDeviceID">
+         <with-param name="dev_id" query-param="dev_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="AddIssue" returnRequestStatus="true">
+      <description>Add issue to a device                                                                                                                                                                                                                                                                                                </description>
+      <call-query href="AddIssue">
+         <with-param name="dev_id" query-param="dev_id"/>
+         <with-param name="emp_id" query-param="emp_id"/>
+         <with-param name="desc" query-param="desc"/>
+         <with-param name="date" query-param="date"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="AddDeviceRequest" returnRequestStatus="true">
+      <description>Request a device                                                                                                                                                </description>
+      <call-query href="AddDeviceRequest">
+         <with-param name="device_type" query-param="device_type"/>
+         <with-param name="purpose" query-param="purpose"/>
+         <with-param name="req" query-param="req"/>
+         <with-param name="emp_id" query-param="emp_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="EditIssue" returnRequestStatus="true">
+      <description>Edit an already drafted issue                                                                                                         </description>
+      <call-query href="EditIssue">
+         <with-param name="sts" query-param="sts"/>
+         <with-param name="desc" query-param="desc"/>
+         <with-param name="date" query-param="date"/>
+         <with-param name="resolv" query-param="resolv"/>
+         <with-param name="issue_id" query-param="issue_id"/>
+         <with-param name="emp_id" query-param="emp_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetIssuesByDeviceAndEmployee">
+      <description>Get issues of a particular device drafted by particular employee                                                                                                                                                </description>
+      <call-query href="GetIssuesByDeviceIDAndEmployee">
+         <with-param name="dev_id" query-param="dev_id"/>
+         <with-param name="emp_id" query-param="emp_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="DeleteIssueFromIssueEmpID" returnRequestStatus="true">
+      <description> Delete invalid issues of a particular device and employee                                                                                                                                               </description>
+      <call-query href="DeleteIssueFromIssueEmpID">
+         <with-param name="emp_id" query-param="emp_id"/>
+         <with-param name="issue_id" query-param="issue_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetWarrantyByDeviceID">
+      <description>Get warranty Details of a device                                                                       </description>
+      <call-query href="GetWarrantyByDeviceID">
+         <with-param name="dev_id" query-param="dev_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetAccessoryWarrantyByDeviceID">
+      <description>Get Warranties of accessories                                                                                                            </description>
+      <call-query href="GetAccessoryWarrantyByDeviceID_User">
+         <with-param name="dev_id" query-param="dev_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="DeleteRequestFromID" returnRequestStatus="true">
+      <description>DeleteRequestfromID                                                                                                         </description>
+      <call-query href="DeleteRequestFromID">
+         <with-param name="req_id" query-param="req_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="MarkRequestResolved" returnRequestStatus="true">
+      <description>Acknowledge resolved device request                                                                                                          </description>
+      <call-query href="MarkConfirmRequestResolve">
+         <with-param name="req_id" query-param="req_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="GetIssuesByEmployee">
+      <description>Get all issues drafted by an particular employee                                                                                                            </description>
+      <call-query href="GetIssuesByEmployee">
+         <with-param name="emp_num" query-param="emp_num"/>
+      </call-query>
+   </resource>
+</data>
