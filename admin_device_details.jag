@@ -122,11 +122,22 @@
 
                             else{
                                 errField.style.display="none";
+
+                                var urlData=window.location.search.substring(1);
+                                var devID=urlData.split("=");
+
+                                var inputData={
+                                    "user":usernameField.value,
+                                    "dev":devID[1]
+                                }
+
+                                $.post("admin_devices_updates.jag",{operation:"assignDevice",inputs:JSON.stringify(inputData)},function(data,status){
+                                    alert(data);
+                                });
+
+
                                 $(this).dialog('close');
                             }
-
-
-                            
             
                         }
                     }
@@ -205,6 +216,16 @@
 
                 $("#assign").click(function(){
                     $("#assignDevicePopup").dialog("open");
+                });
+                $("#revoke").click(function(){
+                    alert("revoke");
+
+                    var urlData=window.location.search.substring(1);
+                    var devID=urlData.split("=");
+
+                     $.post("admin_devices_updates.jag",{operation:"revokeDevice",device_id:deviceID[1]},function(data,status){
+                        alert("Done");
+                     });
                 });
             
             
@@ -351,13 +372,18 @@
             
                     });
                 }
+
+
+            function removeAcc(){
+                alert("hdghsghdf");
+            }
             
              function getAccessories(){
 
                 var urlData=window.location.search.substring(1);
                 var deviceID=urlData.split("=");
 
-                $.post("admin_device_operations.jag",{operation:"getAccessories",deviceID:deviceID[1]},function(data,status){
+                $.post("admin_devices_data_get.jag",{operation:"getAccessories",deviceID:deviceID[1]},function(data,status){
             
                             var objArray=JSON.parse(data);
             
@@ -367,6 +393,13 @@
                             for(var i=0;i<objArray.length;i++){
 
                                 var cntr=0;
+
+                                var removeAccRow=document.createElement('tr');
+                                var removeAccTd=document.createElement('td');
+                                var removeLbl=document.createElement('label');
+                                removeLbl.innerHTML="Remove Accessory";
+                                removeLbl.setAttribute('class','linkLabel');
+                                removeAccTd.setAttribute("colspan", 2);
 
                                 var newTable=document.createElement('table');
                                 newTable.style.width='600px';
@@ -394,8 +427,19 @@
                                         newRow.setAttribute("class","alt");
                                     }
 
-                                    if(property=='ID'){
-                                        th.appendChild(document.createTextNode("ID: "+object[property]));
+                                    if(property=='accessory_id'){
+                                        var accId=object[property]
+                                        th.appendChild(document.createTextNode("Accessory ID: "+accId));
+                                        alert("jdklfsjkfdl");
+                                        removeLbl.onclick=function(){
+                                            var inputData={
+                                                "accID":accId
+                                            };
+                                            $.post("admin_devices_updates.jag",{operation:"removeAccessory",inputs:JSON.stringify(inputData)},function(data,status){
+                                                alert(data);
+                                            });
+                                        };
+
                                     }
 
                                     else{
@@ -416,6 +460,9 @@
                                     cntr++;
 
                                 }
+                                removeAccTd.appendChild(removeLbl);
+                                removeAccRow.appendChild(removeAccTd);
+                                tbody.appendChild(removeAccRow);
                                 newTable.appendChild(tbody);
 
                                 tablearea.appendChild(newTable);

@@ -48,16 +48,16 @@ var dssUrl=store.urlConfigurations.dssUrl;
 
     function getAdminHomeIssues(resolved){
 
-        var url  = dssUrl+"GetAllIssuesAdmin";
+        var url  = dssUrl+"GetIssueBasic";
 
         var type = "json";
         var headers = {"Content-Type": "application/json"};
         var result=get(url,type,headers);
 
         var type = "json";
-        var data={resolved:resolved};
+        var input={res:resolved};
         var headers = {"Accept":"application/json" };
-        var result=post(url,{resolved:resolved},headers,"json");
+        var result=post(url,input,headers,"json");
         var jsonData=result.data;
 
         var elementArray=jsonData["BaseElement"];
@@ -78,6 +78,8 @@ var dssUrl=store.urlConfigurations.dssUrl;
             }
         }
     }
+
+    
 
     function getIssueDetails(issueID){
         var url  = dssUrl+"GetIssue";
@@ -148,10 +150,29 @@ var dssUrl=store.urlConfigurations.dssUrl;
     }
 
     function customWarranty(searchText,status){
-        var url  =dssUrl+"GetCustomWarrantyAdmin";
-        var type = "json";
+
+
         var headers = {"Accept":"application/json" };
-        var data={status:status,war_num:searchText,device_id:searchText};
+        var data;
+        var url;
+
+        if(searchText=="" && status!="0"){
+            data={stat:status};
+            url  =dssUrl+"GetWarrantyByDeviceStatus";
+        }
+        else if(searchText!="" && status=="0"){
+            
+            data={dev_sn:searchText};
+            url  =dssUrl+"GetWarrantyByDeviceSerial";
+
+            //print(status);
+
+        }
+        else if(searchText!="" && status!="0"){
+            data={dev_sn:searchText,stat:status};
+            url  =dssUrl+"GetWarrantyByDeviceSNandStatus";
+        }
+
         var result=post(url,data,headers,"json");
         var jsonData=result.data;
 
