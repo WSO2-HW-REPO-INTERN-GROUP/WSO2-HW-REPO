@@ -920,11 +920,11 @@ Hwdrepo = new function () {
           HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({operation :"deleteRequest",req_id:request_id}),
             function (html) {
 
-                this.viewRequests(1);
+                Hwdrepo.viewRequests(1);
 
             });
 
-          this.viewRequests(1);
+          Hwdrepo.viewRequests(1);
 
     }
     this.confirmRequest = function(request_id){

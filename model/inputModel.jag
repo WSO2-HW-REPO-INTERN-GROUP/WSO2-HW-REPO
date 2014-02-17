@@ -204,6 +204,7 @@ function deleteIssue(issue){
 
 function deleteRequest(requestID) {
 
+    log.info(requestID);
 
     var url = dssUrl+"DeleteRequestFromID"
     var headers = {"Content-Type":"application/json","Accept":"application/json" };

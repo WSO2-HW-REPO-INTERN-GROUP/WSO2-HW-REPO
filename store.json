@@ -1,7 +1,7 @@
 {
 
     "urlConfigurations":{
-	"dssUrl":"http://192.168.19.103:9765/services/WSO2_HWDREPO_SERVICE/"
+	"dssUrl":"http://192.168.43.5:9766/services/WSO2_HWDREPO_SERVICE/"
      }
 
 }

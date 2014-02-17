@@ -27,8 +27,8 @@ var user_id = session.get("LOGGED_IN_USER");
 if (request.getParameter('operation') != null) {
     var opr = request.getParameter('operation');
 } else {
-    var opr = parse(data).operation;
-    var deviceID = parse(data).deviceID;
+    var opr = JSON.parse(data).operation;
+    var deviceID = JSON.parse(data).deviceID;
 }
 
 if (data != null) {
@@ -42,7 +42,7 @@ if (verb == "POST") {
     if (opr == 'addDeviceRequest') {
 
 
-        var addRequestObj = parse(data).dev;
+        var addRequestObj = JSON.parse(data).dev;
 
         var viewReqObj={'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
 
@@ -56,7 +56,9 @@ if (verb == "POST") {
     } 
     else if (opr == 'deleteRequest') {
 
-        var request_id = parse(data).req_id;
+        var request_id = JSON.parse(data).req_id;
+
+        //log.info(request_id);
 
         print(deleteRequest(request_id));
 
@@ -64,7 +66,7 @@ if (verb == "POST") {
     }
     else if (opr == 'confirmRequest') {
 
-        var request_id = parse(data).req_id;
+        var request_id = JSON.parse(data).req_id;
 
         print(confirmRequest(request_id));
 
@@ -103,7 +105,7 @@ if (verb == "POST") {
 
     else if (opr == 'addIssue') {
         
-        var addIssueObj = parse(data);
+        var addIssueObj = JSON.parse(data);
 
         addIssueObj.issue.emp_id=user_id;
 
