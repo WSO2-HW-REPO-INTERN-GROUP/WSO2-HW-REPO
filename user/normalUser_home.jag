@@ -105,6 +105,9 @@
          }
          }
          });
+
+         $( "#addRequestButton" ).button({ label: "Request Device",icons: { primary: "ui-icon-gear"} });
+
          
          $("#addRequestButton").click(function(event)
          {
@@ -246,9 +249,17 @@
                                     <li>
                                        <h2><span style="color: #00346e">My Devices</span></h2>
                                        <ul>
-                                          </br>
+                                          <br/>
                                           <li>
                                              <div id="deviceArea" class="datagrid">
+                                      
+                                             </div>
+                                          </li>
+                                          <br/>
+                                           <li>
+                                             <div >
+                                                    <!--class="siteButton"--> 
+                                                <button id="addRequestButton" value="New Device"/>
                                       
                                              </div>
                                           </li>
@@ -257,10 +268,10 @@
                                     </br>
                                     <hr/>
                                     </br>
+
                                  </ul>
                               </div>
                               <!--<button id="addRequestButton" name="addRequestDevice">Add New Device</button>-->
-                              <input type="button" id="addRequestButton" class="siteButton" value="New Device"/>
                               <!-- This is the form for adding a new device -->
                                  <div id="requestDeviceForm" title="Request a device">
                                  <form>

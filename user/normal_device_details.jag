@@ -13,16 +13,24 @@
    <head>
       <meta charset="utf-8"/>
       <title>User:DeviceDetails</title>
-      <link href="css/global.css" rel="stylesheet" type="text/css" media="all"/>
-      <link href="css/adminDeviceDetailsStyle.css" rel="stylesheet" type="text/css" media="all"/>     
-      <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+           
 
+       <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+      <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
+      <link rel="stylesheet" href="css/carbonFormStyles.css">
+      <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
+      <link rel="stylesheet" href="css/jquery-ui.css">
+      <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
 
-      <!--link href="css/dialog.css" rel="stylesheet" type="text/css" media="all" /-->
-      
+      <!--link href="css/adminDeviceDetailsStyle.css" rel="stylesheet" type="text/css" media="all"/-->
 
       <!-- My CSS -->
-         <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+        <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css">
+
+         <link rel="stylesheet" href="css/jquery.dataTables.css">
 
 
 
@@ -34,17 +42,17 @@
       <![endif]-->
       
 
-      <!--script type="text/javascript" src="js/main.js"></script>
+      <!--script type="text/javascript" src="js/main.js"></script-->
+
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="js/jquery-ui.js"></script>
+       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+       <script src="js/mustache.js"></script>
       
       <!--myscripts-->
-      
-      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-      <script src="js/jquery-ui-1.10.4.custom.js"></script>
-
-      <script src="js/mustache.js"></script>
-
       <script type="text/javascript" src="appJS/util.js"></script>
       <script src="appJS/Hwdrepo.js"></script>
+       <script type="text/javascript" src="js/jquery.dataTables.js"></script>
 
       <!-- This script handles the tabbed pane functionality -->
       <script type="text/javascript">
@@ -52,7 +60,7 @@
          var urlData=window.location.search.substring(1);
          var deviceID=(urlData.split("="))[1];
          
-   $(function() {
+    jQuery(document).ready(function(){
              
                    
          $(function prepareList() {
@@ -94,6 +102,10 @@
             width: 700,
             modal: true
             });
+
+            
+
+            $( "#reportIssue" ).button({ label: "Report Issue",icons: { primary: "ui-icon ui-icon-wrench"} });
              
                  $("#reportIssue").click(function(event)
                  {
@@ -247,7 +259,7 @@
                                                 <div id="linksDiv">
                                                    <table>
                                                       <br/><br/>
-                                                      <button id="reportIssue" class="siteButton" style="margin-left: 150px;">Report Issue</button>
+                                                      <button id="reportIssue"  style="margin-left: 150px;">Report Issue</button>
                                                    </table>
                                                 </div>
                                              </li>

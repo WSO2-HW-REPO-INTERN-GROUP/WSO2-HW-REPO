@@ -11,13 +11,22 @@
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <title>User:Issues</title>
-      <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
 
-      <!--link href="css/dialog.css" rel="stylesheet" type="text/css" media="all" -->
-      <link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all">
-      <!--link rel="stylesheet" href="css/jquery-ui.css"/-->
+
+       <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
+      <link rel="stylesheet" href="css/carbonFormStyles.css">
+      <link rel="stylesheet" href="css/jquery-ui.css">
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+
+       <link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all">
+
+      <!-- My CSS -->
+        <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css">
+         <link rel="stylesheet" href="css/jquery.dataTables.css">
+
       <!--[if gte IE 8]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
@@ -189,7 +198,7 @@
                         <tr>
                            <td>
                               <div id="normalIssuesContainer" class ="main_container">
-                                 <div id="listContainer">
+                                 <div id="listContainer" >
                                     <ul id="expList">
                                        <li>
                                           <h2><span style="color: #00346e">My Device Issues</span></h2>

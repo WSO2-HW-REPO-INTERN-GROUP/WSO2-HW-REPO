@@ -289,7 +289,7 @@ Hwdrepo = new function () {
          
                         formatting3 = formatting3.concat(html);
                      } else if (object.resolved == "2") {
-                         object.status="Marked As Unable At The Current Time ";
+                         object.status="Marked As Rejected";
                          object.New = null;
                          object.resolved = null;
                          object.rejected = "true";
@@ -585,6 +585,8 @@ Hwdrepo = new function () {
                 tablearea.innerHTML = formatting;
 
             });
+
+            $("#EditIssue").button();
 
     }
     this.loadWarranties = function (deviceID) {

@@ -109,6 +109,8 @@ function viewWarrantyByDeviceID(deviceID,user_id){
 
 function viewRequestsByUser(user_id) {
 
+   // log.info(user_id);
+
     var url = dssUrl+"GetRequestsByEmployee";
     
     var rslt=get(url,{"emp_id":user_id},{"Accept":"application/json"},"json");
@@ -141,12 +143,13 @@ function viewIssuesByUser(user_id) {
 
 function addNewRequest(addReqObj) {
 
-    log.info(stringify(addReqObj));
+    //log.info(stringify(addReqObj));
+
     var url = dssUrl+"AddDeviceRequest"
     var data=addReqObj;
     var headers = {"Content-Type":"application/json","Accept":"application/json" };
     var rslt=post(url,data,headers,'json',function(data,xhr){
-    })
+    });
 
 }
 

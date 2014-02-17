@@ -50,23 +50,28 @@
 <tr>
 {{#rejected}}
 <td>
-<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Repeat Issue</button>
+<!--button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Repeat Issue</button-->
+<div style="background-image:url(images/menu_restart.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)'>Repeat Issue</label>
 </td>
 <td>
-<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button>
+<!--button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button-->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)'>Delete</label>
 </td>
 {{/rejected}}
 {{#New}}
 <td>
-<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Edit Issue</button>
+<!--button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)' >Edit Issue</button-->
+<div style="background-image:url(images/edit.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",0)'>Edit Issue</label>
 </td>
 <td>
-<button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button>
+<!--button id='editIssue{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)' >Delete</button -->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",4)'>Delete</label>
 </td>
 {{/New}}
 {{#resolved}}
 <td>
-<button id='confirmSolved{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",3)'>Confirm Solved</button>
+<!--button id='confirmSolved{{issue_number}}' class='siteButton' style='' onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",3)'>Confirm Solved</button-->
+<div style="background-image:url(images/activate.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.editIssue({{issue_number}},{{device_id}},"{{status}}","{{issue_info}}","{{date}}",3)'>Confirm Solved</label>
 </td>
 {{/resolved}} 
 </tr>

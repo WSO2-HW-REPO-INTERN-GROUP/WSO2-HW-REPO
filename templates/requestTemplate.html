@@ -35,20 +35,23 @@
 {{#rejected}}
 <tr>
 <td colspan="2">
-<button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:15px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button>
+<!--button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:15px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button-->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.deleteRequest({{request_id}});'>Delete Request</label>
 </td>
 </tr>
 {{/rejected}}
 {{#New}}
 <tr>
 <td>
-<button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:10px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button>
+<!--button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:10px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button-->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.deleteRequest({{request_id}});'>Delete Request</label>
 </td>
 </tr>
 {{/New}}
 {{#resolved}}
 <td>
-<button id='confirmRequest{{request_id}}' class='siteButton' style='' onclick='Hwdrepo.confirmRequest({{request_id}});' >Confirm Response</button>
+<!--button id='confirmRequest{{request_id}}' class='siteButton' style='' onclick='Hwdrepo.confirmRequest({{request_id}});' >Confirm Response</button-->
+<div style="background-image:url(images/activate.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.confirmRequest({{request_id}});'>Confirm Response</label>
 </td>
 {{/resolved}} 
 </tr>
