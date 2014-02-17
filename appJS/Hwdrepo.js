@@ -12,14 +12,43 @@ var Accessorytemplate;
 var Requestemplate;
 var userID;
 
+HwdrepoUtil.makeRequest("GET","store.json",null,"json",function(data){
 
+    controllerPath = data.urlConfigurations.controllerPath;
+});
+HwdrepoUtil.makeRequest("GET","templates/requestTemplate.html",null,null,function(template){
+
+    Requestemplate = template;
+});
+HwdrepoUtil.makeRequest("GET","templates/upgradeTemplate.html",null,null,function(template){
+
+    Upgradetemplate = template;
+});
+HwdrepoUtil.makeRequest("GET","templates/issueTemplate.html",null,null,function(template){
+
+    Issuetemplate = template;
+});
+HwdrepoUtil.makeRequest("GET","templates/warrantyTemplate.html",null,null,function(template){
+
+    Warrantytemplate = template;
+});
+HwdrepoUtil.makeRequest("GET","templates/accessoryTemplate.html",null,null,function(template){
+
+    Accessorytemplate = template;
+});
+HwdrepoUtil.makeRequest("GET",controllerPath,"operation=getUserID",'json',function(data){
+
+     userID=data.user_id;
+     // alert(JSON.stringify(userID));
+});
+/*
 $.get(controllerPath, "operation=getUserID", function (data) {
 
     userID = data.user_id;
 
 }, 'json');
 
- $.get('templates/requestTemplate.html', function (template) {
+$.get('templates/requestTemplate.html', function (template) {
                      Requestemplate = template;
          });
 
@@ -37,12 +66,13 @@ $.get('templates/warrantyTemplate.html', function (template) {
 
 $.get('templates/accessoryTemplate.html', function (template) {
     Accessorytemplate = template;
-});
+});*/
 
 Hwdrepo = new function () {
 
 
     this.loadDevices = function () {
+        console.log("Hwdrepo_func :"+"loadDevices");
 
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadDevices",
             function (html) {
@@ -142,6 +172,7 @@ Hwdrepo = new function () {
 
     }
     this.viewRequests = function (index) {
+        console.log("Hwdrepo_func :"+"viewRequests"+'-'+index);
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html){
 
             //alert(JSON.stringify(html));
@@ -160,6 +191,7 @@ Hwdrepo = new function () {
 
     this.fillRequestTable = function (html) {
 
+            console.log("Hwdrepo_func :"+"fillRequestTable"+'-'+html);
                 //alert(JSON.stringify(html.requests[0]));
             var reqArea = document.getElementById('requestArea');    
             reqArea.innerHTML = '';
@@ -241,6 +273,7 @@ Hwdrepo = new function () {
          
     }
     this.fillRequestPage = function(html){
+        console.log("Hwdrepo_func :"+"fillRequestPage"+'-'+html);
             // alert(JSON.stringify(html));
          
             var objArray = html.requests;
@@ -326,6 +359,7 @@ Hwdrepo = new function () {
     }
 
     this.requestDevice = function (deviceType, purpose, requirement) {
+        console.log("Hwdrepo_func :"+"requestDevice"+'-'+deviceType+','+purpose+','+requirement);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "addDeviceRequest",
@@ -346,6 +380,7 @@ Hwdrepo = new function () {
     }
 
     this.loadUpgradeHistory = function (deviceID) {
+        console.log("Hwdrepo_func :"+"loadUpgradeHistory"+'-'+deviceID);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "upgradeHistory",
@@ -388,6 +423,7 @@ Hwdrepo = new function () {
     }
 
     this.getDeviceDetails = function (deviceID) {
+        console.log("Hwdrepo_func :"+"getDeviceDetails"+'-'+deviceID);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "getDeviceDetails",
@@ -479,7 +515,7 @@ Hwdrepo = new function () {
 
     }
     this.getAccssories = function (deviceID) {
-
+        console.log("Hwdrepo_func :"+"getAccssories"+'-'+deviceID);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "getAccessories",
@@ -523,6 +559,7 @@ Hwdrepo = new function () {
     }
 
     this.loadIssueHistory = function (deviceID) {
+        console.log("Hwdrepo_func :"+"loadIssueHistory"+'-'+deviceID);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "getIssues",
@@ -590,7 +627,7 @@ Hwdrepo = new function () {
 
     }
     this.loadWarranties = function (deviceID) {
-
+        console.log("Hwdrepo_func :"+"loadWarranties"+'-'+deviceID);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "warrantyHistory",
@@ -705,6 +742,7 @@ Hwdrepo = new function () {
     }
 
     this.addIssue = function (issueData) {
+        console.log("Hwdrepo_func :"+"addIssue"+'-'+issueData);
 
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "addIssue",
@@ -739,7 +777,8 @@ Hwdrepo = new function () {
 */
     this.editIssue = function (issue_no, dev_id, status, issue, oldDate, resolve) {
 
-            
+        console.log("Hwdrepo_func :"+"editIssue"+'-'+issue_no+','+dev_id+','+status+','+issue+','+oldDate+','+resolve);
+
         if (resolve == 0) { 
 
         $( "#editIssueDialog" ).dialog( "option", "buttons", [
@@ -846,7 +885,7 @@ Hwdrepo = new function () {
     }
 
     this.loadDialogs = function (deviceID) {
-
+        console.log("Hwdrepo_func :"+"loadDialogs"+'-'+deviceID);
 
         $("#reportIssueDialog").dialog({
 
@@ -915,10 +954,12 @@ Hwdrepo = new function () {
 
     }
     this.getUserID=function(){
+        console.log("Hwdrepo_func :"+"getUserID");
 
         return userID;
     }
     this.deleteRequest = function(request_id){
+        console.log("Hwdrepo_func :"+"deleteRequest"+'-'+request_id);
           HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({operation :"deleteRequest",req_id:request_id}),
             function (html) {
 
@@ -930,6 +971,7 @@ Hwdrepo = new function () {
 
     }
     this.confirmRequest = function(request_id){
+        console.log("Hwdrepo_func :"+"confirmRequest"+'-'+request_id);
           HwdrepoUtil.makeJsonRequest("POST", controllerPath,JSON.stringify({operation :"confirmRequest",req_id:request_id}),
             function (html) {
 
@@ -939,6 +981,7 @@ Hwdrepo = new function () {
 
     }
     this.nullCheck = function(value){
+        //console.log("Hwdrepo_func :"+"nullCheck"+'-'+value);
 
     //   alert(JSON.stringify(typeof(value)));
 
@@ -967,12 +1010,12 @@ Hwdrepo = new function () {
         }
     }
     this.getUserIssues = function(){
-
+        console.log("Hwdrepo_func :"+"getUserIssues");
 
         HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadUserIssues",
             function (html) {
 
-               // alert(JSON.stringify(html));
+            // alert(JSON.stringify(html));
 
             var objArray = html.issues;
          

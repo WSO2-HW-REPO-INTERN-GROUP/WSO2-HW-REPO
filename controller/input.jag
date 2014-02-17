@@ -9,18 +9,19 @@
 include("../model/inputModel.jag");
 
 var dataStore=require("../store.json");
-
-
 var dssUrl = dataStore.urlConfigurations.dssUrl;
-var serverPath = "http://localhost:9765/WSO2-HW-REPO";
+
 response.contentType = 'text/javascript';
 
 var verb = request.getMethod();
 var data = request.getContent();
 var uri = request.getRequestURI();
+var param=request.getQueryString();
 
 
 var log = new Log();
+
+log.info(verb +'-'+uri+','+JSON.stringify(data)+','+JSON.stringify(param));
 
 var user_id = session.get("LOGGED_IN_USER");
 

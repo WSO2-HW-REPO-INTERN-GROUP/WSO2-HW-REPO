@@ -21,7 +21,9 @@
       <link rel="stylesheet" href="css/jquery-ui.css">
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
 
-       <link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all">
+       <!--link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all"-->
+       <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
+
 
       <!-- My CSS -->
         <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css">
@@ -36,14 +38,18 @@
       <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
       <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
 
-
-     <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-      <!--script type="text/javascript" src="js/jquery-ui.js"></script> -->
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
-      <!--myscripts-->
-      <script src="appJS/Hwdrepo.js"></script>
-      <script type="text/javascript" src="appJS/util.js"></script>
+      <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+      <script type="text/javascript" src="js/jquery-ui.js"></script-->
       <script src="js/mustache.js"></script>
+
+      <!--myscripts-->
+
+      <script type="text/javascript" src="appJS/util.js"></script>
+      <script src="appJS/Hwdrepo.js"></script>
+      <!--script type="text/javascript" src="js/jquery.dataTables.js"></script-->
+           
       <!-- This script handles the tabbed pane functionality -->
       <script type="text/javascript">
          var user_id;

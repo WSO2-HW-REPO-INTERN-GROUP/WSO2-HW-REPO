@@ -19,11 +19,12 @@
       <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
       <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
       <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
       <link rel="stylesheet" href="css/carbonFormStyles.css">
       <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
       <link rel="stylesheet" href="css/jquery-ui.css">
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+
+      <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
 
       <!-- My CSS -->
 
@@ -43,13 +44,15 @@
       <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon"-->
 
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-      <script type="text/javascript" src="js/jquery-ui.js"></script>
-       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+      <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+      <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+      <script type="text/javascript" src="js/jquery-ui.js"></script-->
+      <script src="js/mustache.js"></script>
 
       <!--myscripts-->
-      <script src="appJS/Hwdrepo.js"></script>
       <script type="text/javascript" src="appJS/util.js"></script>
-       <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+      <script src="appJS/Hwdrepo.js"></script>
+      <!--script type="text/javascript" src="js/jquery.dataTables.js"></script-->
 
       <!-- This script handles the tabbed pane functionality -->
       <script>

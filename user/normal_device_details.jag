@@ -19,11 +19,12 @@
       <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
       <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
       <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
       <link rel="stylesheet" href="css/carbonFormStyles.css">
       <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
       <link rel="stylesheet" href="css/jquery-ui.css">
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+
+      <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
 
       <!--link href="css/adminDeviceDetailsStyle.css" rel="stylesheet" type="text/css" media="all"/-->
 
@@ -41,11 +42,10 @@
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
       
+      <!--script type="text/javascript" src="js/jquery-ui.js"></script-->
 
-      <!--script type="text/javascript" src="js/main.js"></script-->
-
-      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-      <script type="text/javascript" src="js/jquery-ui.js"></script>
+      <script type="text/javascript" src="js/main.js"></script>
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script> 
        <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
        <script src="js/mustache.js"></script>
       
