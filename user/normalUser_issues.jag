@@ -16,12 +16,10 @@
        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
       <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
       <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
       <link rel="stylesheet" href="css/carbonFormStyles.css">
       <link rel="stylesheet" href="css/jquery-ui.css">
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
 
-       <!--link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all"-->
        <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
 
 

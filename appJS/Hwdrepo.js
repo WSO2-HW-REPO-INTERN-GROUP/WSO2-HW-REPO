@@ -74,7 +74,7 @@ Hwdrepo = new function () {
     this.loadDevices = function () {
         console.log("Hwdrepo_func :"+"loadDevices");
 
-        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadDevices",
+        HwdrepoUtil.makeRequest("GET", controllerPath, "operation=loadDevices","json",
             function (html) {
 
                // alert(JSON.stringify(html));
@@ -173,7 +173,7 @@ Hwdrepo = new function () {
     }
     this.viewRequests = function (index) {
         console.log("Hwdrepo_func :"+"viewRequests"+'-'+index);
-        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadRequests", function (html){
+        HwdrepoUtil.makeRequest("GET", controllerPath, "operation=loadRequests","json", function (html){
 
             //alert(JSON.stringify(html));
 
@@ -960,7 +960,7 @@ Hwdrepo = new function () {
     }
     this.deleteRequest = function(request_id){
         console.log("Hwdrepo_func :"+"deleteRequest"+'-'+request_id);
-          HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({operation :"deleteRequest",req_id:request_id}),
+          HwdrepoUtil.makeJsonRequest("POST", controllerPath,JSON.stringify({operation :"deleteRequest",req_id:request_id}),
             function (html) {
 
                 Hwdrepo.viewRequests(1);
@@ -1012,7 +1012,7 @@ Hwdrepo = new function () {
     this.getUserIssues = function(){
         console.log("Hwdrepo_func :"+"getUserIssues");
 
-        HwdrepoUtil.makeJsonRequest("GET", controllerPath, "operation=loadUserIssues",
+        HwdrepoUtil.makeRequest("GET", controllerPath,"operation=loadUserIssues","json",
             function (html) {
 
             // alert(JSON.stringify(html));

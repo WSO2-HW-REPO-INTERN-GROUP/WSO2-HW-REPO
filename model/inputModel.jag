@@ -14,8 +14,8 @@ function viewDeviceByID(deviceID) {
 
     var rslt = post(url, {
         "device_id": deviceID
-    }, {"Content-Type":"application/json","Accept": "application/json"
-    }, "json");
+    }, {"Accept": "application/json"},
+     "json");
 
     return rslt.data.BaseElement.Element;
 }
@@ -143,11 +143,11 @@ function viewIssuesByUser(user_id) {
 
 function addNewRequest(addReqObj) {
 
-    //log.info(stringify(addReqObj));
+   // log.info(stringify(addReqObj));
 
     var url = dssUrl+"AddDeviceRequest"
     var data=addReqObj;
-    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var headers = {"Accept":"application/json" };
     var rslt=post(url,data,headers,'json',function(data,xhr){
     });
 
@@ -159,7 +159,7 @@ function addIssue(issue) {
      //log.info(issue);
 
     var url = dssUrl+"AddIssue"
-    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var headers = {"Accept":"application/json" };
     var rslt=post(url,issue,headers,'json',function(data,xhr){});
     //log.info(rslt);
 
@@ -191,7 +191,7 @@ function editIssue(issue){
     //log.info(issue);
 
    var url = dssUrl+"EditIssue"
-  var headers = {"Content-Type":"application/json","Accept":"application/json" };
+  var headers = {"Accept":"application/json" };
   var rslt=post(url,issue,headers,'json',function(data,xhr){});
    //log.info(rslt);
 }
@@ -200,17 +200,17 @@ function deleteIssue(issue){
     //log.info(issue);
 
    var url = dssUrl+"DeleteIssueFromIssueEmpID"
-  var headers = {"Content-Type":"application/json","Accept":"application/json" };
+  var headers = {"Accept":"application/json" };
   var rslt=post(url,issue,headers,'json',function(data,xhr){});
  //  log.info(rslt);
 }
 
 function deleteRequest(requestID) {
 
-    log.info(requestID);
+    //log.info(requestID);
 
     var url = dssUrl+"DeleteRequestFromID"
-    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var headers = {"Accept":"application/json" };
     var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
    // log.info(rslt);
 
@@ -220,7 +220,7 @@ function confirmRequest(requestID) {
 
 
     var url = dssUrl+"MarkRequestResolved"
-    var headers = {"Content-Type":"application/json","Accept":"application/json" };
+    var headers = {"Accept":"application/json" };
     var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
    // log.info(rslt);
 

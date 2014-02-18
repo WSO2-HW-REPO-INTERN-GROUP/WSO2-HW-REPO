@@ -21,15 +21,15 @@ var param=request.getQueryString();
 
 var log = new Log();
 
-log.info(verb +'-'+uri+','+JSON.stringify(data)+','+JSON.stringify(param));
+log.info(verb +'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
 
 var user_id = session.get("LOGGED_IN_USER");
 
 if (request.getParameter('operation') != null) {
     var opr = request.getParameter('operation');
 } else {
-    var opr = JSON.parse(data).operation;
-    var deviceID = JSON.parse(data).deviceID;
+    var opr = data.operation;
+    var deviceID = data.deviceID;
 }
 
 if (data != null) {
@@ -43,7 +43,9 @@ if (verb == "POST") {
     if (opr == 'addDeviceRequest') {
 
 
-        var addRequestObj = JSON.parse(data).dev;
+        var addRequestObj = data.dev;
+
+       // log.info(stringify(addRequestObj));
 
         var viewReqObj={'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
 
@@ -57,7 +59,7 @@ if (verb == "POST") {
     } 
     else if (opr == 'deleteRequest') {
 
-        var request_id = JSON.parse(data).req_id;
+        var request_id = data.req_id;
 
         //log.info(request_id);
 
@@ -67,7 +69,7 @@ if (verb == "POST") {
     }
     else if (opr == 'confirmRequest') {
 
-        var request_id = JSON.parse(data).req_id;
+        var request_id = data.req_id;
 
         print(confirmRequest(request_id));
 
@@ -106,7 +108,7 @@ if (verb == "POST") {
 
     else if (opr == 'addIssue') {
         
-        var addIssueObj = JSON.parse(data);
+        var addIssueObj = data;
 
         addIssueObj.issue.emp_id=user_id;
 
@@ -122,7 +124,7 @@ if (verb == "POST") {
     else if(opr =='editIssue'){
 
 
-        var editIssueObj = JSON.parse(data);
+        var editIssueObj = data;
 
         //log.info(editIssueObj);
 
@@ -135,10 +137,10 @@ if (verb == "POST") {
       else if(opr =='deleteIssue'){
 
 
-        var deleteIssueObj = JSON.parse(data);
+        var deleteIssueObj = data;
 
       deleteIssueObj.issue.emp_id=user_id;
-      log.info(deleteIssueObj);
+      //log.info(deleteIssueObj);
 
        deleteIssue(deleteIssueObj.issue);
 
