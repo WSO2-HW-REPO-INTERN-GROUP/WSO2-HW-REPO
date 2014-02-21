@@ -1,7 +1,7 @@
 {
 
     "urlConfigurations":{
-	"dssUrl":"http://10.100.4.57:9766/services/WSO2_HWDREPO_SERVICE/",
+	"dssUrl":"http://192.168.3.23:9764/services/WSO2_HardwareRepo/",
 	"controllerPath":"/WSO2-HW-REPO/controller/input.jag"
      }
 

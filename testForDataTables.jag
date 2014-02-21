@@ -1,0 +1,56 @@
+<%
+
+	var log=new Log();
+    var store=require("store.json");
+    var dssUrl=store.urlConfigurations.dssUrl;
+	var operation=request.getParameter("operation");
+
+	if (operation=="getAllDevices") {
+		getAllBasicDeviceDetails();
+	}
+
+	function getAllBasicDeviceDetails(){
+		var url  = dssUrl+"GetAllDeviceBasicAdmin";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+         print('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">');
+         print('<thead><tr><th style="width:30px">Device ID</th><th>Device Serial</th><th>Make</th><th>Model</th><th style="width:30px">Rating</th><th>Purchase Date</th><th>Type</th><th></th></tr></thead>');
+
+         print('<tbody>');
+
+        for (var i = 0; i < dataArray.length; i++) {
+
+            var deviceId;
+            print('<tr>');
+
+            var object = dataArray[i];
+
+            for (var property in object) {
+
+                print('<td>'+object[property]+'</td>');
+
+                if (property == "device_id") {
+                    deviceId = object[property];
+                }
+            }
+
+            print('<td><a href="admin_device_details.jag?id='+deviceId+'">more</a></td>');
+            print('</tr>');
+        }
+        print('</tbody>');
+        print('</table>');
+
+
+
+
+
+	}
+
+
+%>
