@@ -41,32 +41,6 @@ HwdrepoUtil.makeRequest("GET",controllerPath,"operation=getUserID",'json',functi
      userID=data.user_id;
      // alert(JSON.stringify(userID));
 });
-/*
-$.get(controllerPath, "operation=getUserID", function (data) {
-
-    userID = data.user_id;
-
-}, 'json');
-
-$.get('templates/requestTemplate.html', function (template) {
-                     Requestemplate = template;
-         });
-
-$.get('templates/upgradeTemplate.html', function (template) {
-    Upgradetemplate = template;
-});
-
-
-$.get('templates/issueTemplate.html', function (template) {
-    Issuetemplate = template;
-});
-$.get('templates/warrantyTemplate.html', function (template) {
-    Warrantytemplate = template;
-});
-
-$.get('templates/accessoryTemplate.html', function (template) {
-    Accessorytemplate = template;
-});*/
 
 Hwdrepo = new function () {
 
@@ -140,6 +114,8 @@ Hwdrepo = new function () {
 
 
                     for (var property in object) {
+
+
                         var td = document.createElement('td');
 
                         if (property == "serial_number") {
@@ -155,7 +131,13 @@ Hwdrepo = new function () {
                             newRow.appendChild(td);
                             break;
                         } else {
+
+                            if(Hwdrepo.nullCheck(object[property]) != true){
                             td.appendChild(document.createTextNode(object[property]));
+                        }
+                        else{
+                            td.appendChild(document.createTextNode(""));
+                        }
                             newRow.appendChild(td);
 
                         }
@@ -255,9 +237,12 @@ Hwdrepo = new function () {
                 if(property!="request_id" && property!="resolved"){   
 
                 var td = document.createElement('td');
-
-            
-                td.appendChild(document.createTextNode(object[property]));
+                if(Hwdrepo.nullCheck(object[property]) != true){
+                            td.appendChild(document.createTextNode(object[property]));
+                        }
+                        else{
+                            td.appendChild(document.createTextNode(""));
+                        }
                 newRow.appendChild(td);
             }
 
@@ -361,6 +346,7 @@ Hwdrepo = new function () {
     this.requestDevice = function (deviceType, purpose, requirement) {
         console.log("Hwdrepo_func :"+"requestDevice"+'-'+deviceType+','+purpose+','+requirement);
 
+
         HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
                 operation: "addDeviceRequest",
                 dev: {
@@ -369,13 +355,12 @@ Hwdrepo = new function () {
                     req: requirement
                 }
             }),
-            function (data) { 
-
-                    Hwdrepo.viewRequests(0);
-                  
+            function (data,status) { 
+                alert(JSON.stringify(status)); 
+                    Hwdrepo.viewRequests(0);        
             });
 
-            Hwdrepo.viewRequests(0);
+        Hwdrepo.viewRequests(0); 
 
     }
 
@@ -434,10 +419,12 @@ Hwdrepo = new function () {
 
                 //alert(JSON.stringify(data));
 
-                var basicDetailsTbl = document.getElementById('basicFeaturesTbl');
+                
 
                 var basicDetailsArea = document.getElementById("basicDetailsDiv");
                 basicDetailsArea.setAttribute('class', 'datagrid');
+
+                var basicDetailsTbl = document.createElement('table');
 
 
                 var thead = document.createElement('thead');
@@ -506,11 +493,10 @@ Hwdrepo = new function () {
                 htr.appendChild(th);
                 thead.appendChild(th);
 
-                basicDetailsTbl.innerHTML = "";
                 basicDetailsTbl.appendChild(thead);
                 basicDetailsTbl.appendChild(tbody);
 
-                return data;
+                basicDetailsArea.appendChild(basicDetailsTbl);
             });
 
     }
@@ -887,6 +873,12 @@ Hwdrepo = new function () {
     this.loadDialogs = function (deviceID) {
         console.log("Hwdrepo_func :"+"loadDialogs"+'-'+deviceID);
 
+        $("#datepicker").datepicker({
+            autoOpen: false,
+            dateFormat: "yy-mm-dd",
+            gotoCurrent: true
+        });
+
         $("#reportIssueDialog").dialog({
 
             autoOpen: false,
@@ -924,15 +916,15 @@ Hwdrepo = new function () {
 
                         var issueData = {
 
-                            //"sts": 'New',
+                            "sts": 'New',
                             /*type.options[type.selectedIndex].text*/
                             "dev_id": deviceID,
                             "desc": description.value,
                             "date": date,
 
                         };
-
-                        Hwdrepo.addIssue(issueData);
+                        $("#dialog-confirm").dialog("open");
+                        $( "#dialog-confirm" ).dialog({ buttons: [ { text: "Got it!", click: function() { Hwdrepo.addIssue(issueData);$('#dialog-confirm').dialog( "close" ); } } ,{ text: "No !", click: function() { $('#dialog-confirm').dialog( "close" ); } } ] });
                         $("#reportIssueDialog").dialog('close');
                         $("#addHdwInfo").attr("class", "hidden");
                         Hwdrepo.loadIssueHistory(deviceID);
@@ -941,14 +933,7 @@ Hwdrepo = new function () {
                 }
             }
         });
-        $('#reportIssueDialog').dialog('option', 'title', 'Report Issue');
-
-        $("#datepicker").datepicker({
-            autoOpen: false,
-            dateFormat: "yy-mm-dd",
-            gotoCurrent: true
-        });
-        $("#issueDescription").val();
+        
 
         //Hwdrepo.getHardwareComponentDescription(deviceID);       
 

@@ -4,6 +4,7 @@
 *** interns UOM-2014 -->  
 
 <%
+   //include("userCheck.jag");
    var userName=session.get('LOGGED_IN_USER');
 %>
 
@@ -55,9 +56,9 @@
           $(function prepareList() {
          $('#expList').find('li:has(ul)').unbind('click').click(function(event) {
          if(this == event.target) {
-          $(this).removeClass('expanded');
-          $(this).addClass('collapsed');
-          $(this).children('ul').toggle('medium');
+         $(this).toggleClass('expanded');
+         $(this).addClass('collapsed');
+         $(this).children('ul').toggle('medium');
          }
          return false;
          }).addClass('expanded').removeClass('collapsed').children('ul').show();
@@ -123,6 +124,11 @@
                                  <strong>Signed-in as:</strong>&nbsp;<%print(userName);%>
                                  </label>
                               </li>
+                              <%
+                              if(session.get("role")=='admin'){
+                                 print(" <li class='middle'>|</li><li class='right'><a href='adminhome'>Switch to admin view</a></li>");
+                                 }
+                              %>
                               <li class="middle">|</li>
                               <li class="right">
                                  <a href="logout">Sign-out</a>
@@ -147,8 +153,7 @@
                      <ul>
                         <li><a href='userhome'><span>Home</span></a></li>
                         <li><a href='userrequests'><span>Requests</span></a></li>
-                        <li><a href='userissues'><span>Issues</span></a></li>
-                        <li class='last'><a href='#'><span>Report Generation</span></a></li>  
+                        <li class='last'><a href='userissues'><span>Issues</span></a></li>
                      </ul>
                   </div>
                </td>

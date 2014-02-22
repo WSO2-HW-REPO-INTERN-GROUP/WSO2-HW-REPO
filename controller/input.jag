@@ -49,7 +49,10 @@ if (verb == "POST") {
 
         var viewReqObj={'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
 
-        addNewRequest(viewReqObj);
+        var result=addNewRequest(viewReqObj);
+        if(result={}){
+        print(result);
+        }
        
     } else if (opr == 'getDeviceDetails') {
 

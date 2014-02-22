@@ -143,14 +143,14 @@ function viewIssuesByUser(user_id) {
 
 function addNewRequest(addReqObj) {
 
-   // log.info(stringify(addReqObj));
+    log.info(stringify(addReqObj));
 
     var url = dssUrl+"AddDeviceRequest"
     var data=addReqObj;
     var headers = {"Accept":"application/json" };
     var rslt=post(url,data,headers,'json',function(data,xhr){
     });
-
+    return rslt;
 }
 
 
