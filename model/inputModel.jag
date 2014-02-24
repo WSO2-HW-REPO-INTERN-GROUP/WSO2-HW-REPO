@@ -6,9 +6,15 @@
 * interns UOM- 2014
 */
 
+function checkUser(user){
 
 
+}
+function putUser(user){
+
+}
 function viewDeviceByID(deviceID) {
+
 
     var url = dssUrl + "GetDeviceByID";
 
@@ -165,27 +171,6 @@ function addIssue(issue) {
 
 }
 
-function  returnValue(returnBaseElement){
-
-   // log.info(returnBaseElement);
-    //log.info(returnBaseElement.Element);
-
-    if(returnBaseElement == null){
-        return [];
-    }
-    else{
-        if( Object.prototype.toString.call(returnBaseElement.Element) === '[object Array]' ) {
-            return returnBaseElement.Element;
-        }
-        else{
-            return [returnBaseElement.Element];
-        }
-        
-    }
-    
-
-}
-
 function editIssue(issue){
 
     //log.info(issue);
@@ -223,6 +208,27 @@ function confirmRequest(requestID) {
     var headers = {"Accept":"application/json" };
     var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
    // log.info(rslt);
+
+}
+
+function  returnValue(returnBaseElement){
+
+   // log.info(returnBaseElement);
+    //log.info(returnBaseElement.Element);
+
+    if(returnBaseElement == null){
+        return [];
+    }
+    else{
+        if( Object.prototype.toString.call(returnBaseElement.Element) === '[object Array]' ) {
+            return returnBaseElement.Element;
+        }
+        else{
+            return [returnBaseElement.Element];
+        }
+        
+    }
+    
 
 }
 

@@ -3,7 +3,7 @@
  * project-wso2 Hardware Repository
  * interns UOM- 2014
  */
-var controllerPath = "/WSO2-HW-REPO/User/";
+var controllerPath = "/WSO2-HW-REPO/server/user/";
 
 var Issuetemplate;
 var Upgradetemplate;
@@ -12,7 +12,7 @@ var Accessorytemplate;
 var Requestemplate;
 var userID;
 
-HwdrepoUtil.makeRequest("GET", "store.json", null, "json", function (data) {
+HwdrepoUtil.makeRequest("GET", "store.json", null, "json", function (data){
 
     //controllerPath = data.urlConfigurations.controllerPath;
 });
@@ -36,7 +36,7 @@ HwdrepoUtil.makeRequest("GET", "templates/accessoryTemplate.html", null, null, f
 
     Accessorytemplate = template;
 });
-HwdrepoUtil.makeRequest("GET", controllerPath, "operation=getUserID", 'json', function (data) {
+HwdrepoUtil.makeRequest("PUT", controllerPath+"userCheck",null,'json', function (data) {
 
     userID = data.user_id;
     // alert(JSON.stringify(userID));
@@ -46,9 +46,10 @@ Hwdrepo = new function () {
 
 
     this.loadDevices = function () {
+
         console.log("Hwdrepo_func :" + "loadDevices");
 
-        HwdrepoUtil.makeRequest("GET", controllerPath +"devices", , "json",
+        HwdrepoUtil.makeRequest("GET", controllerPath+"devices",null, "json",
             function (html) {
 
                 // alert(JSON.stringify(html));
@@ -70,7 +71,6 @@ Hwdrepo = new function () {
                     var headtr = document.createElement("tr");
 
                     var th1 = document.createElement("th");
-                    var th2 = document.createElement("th");
                     var th2 = document.createElement("th");
                     var th3 = document.createElement("th");
                     var th4 = document.createElement("th");
@@ -151,14 +151,15 @@ Hwdrepo = new function () {
 
             });
 
-    }
+    };
     this.viewRequests = function (index) {
         console.log("Hwdrepo_func :" + "viewRequests" + '-' + index);
-        HwdrepoUtil.makeRequest("GET", controllerPath+'requests',, "json", function (html) {
+        HwdrepoUtil.makeRequest("GET", controllerPath+'requests',null, "json", function (html) {
 
             //alert(JSON.stringify(html));
 
             if (index == 0) {
+                Hwdrepo.loadDevices();
                 Hwdrepo.fillRequestTable(html);
             } else if (index == 1) {
                 Hwdrepo.fillRequestPage(html);
@@ -167,7 +168,7 @@ Hwdrepo = new function () {
         });
 
 
-    }
+    };
 
     this.fillRequestTable = function (html) {
 
@@ -188,7 +189,6 @@ Hwdrepo = new function () {
             var headtr = document.createElement("tr");
 
             var th1 = document.createElement("th");
-            var th2 = document.createElement("th");
             var th2 = document.createElement("th");
             var th3 = document.createElement("th");
             var th4 = document.createElement("th");
@@ -253,7 +253,7 @@ Hwdrepo = new function () {
 
     }
     this.fillRequestPage = function (html) {
-        console.log("Hwdrepo_func :" + "fillRequestPage" + '-' + html);
+        console.log("Hwdrepo_func :" + "fillRequestPage" + '-' + JSON.stringify(html));
         // alert(JSON.stringify(html));
 
         var objArray = html.requests;
@@ -286,9 +286,9 @@ Hwdrepo = new function () {
                     object.resolved = null;
                     object.rejected = null;
 
-                    var html = Mustache.render(Requestemplate, object);
+                    var code = Mustache.render(Requestemplate, object);
 
-                    formatting1 = formatting1.concat(html);
+                    formatting1 = formatting1.concat(code);
 
                 } else if (object.resolved == "1") {
                     object.status = "Device Added";
@@ -296,18 +296,18 @@ Hwdrepo = new function () {
                     object.resolved = "true";
                     object.rejected = null;
 
-                    var html = Mustache.render(Requestemplate, object);
+                    var code = Mustache.render(Requestemplate, object);
 
-                    formatting3 = formatting3.concat(html);
+                    formatting3 = formatting3.concat(code);
                 } else if (object.resolved == "2") {
                     object.status = "Marked As Rejected";
                     object.New = null;
                     object.resolved = null;
                     object.rejected = "true";
 
-                    var html = Mustache.render(Requestemplate, object);
+                    var code = Mustache.render(Requestemplate, object);
 
-                    formatting2 = formatting2.concat(html);
+                    formatting2 = formatting2.concat(code);
 
                 } else {
                     object.status = null;
@@ -340,8 +340,7 @@ Hwdrepo = new function () {
         console.log("Hwdrepo_func :" + "requestDevice" + '-' + deviceType + ',' + purpose + ',' + requirement);
 
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "addDeviceRequest",
+        HwdrepoUtil.makeJsonRequest("POST", controllerPath+'requests', JSON.stringify({
                 dev: {
                     device: deviceType,
                     purpose: purpose,
@@ -360,17 +359,12 @@ Hwdrepo = new function () {
     this.loadUpgradeHistory = function (deviceID) {
         console.log("Hwdrepo_func :" + "loadUpgradeHistory" + '-' + deviceID);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "upgradeHistory",
-                deviceID: deviceID
-            }),
+        HwdrepoUtil.makeRequest("GET",controllerPath+'devices/'+deviceID+'/upgrades',null,'json',
 
             function (data, status) {
 
                 var objArray = data;
                 //alert(JSON.stringify(objArray));
-                //var html = Mustache.render(Upgradetemplate,object);
-
 
                 var tablearea = document.getElementById('upgradeDiv');
                 tablearea.innerHTML = '';
@@ -397,16 +391,15 @@ Hwdrepo = new function () {
                 }
                 tablearea.innerHTML = formatting;
 
+                Hwdrepo.loadIssueHistory(deviceID);
+
             });
     }
 
     this.getDeviceDetails = function (deviceID) {
         console.log("Hwdrepo_func :" + "getDeviceDetails" + '-' + deviceID);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "getDeviceDetails",
-                deviceID: deviceID
-            }),
+        HwdrepoUtil.makeRequest("GET",controllerPath+'devices/'+deviceID,null,'json',
             function (data, status) {
                 var i = 0;
 
@@ -490,16 +483,16 @@ Hwdrepo = new function () {
                 basicDetailsTbl.appendChild(tbody);
 
                 basicDetailsArea.appendChild(basicDetailsTbl);
-            });
+
+                Hwdrepo.loadUpgradeHistory(deviceID);
+            }
+            );
 
     }
     this.getAccssories = function (deviceID) {
         console.log("Hwdrepo_func :" + "getAccssories" + '-' + deviceID);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "getAccessories",
-                deviceID: deviceID
-            }),
+        HwdrepoUtil.makeRequest("GET", controllerPath+'devices/'+deviceID+'/accessories',null,'json',
             function (data, status) {
 
                 var objArray = data;
@@ -540,10 +533,7 @@ Hwdrepo = new function () {
     this.loadIssueHistory = function (deviceID) {
         console.log("Hwdrepo_func :" + "loadIssueHistory" + '-' + deviceID);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "getIssues",
-                deviceID: deviceID
-            }),
+        HwdrepoUtil.makeRequest("GET", controllerPath+'devices/'+deviceID+'/issues',null,'json',
             function (data) {
 
                 //alert(JSON.stringify(data));
@@ -600,6 +590,8 @@ Hwdrepo = new function () {
                 }
                 tablearea.innerHTML = formatting;
 
+
+                Hwdrepo.loadWarranties(deviceID);
             });
 
         $("#EditIssue").button();
@@ -608,14 +600,10 @@ Hwdrepo = new function () {
     this.loadWarranties = function (deviceID) {
         console.log("Hwdrepo_func :" + "loadWarranties" + '-' + deviceID);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "warrantyHistory",
-                deviceID: deviceID
-            }),
-
+        HwdrepoUtil.makeRequest("GET", controllerPath+'devices/'+deviceID+'/warranties',null,'json',
             function (data, status) {
 
-                //  alert(JSON.stringify(data));
+                  //alert(JSON.stringify(data.device));
 
                 var deviceArray = data.device;
                 var accessoryArray = data.accessories;
@@ -713,6 +701,9 @@ Hwdrepo = new function () {
 
                 divArea.innerHTML = htmformatting;
 
+
+                Hwdrepo.getAccssories(deviceID);
+
             });
 
     }
@@ -720,8 +711,7 @@ Hwdrepo = new function () {
     this.addIssue = function (issueData) {
         console.log("Hwdrepo_func :" + "addIssue" + '-' + issueData);
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "addIssue",
+        HwdrepoUtil.makeJsonRequest("POST",controllerPath+'devices/'+deviceID+'/issues', JSON.stringify({
                 issue: issueData
             }),
             function (data) {
@@ -733,14 +723,11 @@ Hwdrepo = new function () {
 
     this.editIssue = function (issue_no, dev_id, status, issue, oldDate, resolve) {
 
-      //  console.log("Hwdrepo_func :" + "editIssue" + '-' + issue_no + ',' + dev_id + ',' + status + ',' + issue + ',' + oldDate + ',' + resolve);
+        console.log("Hwdrepo_func :" + "editIssue" + '-' + issue_no + ',' + dev_id + ',' + status + ',' + issue + ',' + oldDate + ',' + resolve);
 
         if (resolve == 0) {
 
             $("#editIssueDialog").dialog("option", "buttons", [
-
-
-
 
                 {
                     text: "Ok",
@@ -761,22 +748,17 @@ Hwdrepo = new function () {
                             $('#editIssErr').toggleClass("ui-widget", true);
                         } else {
 
-                            $("#dialog-confirm").dialog("open");
-
                             $("#dialog-confirm").dialog({
                                 buttons: [{
                                     text: "Got it!",
                                     click: function () {
 
-                                        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                                                operation: "editIssue",
+                                        HwdrepoUtil.makeJsonRequest("PUT",controllerPath+'devices/'+dev_id+'/issues/'+issue_no, JSON.stringify({
                                                 issue: {
                                                     "sts": status,
                                                     "desc": description,
                                                     "date": date,
-                                                    "resolv": resolve,
-                                                    "issue_id": issue_no,
-                                                    "dev_id": dev_id
+                                                    "resolv": resolve
                                                 }
                                             }),
                                             function (data) {
@@ -791,7 +773,6 @@ Hwdrepo = new function () {
                                             });
 
                                         $('#dialog-confirm').dialog("close");
-                                        $('#editIssueDialog').dialog('close');
                                     }
                                 }, {
                                     text: "No !",
@@ -800,7 +781,10 @@ Hwdrepo = new function () {
                                     }
                                 }]
                             });
+
                             $('#editIssueDialog').dialog('close');
+                            $("#dialog-confirm").dialog("open");         
+                            
                         }
 
                     }
@@ -809,7 +793,7 @@ Hwdrepo = new function () {
 
         $("#editDatepicker").datepicker({
             autoOpen: false,
-            dateFormat: "yy-mm-dd",
+            dateFormat: "yy-mm-dd"
         });
         $("#editDatepicker").datepicker("setDate", oldDate.split("+")[0]);
         $("#editIssueDescription").val(issue);
@@ -820,12 +804,7 @@ Hwdrepo = new function () {
         alert("this will delete the issue, are you sure?");
 
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-                operation: "deleteIssue",
-                issue: {
-                    "issue_id": issue_no
-                }
-            }),
+        HwdrepoUtil.makeRequest("DELETE",controllerPath+'issues/'+issue_no,null,'json',
             function (data) {
 
                 if (Hwdrepo.nullCheck(document.getElementById('issueDiv'))) {
@@ -840,7 +819,7 @@ Hwdrepo = new function () {
     } else {
 
 
-        HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
+        HwdrepoUtil.makeJsonRequest("PUT",controllerPath+'devices/'+dev_id+'/issues/'+issue_no, JSON.stringify({
                 operation: "editIssue",
                 issue: {
                     "sts": status,
@@ -939,10 +918,7 @@ this.getUserID = function () {
 }
 this.deleteRequest = function (request_id) {
     console.log("Hwdrepo_func :" + "deleteRequest" + '-' + request_id);
-    HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-            operation: "deleteRequest",
-            req_id: request_id
-        }),
+    HwdrepoUtil.makeRequest("DELETE", controllerPath+'requests/'+request_id,null,'json',
         function (html) {
 
             Hwdrepo.viewRequests(1);
@@ -954,10 +930,7 @@ this.deleteRequest = function (request_id) {
 }
 this.confirmRequest = function (request_id) {
     console.log("Hwdrepo_func :" + "confirmRequest" + '-' + request_id);
-    HwdrepoUtil.makeJsonRequest("POST", controllerPath, JSON.stringify({
-            operation: "confirmRequest",
-            req_id: request_id
-        }),
+    HwdrepoUtil.makeRequest("PUT",controllerPath+'requests/'+request_id,null,'json',
         function (html) {
 
             this.viewRequests(1);
@@ -992,7 +965,7 @@ this.nullCheck = function (value) {
 this.getUserIssues = function () {
     console.log("Hwdrepo_func :" + "getUserIssues");
 
-    HwdrepoUtil.makeRequest("GET", controllerPath, "operation=loadUserIssues", "json",
+    HwdrepoUtil.makeRequest("GET", controllerPath+'issues',null, "json",
         function (html) {
 
             // alert(JSON.stringify(html));
@@ -1030,29 +1003,29 @@ this.getUserIssues = function () {
                         object.resolved = null;
                         object.rejected = null;
 
-                        var html = Mustache.render(Issuetemplate, object);
-                        formatting1 = formatting1.concat(html);
+                        var code = Mustache.render(Issuetemplate, object);
+                        formatting1 = formatting1.concat(code);
                     } else if (object.resolved == "1") {
                         object.New = null;
                         object.resolved = "true";
                         object.rejected = null;
 
-                        var html = Mustache.render(Issuetemplate, object);
-                        formatting3 = formatting3.concat(html);
+                        var code = Mustache.render(Issuetemplate, object);
+                        formatting3 = formatting3.concat(code);
                     } else if (object.resolved == "2") {
                         object.New = null;
                         object.resolved = null;
                         object.rejected = "true";
 
-                        var html = Mustache.render(Issuetemplate, object);
-                        formatting2 = formatting2.concat(html);
+                        var code = Mustache.render(Issuetemplate, object);
+                        formatting2 = formatting2.concat(code);
                     } else {
                         object.New = null;
                         object.resolved = null;
                         object.rejected = null;
 
-                        var html = Mustache.render(Issuetemplate, object);
-                        formatting4 = formatting4.concat(html);
+                        var code = Mustache.render(Issuetemplate, object);
+                        formatting4 = formatting4.concat(code);
                     }
 
                     //alert(JSON.stringify(object));
@@ -1078,5 +1051,4 @@ this.getUserIssues = function () {
 
         });
 }
-
 }

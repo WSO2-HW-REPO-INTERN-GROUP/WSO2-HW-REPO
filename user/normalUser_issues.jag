@@ -88,6 +88,15 @@
           Hwdrepo.getUserIssues();
 
 
+          $( "#dialog-confirm" ).dialog({
+         autoOpen: false,
+         resizable: false,
+         height:150,
+         modal: true
+
+         });
+
+
                    $("#editIssueDialog").dialog({
 
             autoOpen: false,
@@ -97,6 +106,8 @@
             });    
          
            });
+
+
               
          
       </script>
@@ -277,14 +288,14 @@
                                     </ul>
                                  </div>
                               </div>
-                              <div id="editIssueDialog" title="Report Issue">
-                                    <form>
-                                       <table style="width: 500px;margin: auto;" cellspacing="25px">
+                               <div id="editIssueDialog" class='ui-dialog-content' title="Edit Issue">
+                                    <form action="">
+                                       <table style="width: 500px;margin: auto;border-collapse: separate; border-spacing: 25px;">
                                           <tr>
                                              <td>
-                                                <p style:"">Date: </p>                   
+                                                <p style="">Date: </p>
                                              </td>
-                                             <td><input type="text" id="editDatepicker" class="inputField" ></td>
+                                             <td><input type="text" id="editDatepicker" class="inputField" tabindex="-1"/></td>
                                           </tr>
                                           <tr>
                                              <td colspan="2">
@@ -293,33 +304,18 @@
                                              </td>
                                           </tr>
                                           <tr>
-                                             <td>
-                                                <div id="editIssErr1" class ="hidden">
-                                                   <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                      <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please provide an issue description
-                                                      </p>
-                                                   </div>
+                                             <td colspan="2">
+                                                <div id="editIssErr" >
+                  
                                                 </div>
-                                                 <div id="editIssErr2" class ="hidden">
-                                                   <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                      <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please Select A date
-                                                      </p>
-                                                   </div>
-                                                </div>
-                                                <!-- class=-->
                                              </td>
                                           </tr>
                                        </table>
                                     </form>
-                                 <!-- </div>
-                                    <div id="dialog-confirm" title="Edit the issue?">
-  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This issue will be permanently overwritten and cannot be recovered. Are you sure?</p>
-</div>
-                                 
-                              </div> -->
-                              </div>
+                                 </div>
+                                 <div id="dialog-confirm" title="Report the issue?">
+                                    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Report to lkoperations? You can review it after in issues</p>
+                                 </div>
                            </td>
                         </tr>
                         <!-- End of devices grid generation -->
@@ -349,5 +345,3 @@
       </script>
    </body>
 </html>
-COPY TO CLIPBOARD    SELECT ALL 
-© FreeFormatter.com 2011-2012 - Brought to

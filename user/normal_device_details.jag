@@ -73,11 +73,11 @@
          })
          });
                  readURL();
-                 getAccessories();
-                 Hwdrepo.loadIssueHistory(deviceID);
-                 Hwdrepo.loadUpgradeHistory(deviceID);
-                 Hwdrepo.loadWarranties(deviceID);
+
+                 
+
                  Hwdrepo.loadDialogs(deviceID);
+      
          
                  $( "#dialog-confirm" ).dialog({
          autoOpen: false,
@@ -120,12 +120,6 @@
                     Hwdrepo.getDeviceDetails(deviceID);
                  
                  }
-         
-              function getAccessories(){
-         
-                 Hwdrepo.getAccssories(deviceID);
-         
-              }
          
              
                     

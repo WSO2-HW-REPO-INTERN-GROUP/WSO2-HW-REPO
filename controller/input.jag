@@ -22,49 +22,60 @@ var log = new Log();
 
 log.info(verb +'-URI: '+uri+'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
 
-var callPath=uri.replace("/WSO2-HW-REPO/user/","");
+var callPath=uri.replace("/WSO2-HW-REPO/server/user","");
 
 var user_id = session.get("LOGGED_IN_USER");
+
+var opr;
+var opr2;
+var id1;
+var id2;
 
 if(uri != null) {
 
 var uriMatcher = new URIMatcher(callPath);
 
-    if(uriMatcher.match("/{operation}/")) {     
-        var opr = uriMatcher.elements().operation;
+    if(uriMatcher.match("/{operation}")) {     
+        opr = uriMatcher.elements().operation;
+        log.info(opr);
+
+    }
+    if(uriMatcher.match("/{operation}/{id}")) { 
+        opr = uriMatcher.elements().operation;    
+        id1 = uriMatcher.elements().id;
+
+        log.info(opr);
+        log.info(id1);
+
+    }
+    if(uriMatcher.match("/{operation}/{id}/{depopr}")) { 
+        opr = uriMatcher.elements().operation;    
+        id1 = uriMatcher.elements().id;
+        opr2 = uriMatcher.elements().depopr; 
+
+        log.info(opr);
+        log.info(id1);
+        log.info(opr2);
+
+    }
+    if(uriMatcher.match("/{operation}/{id}/{depopr}/{depid}")) { 
+        opr = uriMatcher.elements().operation;    
+        id1 = uriMatcher.elements().id;
+        opr2 = uriMatcher.elements().depopr;
+        id2 = uriMatcher.elements().depid;
+
+        log.info(opr);
+        log.info(id1);
+        log.info(opr2);
+        log.info(id2);
+
     }
 }
-
-    /*
-    if(uriMatcher.match("/{orderid}/")) {       
-       // orderid = uriMatcher.elements().orderid;
-    }
-}
-if(data != null ) {
-    if(data.addition != null) {
-        addition = data.addition;
-    }
-    if(data.status != null) {
-        status = data.status;
-    }
-}
-
-if (request.getParameter('operation') != null) {
-    var opr = request.getParameter('operation');
-} else {
-    var opr = data.operation;
-    var deviceID = data.deviceID;
-}
-
-if (data != null) {
-
-}*/
-
 
 if (verb == "POST") {
 
 
-    if (opr == 'addDeviceRequest') {
+    if (opr == 'requests') {
 
 
         var addRequestObj = data.dev;
@@ -78,116 +89,30 @@ if (verb == "POST") {
         print(result);
         }
        
-    } else if (opr == 'getDeviceDetails') {
-
-        print(viewDeviceByID(deviceID));
-
-
     } 
-    else if (opr == 'deleteRequest') {
-
-        var request_id = data.req_id;
-
-        //log.info(request_id);
-
-        print(deleteRequest(request_id));
-
-
-    }
-    else if (opr == 'confirmRequest') {
-
-        var request_id = data.req_id;
-
-        print(confirmRequest(request_id));
-
-    }
-
-
-
-    else if (opr == 'getAccessories') {
-
-        var result = viewAccessoryByDeviceID(deviceID);
-        print(result);
-
-    } else if (opr == 'upgradeHistory') {
-
-      //log.info(viewUpgradeHistoryByDeviceID(deviceID));
-
-      print(viewUpgradeHistoryByDeviceID(deviceID));
-
-    }
-    else if (opr == 'warrantyHistory') {
-
-     // log.info(viewWarrantyByDeviceID(deviceID));
-
-      print(viewWarrantyByDeviceID(deviceID,user_id));
-
-    }
-     else if (opr == 'getIssues') {
-
-    //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
-        print(viewIssueHistoryByDeviceID(deviceID,user_id));
-    } else if(opr == 'getEmpIssues') {
-
-    //log.info(viewIssueHistoryByDeviceID(deviceID,user_id));
-        print(viewIssueHistoryByEmp(user_id));
-    }
-
-    else if (opr == 'addIssue') {
+    else if (opr == 'devices' && opr2 == 'issues') {
         
-        var addIssueObj = data;
+        var addIssueObj = data.issue;
 
-        addIssueObj.issue.emp_id=user_id;
+        addIssueObj.emp_id=user_id;
 
         //log.info(addIssueObj);
 
-        addIssue(addIssueObj.issue);
+        addIssue(addIssueObj);
         print({
                     'information': 'issue reported successfully'
                 }
 
         );
     }
-    else if(opr =='editIssue'){
-
-
-        var editIssueObj = data;
-
-        //log.info(editIssueObj);
-
-      editIssueObj.issue.emp_id=user_id;
-
-       editIssue(editIssueObj.issue);
-
-
-    }
-      else if(opr =='deleteIssue'){
-
-
-        var deleteIssueObj = data;
-
-      deleteIssueObj.issue.emp_id=user_id;
-      //log.info(deleteIssueObj);
-
-       deleteIssue(deleteIssueObj.issue);
-
-    }
-
-
+      
 }
 
 if (verb == "GET" ) {
 
-    if(opr == 'getUserID'){
-
-       print({'user_id':user_id});
-
-    }
-    else if (opr == 'loadRequests') {
+    if (opr ==='requests' ) {
 
         var result=viewRequestsByUser(user_id);
-
-
 
         // if result has multiple entries it is returned as an array View requests results of type
         // {"requests":[{result1},{result2},{re...}]}
@@ -200,10 +125,16 @@ if (verb == "GET" ) {
             print({"requests":[result]});
         }
 
+    } else if (opr == 'devices' && opr2 ==null) {
 
-    } else if (opr == 'loadDevices') {
+        if(id1 !=null){
+            var result =viewDeviceByID(id1);
 
-        var result=viewDevicesByUser(user_id);
+            print(result);
+
+        }
+        else{
+            var result=viewDevicesByUser(user_id);
 
         // if result has multiple entries it is returned as an array View requests results of type
         // {"devices":[{result1},{result2},{re...}]}
@@ -214,10 +145,38 @@ if (verb == "GET" ) {
         else{
             print({"devices":[result]});
         }
-
+        }
 
     }
-    else if (opr == 'loadUserIssues') {
+    else if(opr == 'devices' && opr2 == 'upgrades'){
+
+        //log.info(viewUpgradeHistoryByDeviceID(deviceID));
+
+        print(viewUpgradeHistoryByDeviceID(id2));
+
+    }
+    else if (opr == 'devices' && opr2== 'accessories') {
+
+        var result = viewAccessoryByDeviceID(id1);
+
+        //log.info(result);
+        print(result);
+
+    }
+    else if (opr == 'devices' && opr2 == 'issues') {
+
+    //log.info('viewIssueHistoryByDeviceID'+id1);
+        print(viewIssueHistoryByDeviceID(id1,user_id));
+    } 
+     else if (opr == 'devices' && opr2 == 'warranties') {
+
+
+     // log.info(viewWarrantyByDeviceID(deviceID));
+
+      print(viewWarrantyByDeviceID(id1,user_id));
+
+    }
+    else if (opr == 'issues') {
 
         var result=viewIssuesByUser(user_id);
 
@@ -233,6 +192,57 @@ if (verb == "GET" ) {
 
 
     }
+}
+if(verb=="PUT"){
+
+    if(opr == 'userCheck'){
+
+        if(checkUser(user_id) == null){
+
+            putUser(user_id);
+
+        }
+
+       print({'user_id':user_id});
+
+    }
+
+    else if(opr2=='issues' && id2 != null){
+
+            var editIssueObj = data;
+
+       // log.info(JSON.stringify(data)+'  editIssueObj'+id1+' '+id2);
+
+      editIssueObj.issue.emp_id=user_id;
+      editIssueObj.issue.dev_id=id1;
+      editIssueObj.issue.issue_id=id2;
+       editIssue(editIssueObj.issue);
+
+    }
+    else if (opr=='issues' && id1 != null) {
+
+        print(confirmRequest(request_id));
+
+    }
+
+}
+if(verb =="DELETE"){
+
+    if(opr=='issues' && id1 != null){
+
+        var deleteIssueObj = {'emp_id':user_id,'issue_id':id1};
+      
+       deleteIssue(deleteIssueObj);
+
+    }
+    else if(opr=='requests' && id1 != null){
+
+
+        //log.info(request_id);
+
+        print(deleteRequest(id1));
+    }
+
 }
 
 %>

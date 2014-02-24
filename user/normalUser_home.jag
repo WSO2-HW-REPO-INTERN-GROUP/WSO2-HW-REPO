@@ -116,7 +116,7 @@
          });
              
          Hwdrepo.viewRequests(0); 
-         Hwdrepo.loadDevices();
+         
          
          });
          
