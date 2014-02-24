@@ -12,7 +12,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <title>User:DeviceDetails</title>
             <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all"/>
-      <link href="css/global.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all"/>
       <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
       <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
       <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all"/>
@@ -90,6 +90,7 @@
                    $("#editIssueDialog").dialog({
          
             autoOpen: false,
+            resizable: false,
             height: 500,
             width: 700,
             modal: true
@@ -107,7 +108,7 @@
          
                      
                      $("#reportIssueDialog").dialog("open");
-         
+                        return false;
          
                  });
                  
@@ -312,33 +313,15 @@
                                  <div id="reportIssueDialog" class='ui-dialog-content' title="Report Issue">
                                     <form action="">
                                        <table style="width: 500px;margin: auto;border-collapse: separate; border-spacing: 25px;">
-                                          <!--  Selecting issue type is disabled  --> 
-                                          <!--  <tr class = "hidden">
-                                             <td><label id="selectIssueType">Select Issue Type</label></td>
-                                             <td>
-                                                <select id="issueTypeSelect" class="siteButton">
-                                                   <option id="option1" selected value="0">Select Issue Urgency</option>
-                                                   <option id="option2" value="op1">Critical</option>
-                                                   <option id="option3" value="op2">insignificant</option>
-                                                   <option id="option4" value="op3">unrecoverable</option>
-                                                   <option id="option4" value="op4">if possible</option>
-                                                   <option id="option4" value="op5">Delete</option>
-                                                </select>
-                                             </td>
-                                             </tr> -->
+                                          <thead>
+                                          </thead>
+                                          <tbody>
                                           <tr>
                                              <td>
                                                 <p style="">Date: </p>
                                              </td>
                                              <td><input type="text" id="datepicker" class="inputField" /></td>
                                           </tr>
-                                          <!-- <tr>
-                                             <td colspan="2">
-                                                <label id="componentDetailsLbl">Hardware Component Description</label><br/><br/>
-                                                <div id="componentDetailsArea" style="border-color: #0099ff;width: 450px;height: 100px;border: 2px solid;" class="textArea">
-                                                </div>
-                                             </td>
-                                             </tr> -->
                                           <tr>
                                              <td colspan="2">
                                                 <label id="issueDescriptionLbl">Add Issue Description</label><br/><br/>
@@ -346,32 +329,15 @@
                                              </td>
                                           </tr>
                                           <tr>
-                                             <td>
-                                                <div id="addHdwErr" class ="hidden">
-                                                   <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                      <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please Type an issue description
-                                                      </p>
+                                             <td colspan="2">
+                                                <div id="addHdwErr" >
                                                    </div>
                                                 </div>
-                                                <div id="addHdwInfo" class="hidden">
-                                                   <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-                                                      <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Info</strong> Issue reported successfully
-                                                      </p>
-                                                   </div>
-                                                </div>
-                                                <!-- class=-->
                                              </td>
                                           </tr>
+                                          </tbody>
                                        </table>
                                     </form>
-                                    <!-- </div>
-                                       <div id="dialog-confirm" title="Edit the issue?">
-                                       <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This issue will be permanently overwritten and cannot be recovered. Are you sure?</p>
-                                       </div>
-                                       
-                                       </div> -->
                                  </div>
                                  <div id="editIssueDialog" class='ui-dialog-content' title="Edit Issue">
                                     <form action="">
@@ -389,22 +355,10 @@
                                              </td>
                                           </tr>
                                           <tr>
-                                             <td>
-                                                <div id="editIssErr1" class ="hidden">
-                                                   <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                      <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please provide an issue description
-                                                      </p>
-                                                   </div>
+                                             <td colspan="2">
+                                                <div id="editIssErr" >
+                  
                                                 </div>
-                                                <div id="editIssErr2" class ="hidden">
-                                                   <div  class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                      <p ><span class="ui-icon ui-icon-alert"  style="float: left; margin-right: .3em;"></span>
-                                                         <strong>Alert:</strong> Please Select A date
-                                                      </p>
-                                                   </div>
-                                                </div>
-                                                <!-- class=-->
                                              </td>
                                           </tr>
                                        </table>

@@ -14,7 +14,7 @@
       <title>User:Issues</title>
 
 
-       <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+       <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all">
       <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
       <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
       <link rel="stylesheet" href="css/carbonFormStyles.css">

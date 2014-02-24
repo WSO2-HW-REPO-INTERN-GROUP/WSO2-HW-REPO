@@ -18,12 +18,36 @@ var data = request.getContent();
 var uri = request.getRequestURI();
 var param=request.getQueryString();
 
-
 var log = new Log();
 
-log.info(verb +'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
+log.info(verb +'-URI: '+uri+'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
+
+var callPath=uri.replace("/WSO2-HW-REPO/user/","");
 
 var user_id = session.get("LOGGED_IN_USER");
+
+if(uri != null) {
+
+var uriMatcher = new URIMatcher(callPath);
+
+    if(uriMatcher.match("/{operation}/")) {     
+        var opr = uriMatcher.elements().operation;
+    }
+}
+
+    /*
+    if(uriMatcher.match("/{orderid}/")) {       
+       // orderid = uriMatcher.elements().orderid;
+    }
+}
+if(data != null ) {
+    if(data.addition != null) {
+        addition = data.addition;
+    }
+    if(data.status != null) {
+        status = data.status;
+    }
+}
 
 if (request.getParameter('operation') != null) {
     var opr = request.getParameter('operation');
@@ -34,7 +58,7 @@ if (request.getParameter('operation') != null) {
 
 if (data != null) {
 
-}
+}*/
 
 
 if (verb == "POST") {
@@ -152,7 +176,7 @@ if (verb == "POST") {
 
 }
 
-if (verb == "GET") {
+if (verb == "GET" ) {
 
     if(opr == 'getUserID'){
 
