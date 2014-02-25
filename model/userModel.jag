@@ -5,8 +5,6 @@
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
-var dataStore=require("../store.json");
-var dssUrl = dataStore.urlConfigurations.dssUrl;
 
 function checkUser(user){
 

@@ -4,16 +4,7 @@
    *** interns UOM-2014 -->  
 <%
    include("userCheck.jag");
-   include("../model/userModel.jag");
-   session.put('LOGGED_IN_USER','mihil@wso2.com');
    var userName=session.get('LOGGED_IN_USER');
-
-   if(checkUser(userName) == ''){
-
-            log.info("putUser :" +putUser(userName));
-
-        }
-
    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
@@ -101,8 +92,8 @@
              var deviceType=$("#deviceTypeSelect option:selected").text();
              var purpose=$("#purposeArea").val();
              var requirements=$("#requirementArea").val();
-
-
+         
+         
          $("#requestConfirm").dialog("open");
                         $( "#requestConfirm" ).dialog({ buttons: [ { text: "Got it!", click: function() { Hwdrepo.requestDevice(deviceType,purpose,requirements);$('#requestConfirm').dialog( "close" ); } } ,{ text: "No !", click: function() { $('#requestConfirm').dialog( "close" ); } } ] });
              $(this).dialog('close');        
@@ -120,7 +111,7 @@
          event.preventDefault();
          //Open your dialog.
          $("#requestDeviceForm").dialog("open");
-
+         
          });
              
          Hwdrepo.initiateHome();

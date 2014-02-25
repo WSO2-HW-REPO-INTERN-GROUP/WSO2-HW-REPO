@@ -50,13 +50,8 @@
            
       <!-- This script handles the tabbed pane functionality -->
       <script type="text/javascript">
-         var user_id;
-         
-         
+      
            $(function() {
-         
-              
-               user_id=Hwdrepo.getUserID();
          
         $(function prepareList() {
          $('#expList').find('li:has(ul)').unbind('click').click(function(event) {

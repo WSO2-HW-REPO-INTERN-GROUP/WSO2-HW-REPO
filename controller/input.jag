@@ -1,12 +1,15 @@
 <%
 
 /* Author - mihil ranathunga
-* email-mihil@wso2.com
+ * email-mihil@wso2.com
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
 
 include("../model/userModel.jag");
+
+var dataStore=require("../store.json");
+var dssUrl = dataStore.urlConfigurations.dssUrl;
 
 response.contentType = 'text/javascript';
 
@@ -30,26 +33,26 @@ var id2;
 
 if(uri != null) {
 
-var uriMatcher = new URIMatcher(callPath);
+    var uriMatcher = new URIMatcher(callPath);
 
-    if(uriMatcher.match("/{operation}")) {     
+    if(uriMatcher.match("/{operation}")) {
         opr = uriMatcher.elements().operation;
 
     }
-    if(uriMatcher.match("/{operation}/{id}")) { 
-        opr = uriMatcher.elements().operation;    
+    if(uriMatcher.match("/{operation}/{id}")) {
+        opr = uriMatcher.elements().operation;
         id1 = uriMatcher.elements().id;
 
 
     }
-    if(uriMatcher.match("/{operation}/{id}/{depopr}")) { 
-        opr = uriMatcher.elements().operation;    
+    if(uriMatcher.match("/{operation}/{id}/{depopr}")) {
+        opr = uriMatcher.elements().operation;
         id1 = uriMatcher.elements().id;
-        opr2 = uriMatcher.elements().depopr; 
+        opr2 = uriMatcher.elements().depopr;
 
     }
-    if(uriMatcher.match("/{operation}/{id}/{depopr}/{depid}")) { 
-        opr = uriMatcher.elements().operation;    
+    if(uriMatcher.match("/{operation}/{id}/{depopr}/{depid}")) {
+        opr = uriMatcher.elements().operation;
         id1 = uriMatcher.elements().id;
         opr2 = uriMatcher.elements().depopr;
         id2 = uriMatcher.elements().depid;
@@ -68,18 +71,20 @@ if (verb == "POST") {
 
         var addRequestObj = data.dev;
 
-       // log.info(stringify(addRequestObj));
+        // log.info(stringify(addRequestObj));
 
-        var viewReqObj={'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
+        var viewReqObj={
+            'device_type':addRequestObj.device,'purpose':addRequestObj.purpose,'req':addRequestObj.req,'emp_id':user_id};
 
-        var result=addNewRequest(viewReqObj);
-        if(result={}){
-        print(result);
-        }
-       
-    } 
+            var result=addNewRequest(viewReqObj);
+            if(result={
+            }){
+                print(result);
+            }
+             
+    }
     else if (opr == 'devices' && opr2 == 'issues') {
-        
+
         var addIssueObj = data.issue;
 
         addIssueObj.emp_id=user_id;
@@ -88,12 +93,12 @@ if (verb == "POST") {
 
         addIssue(addIssueObj);
         print({
-                    'information': 'issue reported successfully'
-                }
+            'information': 'issue reported successfully'
+        }
 
-        );
+            );
     }
-      
+
 }
 
 if (verb == "GET" ) {
@@ -106,18 +111,21 @@ if (verb == "GET" ) {
         // {"requests":[{result1},{result2},{re...}]}
 
         if( Object.prototype.toString.call(result) === '[object Array]' ) {
- 
-            print({"requests":result});
+
+            print({
+                "requests":result});
         }
         else{
-            print({"requests":[result]});
+            print({
+                "requests":[result]});
         }
 
     }
 
     else if(opr == 'getUser'){
 
-       print({'user_id':user_id});
+        print({
+            'user_id':user_id});
 
     }else if (opr == 'devices' && opr2 ==null) {
 
@@ -130,15 +138,17 @@ if (verb == "GET" ) {
         else{
             var result=viewDevicesByUser(user_id);
 
-        // if result has multiple entries it is returned as an array View requests results of type
-        // {"devices":[{result1},{result2},{re...}]}
+            // if result has multiple entries it is returned as an array View requests results of type
+            // {"devices":[{result1},{result2},{re...}]}
 
-        if( Object.prototype.toString.call(result) === '[object Array]' ) {
-            print({"devices":result});
-        }
-        else{
-            print({"devices":[result]});
-        }
+            if( Object.prototype.toString.call(result) === '[object Array]' ) {
+                print({
+                    "devices":result});
+            }
+            else{
+                print({
+                    "devices":[result]});
+            }
         }
 
     }
@@ -159,15 +169,15 @@ if (verb == "GET" ) {
     }
     else if (opr == 'devices' && opr2 == 'issues') {
 
-    //log.info('viewIssueHistoryByDeviceID'+id1);
+        //log.info('viewIssueHistoryByDeviceID'+id1);
         print(viewIssueHistoryByDeviceID(id1,user_id));
-    } 
-     else if (opr == 'devices' && opr2 == 'warranties') {
+    }
+    else if (opr == 'devices' && opr2 == 'warranties') {
 
 
-     // log.info(viewWarrantyByDeviceID(deviceID));
+        // log.info(viewWarrantyByDeviceID(deviceID));
 
-      print(viewWarrantyByDeviceID(id1,user_id));
+        print(viewWarrantyByDeviceID(id1,user_id));
 
     }
     else if (opr == 'issues') {
@@ -178,10 +188,12 @@ if (verb == "GET" ) {
         // {"issues":[{result1},{result2},{re...}]}
 
         if( Object.prototype.toString.call(result) === '[object Array]' ) {
-            print({"issues":result});
+            print({
+                "issues":result});
         }
         else{
-            print({"issues":[result]});
+            print({
+                "issues":[result]});
         }
 
 
@@ -189,18 +201,32 @@ if (verb == "GET" ) {
 }
 if(verb=="PUT"){
 
+    if(opr == 'userCheck'){
 
-if(opr2=='issues' && id2 != null){
+        if(checkUser(user_id) == ''){
 
-            var editIssueObj = data;
+            var result = putUser(user_id);
 
-       // log.info(JSON.stringify(data)+'  editIssueObj'+id1+' '+id2);
+            log.info("putUser :" +result);
 
-      editIssueObj.issue.emp_id=user_id;
-      editIssueObj.issue.dev_id=id1;
-      editIssueObj.issue.issue_id=id2;
+            print(result);
 
-       print(editIssue(editIssueObj.issue));
+        }
+
+    }
+
+
+    else if(opr2=='issues' && id2 != null){
+
+        var editIssueObj = data;
+
+        // log.info(JSON.stringify(data)+'  editIssueObj'+id1+' '+id2);
+
+        editIssueObj.issue.emp_id=user_id;
+        editIssueObj.issue.dev_id=id1;
+        editIssueObj.issue.issue_id=id2;
+
+        print(editIssue(editIssueObj.issue));
 
     }
     else if (opr=='issues' && id1 != null) {
@@ -214,9 +240,10 @@ if(verb =="DELETE"){
 
     if(opr=='issues' && id1 != null){
 
-        var deleteIssueObj = {'emp_id':user_id,'issue_id':id1};
-      
-       print(deleteIssue(deleteIssueObj));
+        var deleteIssueObj = {
+            'emp_id':user_id,'issue_id':id1};
+
+            print(deleteIssue(deleteIssueObj));
 
     }
     else if(opr=='requests' && id1 != null){
