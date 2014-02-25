@@ -4,7 +4,7 @@
 *** interns UOM-2014 -->  
 
 <%
-   //include("userCheck.jag");
+   include("userCheck.jag");
    var userName=session.get('LOGGED_IN_USER');
 %>
 
@@ -12,17 +12,17 @@
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <title>User:Requests</title>
-      <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-      <link rel="stylesheet" href="css/carbonFormStyles.css">
+      <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all"/>
+      <link rel="stylesheet" href="css/carbonFormStyles.css"/>
 
-      <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
+      <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all"/>
 
-      <link rel="stylesheet" href="css/jquery-ui.css">
+      <link rel="stylesheet" href="css/jquery-ui.css"/>
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
       <!--[if gte IE 8]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
@@ -34,7 +34,7 @@
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
       <script type="text/javascript" src="js/jquery.dataTables.js"></script>
-      <script src="js/mustache.js"></script>
+      <script type="text/javascript" src="js/mustache.js"></script>
 
       <!--script src="js/jquery-1.10.2.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script-->
@@ -42,7 +42,7 @@
       <!--myscripts-->
 
       <script type="text/javascript" src="appJS/util.js"></script>
-      <script src="appJS/Hwdrepo.js"></script>
+      <script type="text/javascript" src="appJS/Hwdrepo.js"></script>
       <!-- This script handles the tabbed pane functionality -->
       <script type="text/javascript">
                   var user_id;
@@ -78,8 +78,10 @@
          $('.collapsed').children().hide('medium');
          })
          });
+
+         Hwdrepo.initiateRequests();
          
-                 Hwdrepo.viewRequests(1);
+                 
              
              });
                 
@@ -134,12 +136,8 @@
                                  <a href="logout">Sign-out</a>
                               </li>
                               <li class="middle">|</li>
-                              <li class="middle">
-                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
-                              </li>
-                              <li class="middle">|</li>
                               <li class="left">
-                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+                                 <a target="_blank" href="about.html">About</a>
                               </li>
                            </ul>
                         </div>
@@ -176,7 +174,7 @@
                                              </tbody>
                                           </table>
                                        </td>
-                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                       <td class="page-header-help"><a href="README.md" target="_blank">Help</a></td>
                                     </tr>
                                  </tbody>
                               </table>
@@ -197,56 +195,52 @@
                                           <h2><span style="color: #00346e">My Device Requests</span></h2>
                                           <!-- Get the data from DB and show here -->
 
-                                           </br>
-                                       <hr/>
-                                       </br>
+                                           <br/>
+                                       <hr  style="margin-bottom: 25px"/>
+                                       <br/>
                                           <ul id="expList" >
                                         <li>
                                           <h3><span style="color: #00346e">New Requests</span></h3>
                                           <!-- Get the data from DB and show here -->
                                           <ul>
-                                             </br>
                                              <li>
+                                             <br/>
                                                 <div id="newRequestDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>
+                                          <br/>
+                                       <br/>
                                        </li>
-                                       </br>
-                                       <hr/>
-                                       </br>
                                        <li>
                                           <h3><span style="color: #00346e">Rejected Requests</span></h3>
                                           <!-- Get the data from DB and show here -->
                                           <ul>
-                                             </br>
                                              <li>
+                                             <br/>
                                                 <div id="rejectRequestDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>
+                                          <br/>
+                                          <br/>
                                        </li>
-                                       </br>
-                                       <hr/>
-                                       </br>
                                         <li>
                                           <h3><span style="color: #00346e">Resolved Requests</span></h3>
                                           <!-- Get the data from DB and show here -->
                                           <ul>
-                                             </br>
                                              <li>
+                                             <br/>
                                                 <div id="resolvedRequestDiv" class="datagrid">
                                                 </div>
                                              </li>
                                           </ul>
                                        </li>
                                           </ul>
+                                          <br/>
+                                       <br/>
                                        </li>
-                                       </br>
-                                       <hr/>
-                                       </br>
-
-                                    </ul>
+                                       </ul>
                                  </div>
                               </div>
                            </td>

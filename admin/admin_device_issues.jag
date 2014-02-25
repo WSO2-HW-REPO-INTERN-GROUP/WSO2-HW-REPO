@@ -1,0 +1,171 @@
+
+<%
+    include("adminCheck.jag");
+    var userName=session.get('LOGGED_IN_USER');
+    var dataGetFilesLocation="admin/dataGetFiles/";
+%>
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Admin:Home</title>
+        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/adminDeviceIssuesStyle.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="css/carbonFormStyles.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+        <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.form.js"></script>
+        <script type="text/javascript" src="js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.js"></script>
+        <script type="text/javascript" src="js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.core.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.tabs.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/WSRequest.js"></script>
+        <script type="text/javascript" src="js/cookies.js"></script>
+        <script type="text/javascript" src="js/customControls.js"></script>
+        <script type="text/javascript" src="js/admin_device_issues_functions.js"></script>
+        <!-- This script handles the tabbed pane functionality -->
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                getReportedIssues();
+            });
+        </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+
+        <div id="dcontainer"></div>
+        <script type="text/javascript" src="./page2_files/dialog.js"></script>
+        <!-- JS imports for collapsible menu -->
+        <script src="./page2_files/yahoo-dom-event.js" type="text/javascript"></script>
+        <script src="./page2_files/animation-min.js" type="text/javascript"></script>
+        <script src="./page2_files/template.js" type="text/javascript"></script>
+        <script src="./page2_files/yahoo-min.js" type="text/javascript"></script>
+        <script src="./page2_files/selector-min.js" type="text/javascript"></script>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <div id="header-div">
+                            <div class="right-logo">WSO2 Hardware Repository</div>
+                            <div class="left-logo">
+                                <a href="https://localhost:9443/carbon/admin/index.jsp" class="header-home"><img src="./page2_files/1px.gif" width="300px" height="32px"></a>
+                            </div>
+                            <div class="middle-ad">
+                            </div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong><%print(userName);%>
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="logout">Sign-out</a>
+                                        </li>
+					<li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="userhome">Login As User</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top" height="400px">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
+                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="body">
+                                        <img src="./page2_files/1px.gif" width="735px" height="1px">
+                                    </td>
+                                </tr>
+                                <!--This is edited for devices grid implementation -->
+                                <tr>
+                                    <td>
+                                        <div id="issuesMainContainer" class="main_container">
+                                            <h2 style="margin:50px 0px 0px 50px;color: #00346e">Reported Issues</h2>
+                                            <br/>
+                                            <div id="deviceIssuesDevision">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- End of devices grid generation -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()){
+                document.documentElement.className+=' ie10';
+            }
+        </script>
+    </body>
+</html>

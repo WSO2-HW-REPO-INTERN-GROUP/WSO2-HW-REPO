@@ -1,12 +1,7 @@
 <%
-var log = new Log();
 if(session.get("Logged")){
-	if(!(session.get("role")=='user')){
-		if(!(session.get("role")=='admin')){
+	if(!(session.get("role")=='user')&&!(session.get("role")=='admin')){
 			response.sendRedirect("logout");
-		}else{
-			response.sendRedirect("");
-		}
 	}
 }else{
 	session.put("prevURL",request.getRequestURL());

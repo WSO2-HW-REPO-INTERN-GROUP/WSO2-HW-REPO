@@ -48,7 +48,7 @@
 						var reqXML = samlXML..attrb::AttributeValue;
 						var roleList = (reqXML+"").split(',');
 						session.put("Roles", roleList);
-						if(roleList.indexOf("Admin") > -1){
+						if(roleList.indexOf("hwadmin") > -1){
 							session.put("role","admin");
 						}else{
 							session.put("role","user");

@@ -99,7 +99,7 @@ table#main-table {
 	width: 100%;
 }
 table#main-table td {
-    padding: 0px;
+	padding: 0px;
 }
 table#main-table td#header {
 	background-image: url( /images/header-region-bg.gif);
@@ -1492,9 +1492,6 @@ label.error{
     -moz-border-radius: 5px 5px 5px 5px;
     -webkit-border-radius: 5px 5px 5px 5px;
     border: 2px solid #0067b1;
-    padding-left: 40px;
-    padding-right: 40px;
-
 }
 
 .inputField {
@@ -1600,12 +1597,14 @@ label.error{
     background: #E1EEF4;
     color: #121212;
 }
+<<<<<<< HEAD
 
 .err td{
     background: #F54C4C;
     color: #121212;
 }
-
+=======
+>>>>>>> master
 /*.datagrid table tbody td:first-child {
     border-left: none;
 }
@@ -1618,7 +1617,7 @@ label.error{
 }
 
 #expList{
-    width: auto;
+    width: 1000px;
     margin: 40px auto;
 }
 

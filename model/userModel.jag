@@ -5,12 +5,28 @@
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
+var dataStore=require("../store.json");
+var dssUrl = dataStore.urlConfigurations.dssUrl;
 
 function checkUser(user){
 
+    var url = dssUrl + "CheckEmployeeAvailability";
+    var rslt = get(url, {
+        "emp_id": user
+    }, {
+        "Accept": "application/json"
+    }, "json");
 
+    return returnValue(rslt.data.BaseElement);
 }
 function putUser(user){
+    var url = dssUrl+"AddEmployee"
+    var headers = {"Accept":"application/json" };
+    var rslt=post(url,{"emp": user},headers,'json',function(data,xhr){});
+    
+    log.info(user);
+
+    return rslt;
 
 }
 function viewDeviceByID(deviceID) {
@@ -34,8 +50,7 @@ function viewAccessoryByDeviceID(deviceID) {
     var url = dssUrl + "GetAccessoriesByDeviceID";
     var rslt = get(url, {
         "dev_id": deviceID
-    }, {
-        "Accept": "application/json"
+    }, {"Accept": "application/json"
     }, "json");
 
     return returnValue(rslt.data.BaseElement);
@@ -43,11 +58,12 @@ function viewAccessoryByDeviceID(deviceID) {
 
 function viewUpgradeHistoryByDeviceID(deviceID) {
 
+    
+
     var url = dssUrl + "GetDeviceUpgradeHistory";
     var rslt = get(url, {
         "device_id": deviceID
-    }, {/*"Content-Type":"application/json",*/
-        "Accept": "application/json"
+    }, {"Accept": "application/json"
     }, "json");
 
     //log.info(rslt);
@@ -168,6 +184,7 @@ function addIssue(issue) {
     var headers = {"Accept":"application/json" };
     var rslt=post(url,issue,headers,'json',function(data,xhr){});
     //log.info(rslt);
+    return rslt;
 
 }
 
@@ -179,6 +196,7 @@ function editIssue(issue){
   var headers = {"Accept":"application/json" };
   var rslt=post(url,issue,headers,'json',function(data,xhr){});
    //log.info(rslt);
+   return rslt;
 }
 function deleteIssue(issue){
 
@@ -188,6 +206,7 @@ function deleteIssue(issue){
   var headers = {"Accept":"application/json" };
   var rslt=post(url,issue,headers,'json',function(data,xhr){});
  //  log.info(rslt);
+ return rslt;
 }
 
 function deleteRequest(requestID) {
@@ -198,6 +217,7 @@ function deleteRequest(requestID) {
     var headers = {"Accept":"application/json" };
     var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
    // log.info(rslt);
+   return rslt;
 
 }
 
@@ -208,6 +228,7 @@ function confirmRequest(requestID) {
     var headers = {"Accept":"application/json" };
     var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
    // log.info(rslt);
+   return rslt;
 
 }
 

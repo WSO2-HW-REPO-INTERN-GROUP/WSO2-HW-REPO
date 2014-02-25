@@ -3,9 +3,17 @@
    *** project-wso2 Hardware Repository
    *** interns UOM-2014 -->  
 <%
-   //include("userCheck.jag");
-   session.put('LOGGED_IN_USER','maheshakya@wso2.com');
+   include("userCheck.jag");
+   include("../model/userModel.jag");
+   session.put('LOGGED_IN_USER','mihil@wso2.com');
    var userName=session.get('LOGGED_IN_USER');
+
+   if(checkUser(userName) == ''){
+
+            log.info("putUser :" +putUser(userName));
+
+        }
+
    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
@@ -115,7 +123,7 @@
 
          });
              
-         Hwdrepo.viewRequests(0); 
+         Hwdrepo.initiateHome();
          
          
          });
@@ -172,7 +180,7 @@
                                  %>
                               <li class="middle">|</li>
                               <li class="left">
-                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a> 
+                                 <a target="_blank" href="about.html">About</a> 
                               </li>
                            </ul>
                         </div>
@@ -209,7 +217,7 @@
                                              </tbody>
                                           </table>
                                        </td>
-                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                       <td class="page-header-help"><a href="README.md" target="_blank">Help</a></td>
                                     </tr>
                                  </tbody>
                               </table>

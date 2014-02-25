@@ -1,0 +1,82 @@
+<%
+	var store=require("../store.json");
+	var dssUrl=store.urlConfigurations.dssUrl;
+	tableDataArray={"aaData": []};
+	var log=new Log();
+
+	var searchedData;
+	var queryType=request.getParameter("queryType");
+	var searchText=request.getParameter("searchText");
+
+	if(queryType=="0"){
+		var url=dssUrl+"GetDeviceBasicBySN";
+		var data={sn:searchText};
+		searchedData=getSearchedDevices(url,data);
+	}
+
+	else if(queryType=="1"){
+		var url=dssUrl+"GetDeviceByEmployeeID";
+
+    	var data={emp_id:searchText};
+    	searchedData=getSearchedDevices(url,data);
+	}
+
+    else if(queryType=="2"){
+    	var url=dssUrl+"GetDeviceBasicByModel";
+
+    	var data={model:searchText};
+    	searchedData=getSearchedDevices(url,data);
+    }
+
+	else if(queryType=="3"){
+		var url=dssUrl+"GetDeviceBasicByType";
+
+		var data={dev_type:searchText};
+		searchedData=getSearchedDevices(url,data);
+	}
+
+	for (var i = 0; i < searchedData.length; i++) {
+
+        	var dataArr=[];
+            var deviceId;
+            var object = searchedData[i];
+
+            for (var property in object) {
+                if (property == "device_id") {
+                    deviceId = object[property];
+                }
+                dataArr.push(object[property]);
+            }
+            dataArr.push('<a target="_blank" href="admindevicedetails?id='+deviceId+'">more</a>');
+            dataArr.push('<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick="deleteDevice('+object.device_id+')">Delete</label>');
+            tableDataArray.aaData.push(dataArr);
+    }
+
+    print(tableDataArray);
+
+ function getSearchedDevices(url,data){
+		var type = "json";
+		var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            return forcedArray;
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                return forcedArray;
+            }
+            else{
+                return dataArray;
+            }
+        }
+	}
+%>

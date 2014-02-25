@@ -1,0 +1,24 @@
+<%
+
+    var issueID=request.getParameter("issueID");
+
+    var newIssue=false;
+
+
+    print('<div id="basicDetailsDiv">');
+
+
+
+    print(
+        '<table id="issueDetailTable"><tbody>'+
+            '<tr><td>Issue ID</td><td>'+issueID+'</td>'+'</tr>'+
+            '<tr><td>Reported Date</td><td>2012/12/12</td></tr>'+
+            '<tr><td>User Name</td><td>saminda@wso2.com</td></tr>'+
+            '</tbody></table>'
+    );
+
+
+
+
+
+%>

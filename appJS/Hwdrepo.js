@@ -3,7 +3,7 @@
  * project-wso2 Hardware Repository
  * interns UOM- 2014
  */
-var controllerPath = "/WSO2-HW-REPO/server/user/";
+var controllerPath ="server/user/";
 
 var Issuetemplate;
 var Upgradetemplate;
@@ -12,9 +12,11 @@ var Accessorytemplate;
 var Requestemplate;
 var userID;
 
-HwdrepoUtil.makeRequest("GET", "store.json", null, "json", function (data){
 
-    //controllerPath = data.urlConfigurations.controllerPath;
+    HwdrepoUtil.makeRequest("GET", controllerPath+"getUser",null,'json', function (data) {
+
+            userID = data.user_id;
+    // alert(JSON.stringify(userID));
 });
 HwdrepoUtil.makeRequest("GET", "templates/requestTemplate.html", null, null, function (template) {
 
@@ -36,13 +38,57 @@ HwdrepoUtil.makeRequest("GET", "templates/accessoryTemplate.html", null, null, f
 
     Accessorytemplate = template;
 });
-HwdrepoUtil.makeRequest("PUT", controllerPath+"userCheck",null,'json', function (data) {
 
-    userID = data.user_id;
-    // alert(JSON.stringify(userID));
-});
 
 Hwdrepo = new function () {
+
+    this.initiateHome = function(){
+
+        $.getJSON("store.json", function(data){
+
+     console.log("Hwdrepo_func :" + "getJSON");
+
+    controllerPath = data.urlConfigurations.controllerPath;
+
+    Hwdrepo.viewRequests(0); 
+
+});
+   
+    }
+    this.initiateDeviceDetails = function(deviceID){
+
+        $.getJSON("store.json", function(data){
+
+    controllerPath = data.urlConfigurations.controllerPath;
+
+    Hwdrepo.getDeviceDetails(deviceID);
+
+});
+
+    }
+
+    this.initiateRequests = function(){
+
+        $.getJSON("store.json", function(data){
+
+    controllerPath = data.urlConfigurations.controllerPath;
+
+    Hwdrepo.viewRequests(1);
+
+});
+
+    }
+    this.initiateIssues = function(){
+
+        $.getJSON("store.json", function(data){
+
+    controllerPath = data.urlConfigurations.controllerPath;
+
+    Hwdrepo.getUserIssues();
+
+});
+
+    }
 
 
     this.loadDevices = function () {
@@ -351,8 +397,6 @@ Hwdrepo = new function () {
                 alert(JSON.stringify(status));
                 Hwdrepo.viewRequests(0);
             });
-
-        Hwdrepo.viewRequests(0);
 
     }
 
@@ -714,9 +758,9 @@ Hwdrepo = new function () {
         HwdrepoUtil.makeJsonRequest("POST",controllerPath+'devices/'+deviceID+'/issues', JSON.stringify({
                 issue: issueData
             }),
-            function (data) {
+            function (data,status) {
+                alert(JSON.stringify(status));
                 Hwdrepo.loadIssueHistory(deviceID);
-                //location.reload();
 
             });
     }
@@ -727,7 +771,31 @@ Hwdrepo = new function () {
 
         if (resolve == 0) {
 
-            $("#editIssueDialog").dialog("option", "buttons", [
+            if(status==='resolved'){
+                if(window.confirm("Issue is unresolved? Are you sure?")===true){
+
+                HwdrepoUtil.makeJsonRequest("PUT",controllerPath+'devices/'+dev_id+'/issues/'+issue_no, JSON.stringify({
+                                                issue: {
+                                                    "sts": status,
+                                                    "desc": issue,
+                                                    "date": oldDate,
+                                                    "resolv": resolve
+                                                }
+                                            }),
+                                            function (data) {
+
+                                                if (Hwdrepo.nullCheck(document.getElementById('issueDiv'))) {
+                                                    Hwdrepo.getUserIssues();
+                                                } else {
+
+                                                    Hwdrepo.loadIssueHistory(dev_id);
+                                                }
+
+                                            });
+            }
+            }
+            else{
+                $("#editIssueDialog").dialog("option", "buttons", [
 
                 {
                     text: "Ok",
@@ -791,7 +859,7 @@ Hwdrepo = new function () {
 
             }]);
 
-        $("#editDatepicker").datepicker({
+             $("#editDatepicker").datepicker({
             autoOpen: false,
             dateFormat: "yy-mm-dd"
         });
@@ -799,9 +867,11 @@ Hwdrepo = new function () {
         $("#editIssueDescription").val(issue);
         $("#editIssueDialog").dialog("open");
 
+            }
+
     } else if (resolve == 4) {
 
-        alert("this will delete the issue, are you sure?");
+        if(window.confirm("Delete the issue? This is unrecoverable!")===true){
 
 
         HwdrepoUtil.makeRequest("DELETE",controllerPath+'issues/'+issue_no,null,'json',
@@ -815,10 +885,11 @@ Hwdrepo = new function () {
                 }
 
             });
+    }
 
     } else {
 
-
+        if(window.confirm("Issue is resolved?")===true){
         HwdrepoUtil.makeJsonRequest("PUT",controllerPath+'devices/'+dev_id+'/issues/'+issue_no, JSON.stringify({
                 operation: "editIssue",
                 issue: {
@@ -842,6 +913,7 @@ Hwdrepo = new function () {
             });
 
     }
+}
 }
 this.loadDialogs = function (deviceID) {
     console.log("Hwdrepo_func :" + "loadDialogs" + '-' + deviceID);
@@ -918,6 +990,8 @@ this.getUserID = function () {
 }
 this.deleteRequest = function (request_id) {
     console.log("Hwdrepo_func :" + "deleteRequest" + '-' + request_id);
+
+    if(window.confirm("Delete the request? this is unrecoverable!")===true){
     HwdrepoUtil.makeRequest("DELETE", controllerPath+'requests/'+request_id,null,'json',
         function (html) {
 
@@ -925,17 +999,20 @@ this.deleteRequest = function (request_id) {
 
         });
 
-    Hwdrepo.viewRequests(1);
+}
 
 }
 this.confirmRequest = function (request_id) {
     console.log("Hwdrepo_func :" + "confirmRequest" + '-' + request_id);
+
+    if(window.confirm("Device Recieved?")===true){
     HwdrepoUtil.makeRequest("PUT",controllerPath+'requests/'+request_id,null,'json',
         function (html) {
 
             this.viewRequests(1);
 
         });
+}
 
 }
 this.nullCheck = function (value) {

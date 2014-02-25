@@ -3,30 +3,30 @@
    *** project-wso2 Hardware Repository
    *** interns UOM-2014 -->  
 <%
-   //include("userCheck.jag");
+   include("userCheck.jag");
    var userName=session.get('LOGGED_IN_USER');
    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <title>User:Issues</title>
 
 
-       <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
-      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
-      <link rel="stylesheet" href="css/carbonFormStyles.css">
-      <link rel="stylesheet" href="css/jquery-ui.css">
+       <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all"/>
+      <link rel="stylesheet" href="css/carbonFormStyles.css"/>
+      <link rel="stylesheet" href="css/jquery-ui.css"/>
       <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
 
-       <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all">
+       <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all"/>
 
 
       <!-- My CSS -->
-        <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css">
-         <link rel="stylesheet" href="css/jquery.dataTables.css">
+        <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css"/>
+         <link rel="stylesheet" href="css/jquery.dataTables.css"/>
 
       <!--[if gte IE 8]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
@@ -34,20 +34,19 @@
       <!--[if gte IE 7]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
-      <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-      <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+      <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon"/>
+      <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon"/>
 
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
       <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
       <script type="text/javascript" src="js/jquery-ui.js"></script-->
-      <script src="js/mustache.js"></script>
+      <script type="text/javascript" src="js/mustache.js"></script>
 
       <!--myscripts-->
 
       <script type="text/javascript" src="appJS/util.js"></script>
-      <script src="appJS/Hwdrepo.js"></script>
-      <!--script type="text/javascript" src="js/jquery.dataTables.js"></script-->
+      <script type="text/javascript" src="appJS/Hwdrepo.js"></script>
            
       <!-- This script handles the tabbed pane functionality -->
       <script type="text/javascript">
@@ -84,9 +83,8 @@
          $('.collapsed').children().hide('medium');
          })
          });
-         
-          Hwdrepo.getUserIssues();
 
+         Hwdrepo.initiateIssues();
 
           $( "#dialog-confirm" ).dialog({
          autoOpen: false,
@@ -162,12 +160,8 @@
                                  <a href="logout">Sign-out</a>
                               </li>
                               <li class="middle">|</li>
-                              <li class="middle">
-                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
-                              </li>
-                              <li class="middle">|</li>
                               <li class="left">
-                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+                                 <a target="_blank" href="about.html">About</a>
                               </li>
                            </ul>
                         </div>
@@ -204,7 +198,7 @@
                                              </tbody>
                                           </table>
                                        </td>
-                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                       <td class="page-header-help"><a href="README.md" target="_blank">Help</a></td>
                                     </tr>
                                  </tbody>
                               </table>
@@ -223,68 +217,64 @@
                                        <li>
                                           <h2><span style="color: #00346e">My Device Issues</span></h2>
                                           <!-- Get the data from DB and show here -->
-                                          </br>
-                                          <hr/>
-                                          </br>
+                                          <br/>
+                                           <hr  style="margin-bottom: 25px"/>
+                                          <br/>
                                           <ul id="expList" >
                                              <li>
                                                 <h3><span style="color: #00346e">New Issues</span></h3>
                                                 <!-- Get the data from DB and show here -->
                                                 <ul>
-                                                   </br>
                                                    <li>
+                                                   <br/>
                                                       <div id="newIssueDiv" class="datagrid">
                                                       </div>
                                                    </li>
                                                 </ul>
+                                                <br/>
+                                                <br/>
                                              </li>
-                                             </br>
-                                             <hr/>
-                                             </br>
                                              <li>
                                                 <h3><span style="color: #00346e">Rejected Issues</span></h3>
                                                 <!-- Get the data from DB and show here -->
                                                 <ul>
-                                                   </br>
                                                    <li>
+                                                   <br/>
                                                       <div id="rejectIssueDiv" class="datagrid">
                                                       </div>
                                                    </li>
                                                 </ul>
+                                                <br/>
+                                                <br/>
                                              </li>
-                                             </br>
-                                             <hr/>
-                                             </br>
                                              <li>
                                                 <h3><span style="color: #00346e">Admin Resolved Issues</span></h3>
                                                 <!-- Get the data from DB and show here -->
                                                 <ul>
-                                                   </br>
                                                    <li>
+                                                   <br/>
                                                       <div id="resolvedIssueDiv" class="datagrid">
                                                       </div>
                                                    </li>
                                                 </ul>
+                                                <br/>
+                                                <br/>
                                              </li>
-                                             </br>
-                                             <hr/>
-                                             </br>
                                              <li>
                                                 <h3><span style="color: #00346e">Past Issues</span></h3>
                                                 <!-- Get the data from DB and show here -->
                                                 <ul>
-                                                   </br>
                                                    <li>
+                                                   <br/>
                                                       <div id="pastIssueDiv" class="datagrid">
                                                       </div>
                                                    </li>
                                                 </ul>
                                              </li>
                                           </ul>
+                                          <br/>
+                                          <br/>
                                        </li>
-                                       </br>
-                                       <hr/>
-                                       </br>
                                     </ul>
                                  </div>
                               </div>

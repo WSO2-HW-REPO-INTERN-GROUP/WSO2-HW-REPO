@@ -16,7 +16,6 @@
     %>
 
     <div>
-
         <p>You are now being redirected to Identity Server. If the
             redirection fails, please click on the button below.</p>
         <form method="post" action="<%=postUrl%>">
@@ -29,7 +28,7 @@
         </form>
     </div>
     <script type = "text/javascript" >
-        document.forms[0].submit();
+       document.forms[0].submit();
     </script>
     <%
     }else{

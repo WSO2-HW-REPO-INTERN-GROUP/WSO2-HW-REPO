@@ -1,0 +1,242 @@
+<%
+	var store=require("../store.json");
+	var dssUrl=store.urlConfigurations.dssUrl;
+	tableDataArray={"aaData": []};
+	var log=new Log();
+
+	var searchedData;
+	var queryType=request.getParameter("queryType");
+	var searchText=request.getParameter("searchText");
+
+	if(queryType=="0"){
+		var url=dssUrl+"GetDeviceBasicBySN";
+		var data={sn:searchText};
+		searchedData=getSearchedDevices(url,data);
+	}
+
+	else if(queryType=="1"){
+
+	}
+
+    else if(queryType=="2"){
+    	var url=dssUrl+"GetDeviceBasicByModel";
+
+    	var data={model:searchText};
+    	searchedData=getSearchedDevices(url,data);
+    }
+
+	else if(queryType=="3"){
+		var url=dssUrl+"GetDeviceBasicByType";
+
+		var data={dev_type:searchText};
+		searchedData=getSearchedDevices(url,data);
+	}
+
+	for (var i = 0; i < searchedData.length; i++) {
+
+        	var dataArr=[];
+            var deviceId;
+            var object = searchedData[i];
+
+            for (var property in object) {
+                if (property == "device_id") {
+                    deviceId = object[property];
+                }
+                dataArr.push(object[property]);
+            }
+            dataArr.push('<a href="HW_REPO/admindevicedetails?id='+deviceId+'">more</a>');
+            tableDataArray.aaData.push(dataArr);
+    }
+
+    log.info(tableDataArray);
+
+    print(tableDataArray);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// if(queryType=="3"){
+
+	// 		var url=dssUrl+"GetDeviceBasicByType";
+	// 		// var data={sn:searchText};
+	// 		var data={dev_type:searchText};
+	// 		// searchedData=getSearchedDevices(url,data);
+
+
+
+
+
+	// 	var type = "json";
+	// 	var headers = {"Accept":"application/json" };
+ //        var result=post(url,data,headers,"json");
+ //        var jsonData=result.data;
+
+
+
+ //        var elementArray=jsonData["BaseElement"];
+ //        var dataArray=elementArray["Element"];
+
+ //        // log.info(jsonData);
+        
+        
+ //        for (var i = 0; i < dataArray.length; i++) {
+
+ //        	var dataArr=[];
+ //            var deviceId;
+ //            var object = dataArray[i];
+
+ //            for (var property in object) {
+ //                if (property == "device_id") {
+ //                    deviceId = object[property];
+ //                }
+ //                dataArr.push(object[property]);
+                	
+ //                	// log.info(property);
+ //            }
+ //            dataArr.push('<a href="admin_device_details.jag?id='+deviceId+'">more</a>');
+ //            tableDataArray.aaData.push(dataArr);
+ //        }
+	// }
+	// // dataArr.push(tableDataArray);
+
+	// log.info(tableDataArray);
+	// print(tableDataArray);
+
+	// else if(queryType=="1"){
+
+	// }
+
+ //    else if(queryType=="2"){
+ //    	var url=dssUrl+"GetDeviceBasicByModel";
+
+ //    	var data={model:searchText};
+ //    	searchedData=getSearchedDevices(url,data);
+ //    }
+
+
+
+	// else if(queryType=="3"){
+	// 	var url=dssUrl+"GetDeviceBasicByType";
+
+	// 	var data={dev_type:searchText};
+	// 	searchedData=getSearchedDevices(url,data);
+	// }
+
+
+	// for (var i = 0; i < searchedData.length; i++) {
+ //        	var dataArr=[];
+ //            var deviceId;
+ //            var object = searchedData[i];
+
+ //            for (var property in object) {
+ //                if (property == "device_id") {
+ //                    deviceId = object[property];
+ //                }
+ //                	dataArr.push(object[property]);
+ //            }
+ //            dataArr.push('<a href="admin_device_details.jag?id='+deviceId+'">more</a>');
+ //            tableDataArray.aaData.push(dataArr);
+ //        }
+
+        // print(tableDataArray);
+
+	
+
+	// var store=require("../store.json");
+	// var dssUrl=store.urlConfigurations.dssUrl;
+
+	// var url  = dssUrl+"GetAllDeviceBasicAdmin";
+ //    var type = "json";
+ //    tableDataArray={"aaData": []};
+
+    
+
+ //    var headers = {"Accept":"application/json" };
+ //    var result=post(url,{},headers,"json");
+ //    var jsonData=result.data;
+
+ //    var elementArray=jsonData["BaseElement"];
+ //    var dataArray=elementArray["Element"];
+
+ //        for (var i = 0; i < dataArray.length; i++) {
+ //        	var dataArr=[];
+ //            var deviceId;
+ //            var object = dataArray[i];
+
+ //            for (var property in object) {
+ //                if (property == "device_id") {
+ //                    deviceId = object[property];
+ //                }
+ //                	dataArr.push(object[property]);
+ //            }
+ //            dataArr.push('<a href="admin_device_details.jag?id='+deviceId+'">more</a>');
+ //            tableDataArray.aaData.push(dataArr);
+ //        }
+
+ //    print(tableDataArray);
+
+ // print("gdgdgdgdg");
+
+
+
+ function getSearchedDevices(url,data){
+		var type = "json";
+		var headers = {"Accept":"application/json" };
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        // log.info(jsonData);
+        
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            return forcedArray;
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                return forcedArray;
+            }
+            else{
+                return dataArray;
+            }
+        }
+	}
+%>

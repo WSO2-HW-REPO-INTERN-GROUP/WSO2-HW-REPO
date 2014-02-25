@@ -1,0 +1,15 @@
+<%
+ var log = new Log();
+ if(session.get("Logged")){
+ 	if(!((session.get("role")=='admin')||(session.get("LOGGED_IN_USER")=="nadeeshaan@wso2.com"))){
+ 		if(!(session.get("role")=='user')){
+ 			response.sendRedirect("logout");
+ 		}else{
+ 			response.sendRedirect("");
+ 		}
+ 	}
+ }else{
+ 	session.put("prevURL",request.getRequestURL());
+ 	response.sendRedirect("login");
+ }
+%>

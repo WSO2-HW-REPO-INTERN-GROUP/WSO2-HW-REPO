@@ -6,10 +6,7 @@
 * interns UOM- 2014
 */
 
-include("../model/inputModel.jag");
-
-var dataStore=require("../store.json");
-var dssUrl = dataStore.urlConfigurations.dssUrl;
+include("../model/userModel.jag");
 
 response.contentType = 'text/javascript';
 
@@ -37,25 +34,18 @@ var uriMatcher = new URIMatcher(callPath);
 
     if(uriMatcher.match("/{operation}")) {     
         opr = uriMatcher.elements().operation;
-        log.info(opr);
 
     }
     if(uriMatcher.match("/{operation}/{id}")) { 
         opr = uriMatcher.elements().operation;    
         id1 = uriMatcher.elements().id;
 
-        log.info(opr);
-        log.info(id1);
 
     }
     if(uriMatcher.match("/{operation}/{id}/{depopr}")) { 
         opr = uriMatcher.elements().operation;    
         id1 = uriMatcher.elements().id;
         opr2 = uriMatcher.elements().depopr; 
-
-        log.info(opr);
-        log.info(id1);
-        log.info(opr2);
 
     }
     if(uriMatcher.match("/{operation}/{id}/{depopr}/{depid}")) { 
@@ -64,13 +54,11 @@ var uriMatcher = new URIMatcher(callPath);
         opr2 = uriMatcher.elements().depopr;
         id2 = uriMatcher.elements().depid;
 
-        log.info(opr);
-        log.info(id1);
-        log.info(opr2);
-        log.info(id2);
-
     }
 }
+
+log.info("Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
+
 
 if (verb == "POST") {
 
@@ -125,7 +113,13 @@ if (verb == "GET" ) {
             print({"requests":[result]});
         }
 
-    } else if (opr == 'devices' && opr2 ==null) {
+    }
+
+    else if(opr == 'getUser'){
+
+       print({'user_id':user_id});
+
+    }else if (opr == 'devices' && opr2 ==null) {
 
         if(id1 !=null){
             var result =viewDeviceByID(id1);
@@ -152,7 +146,7 @@ if (verb == "GET" ) {
 
         //log.info(viewUpgradeHistoryByDeviceID(deviceID));
 
-        print(viewUpgradeHistoryByDeviceID(id2));
+        print(viewUpgradeHistoryByDeviceID(id1));
 
     }
     else if (opr == 'devices' && opr2== 'accessories') {
@@ -195,19 +189,8 @@ if (verb == "GET" ) {
 }
 if(verb=="PUT"){
 
-    if(opr == 'userCheck'){
 
-        if(checkUser(user_id) == null){
-
-            putUser(user_id);
-
-        }
-
-       print({'user_id':user_id});
-
-    }
-
-    else if(opr2=='issues' && id2 != null){
+if(opr2=='issues' && id2 != null){
 
             var editIssueObj = data;
 
@@ -216,7 +199,8 @@ if(verb=="PUT"){
       editIssueObj.issue.emp_id=user_id;
       editIssueObj.issue.dev_id=id1;
       editIssueObj.issue.issue_id=id2;
-       editIssue(editIssueObj.issue);
+
+       print(editIssue(editIssueObj.issue));
 
     }
     else if (opr=='issues' && id1 != null) {
@@ -232,7 +216,7 @@ if(verb =="DELETE"){
 
         var deleteIssueObj = {'emp_id':user_id,'issue_id':id1};
       
-       deleteIssue(deleteIssueObj);
+       print(deleteIssue(deleteIssueObj));
 
     }
     else if(opr=='requests' && id1 != null){

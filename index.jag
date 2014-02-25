@@ -6,7 +6,7 @@ if(!session.get("Logged")) {
 		response.sendRedirect("login");
 	}
 	else{
-		if(roles.indexOf("Admin") > -1){
+		if(roles.indexOf("hwadmin") > -1){
 			session.put("prevURL","");
 			session.put("role","admin");
 			response.sendRedirect("adminhome");
