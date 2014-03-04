@@ -3,7 +3,8 @@
    *** project-wso2 Hardware Repository
    *** interns UOM-2014 -->  
 <%
-   include("userCheck.jag");
+   //include("userCheck.jag");
+   session.put('LOGGED_IN_USER','tharindup@wso2.com');
    var userName=session.get('LOGGED_IN_USER');
    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -30,13 +31,10 @@
       <!--[if gte IE 7]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
-<<<<<<< HEAD
+
       <link rel="icon" href="images/favicon.ico" type="image/x-icon">
          <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-=======
-      <!--link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
-         <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon"-->
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+
       <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
       <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
@@ -283,10 +281,8 @@
                                                 <option id="option2">laptop</option>
                                                 <option id="option3">desktop</option>
                                                 <option id="option4">server</option>
-<<<<<<< HEAD
                                                 <option id="option5">other</option>
-=======
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+
                                              </select>
                                           </td>
                                        </tr>
@@ -316,11 +312,7 @@
                   <div id="footer-div">
                      <div class="footer-content">
                         <div class="copyright">
-<<<<<<< HEAD
                            © 2005 - 2014 WSO2 Inc. All Rights Reserved.
-=======
-                           © 2005 - 2013 WSO2 Inc. All Rights Reserved.
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                         </div>
                      </div>
                   </div>
@@ -334,8 +326,5 @@
          }
       </script>
    </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+

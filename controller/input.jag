@@ -5,13 +5,11 @@
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
-<<<<<<< HEAD
+
 var user_id = session.get("LOGGED_IN_USER");
 
 if (user_id !== null){
-=======
 
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 include("../model/userModel.jag");
 
 var dataStore=require("../store.json");
@@ -28,13 +26,7 @@ var log = new Log();
 
 log.info(verb +'-URI: '+uri+'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
 
-<<<<<<< HEAD
 var callPath=uri.replace("/HW_REPO/server/user","");
-=======
-var callPath=uri.replace("/WSO2-HW-REPO/server/user","");
-
-var user_id = session.get("LOGGED_IN_USER");
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
 var opr;
 var opr2;
@@ -70,12 +62,7 @@ if(uri != null) {
     }
 }
 
-<<<<<<< HEAD
 log.info("User: "+user_id+" : Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
-=======
-log.info("Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
-
 
 if (verb == "POST") {
 
@@ -243,15 +230,10 @@ if(verb=="PUT"){
         print(editIssue(editIssueObj.issue));
 
     }
-<<<<<<< HEAD
     else if (opr=='requests' && id1 != null) {
 
         print(confirmRequest(id1,user_id));
-=======
-    else if (opr=='issues' && id1 != null) {
 
-        print(confirmRequest(request_id));
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
     }
 
@@ -269,9 +251,8 @@ if(verb =="DELETE"){
     else if(opr=='requests' && id1 != null){
 
 
-        //log.info(request_id);
+        //log.info(id1+','+user_id);
 
-<<<<<<< HEAD
         print(deleteRequest(id1,user_id));
     }
 
@@ -282,11 +263,4 @@ else{
 }
 
 %>
-=======
-        print(deleteRequest(id1));
-    }
 
-}
-
-%>
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f

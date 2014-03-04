@@ -44,7 +44,7 @@ Hwdrepo = new function () {
         HwdrepoUtil.makeRequest("GET", controllerPath + "devices", null, "json",
             function (html) {
 
-                // alert(JSON.stringify(html));
+                //alert(JSON.stringify(html));
 
                 var devArea = document.getElementById('deviceArea');
                 devArea.innerHTML = '';
@@ -172,7 +172,9 @@ Hwdrepo = new function () {
     this.fillRequestTable = function (html) {
 
         console.log("Hwdrepo_func :" + "fillRequestTable" + '-' + html);
+        
         //alert(JSON.stringify(html.requests[0]));
+
         var reqArea = document.getElementById('requestArea');
         reqArea.innerHTML = '';
 
@@ -217,11 +219,8 @@ Hwdrepo = new function () {
 
                 var object = obj.requests[i];
 
-<<<<<<< HEAD
                 if (object.resolved != 3) {
-=======
-                if (object.resolved == 0 | object.resolved == 1) {
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+
                     var newRow = document.createElement('tr');
 
 
@@ -248,14 +247,14 @@ Hwdrepo = new function () {
 
                     tbody.appendChild(newRow);
                 }
+                
             }
-<<<<<<< HEAD
+
 		if(!(tbody.hasChildNodes())){
                     reqArea.innerHTML = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No uresolved requests from you, yet!</span></div>';
                     return;
                 }
-=======
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+
             reqTable.appendChild(tbody);
             reqArea.appendChild(reqTable);
         }
@@ -301,11 +300,8 @@ Hwdrepo = new function () {
                     formatting1 = formatting1.concat(code);
 
                 } else if (object.resolved == "1") {
-<<<<<<< HEAD
+
                     object.status = "Resolved";
-=======
-                    object.status = "Device Added";
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                     object.New = null;
                     object.resolved = "true";
                     object.rejected = null;
@@ -329,7 +325,6 @@ Hwdrepo = new function () {
                     object.resolved = null;
                     object.rejected = null;
                 }
-
                 //alert(JSON.stringify(object));
 
             }
@@ -420,7 +415,7 @@ Hwdrepo = new function () {
             function (data, status) {
                 var i = 0;
 
-                //alert(JSON.stringify(data));
+                alert(JSON.stringify(data));
 
 
 
@@ -566,8 +561,8 @@ Hwdrepo = new function () {
         HwdrepoUtil.makeRequest("GET", controllerPath + 'devices/' + deviceID + '/issues', null, 'json',
             function (data) {
 
-                //alert(JSON.stringify(data));
-
+                //alert(JSON.stringify(data[0]));
+                //alert(Issuetemplate);
 
                 var objArray = data;
 
@@ -606,10 +601,6 @@ Hwdrepo = new function () {
                             object.rejected = null;
 
                         }
-
-                        //if(object)
-
-
 
                         // alert(JSON.stringify(object));
 
@@ -766,6 +757,7 @@ Hwdrepo = new function () {
             function (data, status) {
                 Hwdrepo.loadIssueHistory(deviceID);
                 alert(JSON.stringify(status));
+                Hwdrepo.sendMail();
 
             });
     };
@@ -776,16 +768,13 @@ Hwdrepo = new function () {
 
         if (resolve == 0) {
 
-            if (status === 'resolved') {
+            if (status == 'resolved') {
                 if (window.confirm("Issue is unresolved? Are you sure?") === true) {
 
                     HwdrepoUtil.makeJsonRequest("PUT", controllerPath + 'devices/' + dev_id + '/issues/' + issue_no, JSON.stringify({
                             issue: {
-<<<<<<< HEAD
+
                                 "sts": 'Repeat Issue',
-=======
-                                "sts": status,
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                                 "desc": issue,
                                 "date": oldDate,
                                 "resolv": resolve
@@ -806,6 +795,7 @@ Hwdrepo = new function () {
 
                         });
                 }
+                return;
             } else {
                 $("#editIssueDialog").dialog("option", "buttons", [
 
@@ -908,11 +898,8 @@ Hwdrepo = new function () {
                 HwdrepoUtil.makeJsonRequest("PUT", controllerPath + 'devices/' + dev_id + '/issues/' + issue_no, JSON.stringify({
                         operation: "editIssue",
                         issue: {
-<<<<<<< HEAD
+
                             "sts": 'Past Issue',
-=======
-                            "sts": status,
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                             "desc": issue,
                             "date": oldDate,
                             "resolv": resolve,
@@ -1032,19 +1019,11 @@ Hwdrepo = new function () {
     this.confirmRequest = function (request_id) {
         console.log("Hwdrepo_func :" + "confirmRequest" + '-' + request_id);
 
-<<<<<<< HEAD
         if (window.confirm("Request is resolved?") === true) {
             HwdrepoUtil.makeRequest("PUT", controllerPath + 'requests/' + request_id, null, 'json',
                 function (html) {
 
                     Hwdrepo.viewRequests(1);
-=======
-        if (window.confirm("Device Recieved?") === true) {
-            HwdrepoUtil.makeRequest("PUT", controllerPath + 'requests/' + request_id, null, 'json',
-                function (html) {
-
-                    this.viewRequests(1);
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
                 });
         }
@@ -1180,8 +1159,14 @@ Hwdrepo = new function () {
 
             });
     };
-<<<<<<< HEAD
+
+
+    this.sendMail = function(){
+
+        var sendGmail = function(opts){ 
+            var str = 'http://mail.google.com/mail/?view=cm&fs=1'+ '&to=' + opts.to + '&su=' + opts.subject + '&body=' + opts.message + '&ui=1'; 
+            location.href = str; }
+    };
+
 };
-=======
-};
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+

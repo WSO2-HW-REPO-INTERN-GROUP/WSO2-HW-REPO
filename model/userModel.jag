@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 <%
 
 /* Author - mihil ranathunga
@@ -211,40 +208,25 @@ function deleteIssue(issue){
  return rslt;
 }
 
-<<<<<<< HEAD
-function deleteRequest(requestID,user) {
-=======
-function deleteRequest(requestID) {
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
-    //log.info(requestID);
+function deleteRequest(requestID,user) {
+
+    log.info(requestID+','+user);
 
     var url = dssUrl+"DeleteRequestFromID"
     var headers = {"Accept":"application/json" };
-<<<<<<< HEAD
     var rslt=post(url,{req_id:requestID,emp_id:user},headers,'json',function(data,xhr){});
-=======
-    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
    // log.info(rslt);
    return rslt;
 
 }
 
-<<<<<<< HEAD
 function confirmRequest(requestID,user) {
-=======
-function confirmRequest(requestID) {
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
 
     var url = dssUrl+"MarkRequestResolved"
     var headers = {"Accept":"application/json" };
-<<<<<<< HEAD
     var rslt=post(url,{req_id:requestID,emp_id:user},headers,'json',function(data,xhr){});
-=======
-    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
    // log.info(rslt);
    return rslt;
 
@@ -252,11 +234,7 @@ function confirmRequest(requestID) {
 
 function  returnValue(returnBaseElement){
 
-<<<<<<< HEAD
-    log.info(returnBaseElement);
-=======
    // log.info(returnBaseElement);
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
     //log.info(returnBaseElement.Element);
 
     if(returnBaseElement == null){
@@ -275,9 +253,5 @@ function  returnValue(returnBaseElement){
 
 }
 
+%>
 
-<<<<<<< HEAD
-%>
-=======
-%>
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
