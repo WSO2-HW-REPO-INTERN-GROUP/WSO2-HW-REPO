@@ -220,6 +220,7 @@ Hwdrepo = new function () {
                 var object = obj.requests[i];
 
                 if (object.resolved != 3) {
+
                     var newRow = document.createElement('tr');
 
 
@@ -248,10 +249,12 @@ Hwdrepo = new function () {
                 }
                 
             }
-            if(!(tbody.hasChildNodes())){
+
+		if(!(tbody.hasChildNodes())){
                     reqArea.innerHTML = '<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding:0 .7em;"><span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Information:</strong> No uresolved requests from you, yet!</span></div>';
                     return;
                 }
+
             reqTable.appendChild(tbody);
             reqArea.appendChild(reqTable);
         }
@@ -297,7 +300,8 @@ Hwdrepo = new function () {
                     formatting1 = formatting1.concat(code);
 
                 } else if (object.resolved == "1") {
-                    object.status = "Device Added";
+
+                    object.status = "Resolved";
                     object.New = null;
                     object.resolved = "true";
                     object.rejected = null;
@@ -769,7 +773,8 @@ Hwdrepo = new function () {
 
                     HwdrepoUtil.makeJsonRequest("PUT", controllerPath + 'devices/' + dev_id + '/issues/' + issue_no, JSON.stringify({
                             issue: {
-                                "sts": status,
+
+                                "sts": 'Repeat Issue',
                                 "desc": issue,
                                 "date": oldDate,
                                 "resolv": resolve
@@ -893,7 +898,8 @@ Hwdrepo = new function () {
                 HwdrepoUtil.makeJsonRequest("PUT", controllerPath + 'devices/' + dev_id + '/issues/' + issue_no, JSON.stringify({
                         operation: "editIssue",
                         issue: {
-                            "sts": status,
+
+                            "sts": 'Past Issue',
                             "desc": issue,
                             "date": oldDate,
                             "resolv": resolve,
@@ -1013,7 +1019,7 @@ Hwdrepo = new function () {
     this.confirmRequest = function (request_id) {
         console.log("Hwdrepo_func :" + "confirmRequest" + '-' + request_id);
 
-        if (window.confirm("Device Recieved?") === true) {
+        if (window.confirm("Request is resolved?") === true) {
             HwdrepoUtil.makeRequest("PUT", controllerPath + 'requests/' + request_id, null, 'json',
                 function (html) {
 
@@ -1154,10 +1160,13 @@ Hwdrepo = new function () {
             });
     };
 
+
     this.sendMail = function(){
 
         var sendGmail = function(opts){ 
             var str = 'http://mail.google.com/mail/?view=cm&fs=1'+ '&to=' + opts.to + '&su=' + opts.subject + '&body=' + opts.message + '&ui=1'; 
             location.href = str; }
-    }
+    };
+
 };
+

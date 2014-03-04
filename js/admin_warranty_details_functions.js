@@ -4,7 +4,11 @@ function readURL() {
 
     var i = 0;
 
+<<<<<<< HEAD
+    $.post("admin/dataGetFiles/admin_data_get.jag", {
+=======
     $.post("admin_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         warrantyID: warrantyID[1],
         operation: "getWarrantyDetailsByID"
     }, function (data, status) {

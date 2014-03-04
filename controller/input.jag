@@ -5,9 +5,11 @@
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
+
 var user_id = session.get("LOGGED_IN_USER");
 
-if(user_id!==null){
+if (user_id !== null){
+
 include("../model/userModel.jag");
 
 var dataStore=require("../store.json");
@@ -24,9 +26,7 @@ var log = new Log();
 
 log.info(verb +'-URI: '+uri+'-Content:'+JSON.stringify(data)+', Parameters:'+JSON.stringify(param));
 
-var callPath=uri.replace("/WSO2-HW-REPO/server/user","");
-
-
+var callPath=uri.replace("/HW_REPO/server/user","");
 
 var opr;
 var opr2;
@@ -62,9 +62,7 @@ if(uri != null) {
     }
 }
 
-log.info("User: "+user_id+" ,Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
-
-
+log.info("User: "+user_id+" : Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
 
 if (verb == "POST") {
 
@@ -234,7 +232,8 @@ if(verb=="PUT"){
     }
     else if (opr=='requests' && id1 != null) {
 
-        print(confirmRequest(id1));
+        print(confirmRequest(id1,user_id));
+
 
     }
 
@@ -264,3 +263,4 @@ else{
 }
 
 %>
+

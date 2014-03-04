@@ -9,7 +9,13 @@
  		}
  	}
  }else{
- 	session.put("prevURL",request.getRequestURL());
+	if(request.getRequestURL().indexOf("https") == -1){
+                        session.put("prevURL",request.getRequestURL().replace("http","https"));
+                }else{
+                        session.put("prevURL",request.getRequestURL());
+                }
+// 	session.put("prevURL",request.getRequestURL());
+
  	response.sendRedirect("login");
  }
 %>

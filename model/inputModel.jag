@@ -1,4 +1,3 @@
-
 <%
 
 /* Author - mihil ranathunga
@@ -7,29 +6,9 @@
 * interns UOM- 2014
 */
 
-function checkUser(user){
 
-    var url = dssUrl + "CheckEmployeeAvailability";
-    var rslt = get(url, {
-        "emp_id": user
-    }, {
-        "Accept": "application/json"
-    }, "json");
 
-    return returnValue(rslt.data.BaseElement);
-}
-function putUser(user){
-    var url = dssUrl+"AddEmployee"
-    var headers = {"Accept":"application/json" };
-    var rslt=post(url,{"emp": user},headers,'json',function(data,xhr){});
-    
-    log.info(user);
-
-    return rslt;
-
-}
 function viewDeviceByID(deviceID) {
-
 
     var url = dssUrl + "GetDeviceByID";
 
@@ -49,7 +28,8 @@ function viewAccessoryByDeviceID(deviceID) {
     var url = dssUrl + "GetAccessoriesByDeviceID";
     var rslt = get(url, {
         "dev_id": deviceID
-    }, {"Accept": "application/json"
+    }, {
+        "Accept": "application/json"
     }, "json");
 
     return returnValue(rslt.data.BaseElement);
@@ -57,12 +37,11 @@ function viewAccessoryByDeviceID(deviceID) {
 
 function viewUpgradeHistoryByDeviceID(deviceID) {
 
-    
-
     var url = dssUrl + "GetDeviceUpgradeHistory";
     var rslt = get(url, {
         "device_id": deviceID
-    }, {"Accept": "application/json"
+    }, {/*"Content-Type":"application/json",*/
+        "Accept": "application/json"
     }, "json");
 
     //log.info(rslt);
@@ -183,52 +162,6 @@ function addIssue(issue) {
     var headers = {"Accept":"application/json" };
     var rslt=post(url,issue,headers,'json',function(data,xhr){});
     //log.info(rslt);
-    return rslt;
-
-}
-
-function editIssue(issue){
-
-    //log.info(issue);
-
-   var url = dssUrl+"EditIssue"
-  var headers = {"Accept":"application/json" };
-  var rslt=post(url,issue,headers,'json',function(data,xhr){});
-   //log.info(rslt);
-   return rslt;
-}
-function deleteIssue(issue){
-
-    //log.info(issue);
-
-   var url = dssUrl+"DeleteIssueFromIssueEmpID"
-  var headers = {"Accept":"application/json" };
-  var rslt=post(url,issue,headers,'json',function(data,xhr){});
- //  log.info(rslt);
- return rslt;
-}
-
-
-function deleteRequest(requestID,user) {
-
-    log.info(requestID+','+user);
-
-    var url = dssUrl+"DeleteRequestFromID"
-    var headers = {"Accept":"application/json" };
-    var rslt=post(url,{req_id:requestID,emp_id:user},headers,'json',function(data,xhr){});
-   // log.info(rslt);
-   return rslt;
-
-}
-
-function confirmRequest(requestID,user) {
-
-
-    var url = dssUrl+"MarkRequestResolved"
-    var headers = {"Accept":"application/json" };
-    var rslt=post(url,{req_id:requestID,emp_id:user},headers,'json',function(data,xhr){});
-   // log.info(rslt);
-   return rslt;
 
 }
 
@@ -253,5 +186,45 @@ function  returnValue(returnBaseElement){
 
 }
 
-%>
+function editIssue(issue){
 
+    //log.info(issue);
+
+   var url = dssUrl+"EditIssue"
+  var headers = {"Accept":"application/json" };
+  var rslt=post(url,issue,headers,'json',function(data,xhr){});
+   //log.info(rslt);
+}
+function deleteIssue(issue){
+
+    //log.info(issue);
+
+   var url = dssUrl+"DeleteIssueFromIssueEmpID"
+  var headers = {"Accept":"application/json" };
+  var rslt=post(url,issue,headers,'json',function(data,xhr){});
+ //  log.info(rslt);
+}
+
+function deleteRequest(requestID) {
+
+    //log.info(requestID);
+
+    var url = dssUrl+"DeleteRequestFromID"
+    var headers = {"Accept":"application/json" };
+    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
+   // log.info(rslt);
+
+}
+
+function confirmRequest(requestID) {
+
+
+    var url = dssUrl+"MarkRequestResolved"
+    var headers = {"Accept":"application/json" };
+    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
+   // log.info(rslt);
+
+}
+
+
+%>

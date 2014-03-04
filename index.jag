@@ -2,8 +2,13 @@
 var log = new Log();
 var roles = session.get("Roles");
 if(!session.get("Logged")) {
-		session.put("prevURL",request.getRequestURL());
-		response.sendRedirect("login");
+
+		if(request.getRequestURL().indexOf("https") == -1){
+			print('<script>alert("'+request.getRequestURL().replace("http","https")+'")');
+			session.put("prevURL",request.getRequestURL().replace("http","https"));
+		}else{
+			session.put("prevURL",request.getRequestURL());
+		}response.sendRedirect("login");
 	}
 	else{
 		if(roles.indexOf("hwadmin") > -1){

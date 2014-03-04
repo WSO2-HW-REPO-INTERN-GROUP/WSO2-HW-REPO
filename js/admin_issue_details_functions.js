@@ -3,6 +3,11 @@ function readURL() {
     var urlData = window.location.search.substring(1);
     
     var issueID = urlData.split("=");
+<<<<<<< HEAD
+    $.ajax({
+        type: 'POST',
+        url :"admin/dataGetFiles/admin_data_get.jag", 
+=======
 
     // $.post("admin_data_get.jag", {
     //     operation: "getissueDetails",
@@ -67,6 +72,7 @@ function readURL() {
     $.ajax({
         type: 'POST',
         url :"admin_data_get.jag", 
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         data :{
         operation: "getissueDetails",
         issueID: issueID[1]
@@ -81,8 +87,11 @@ function readURL() {
 
         var object = JSON.parse(data);
 
+<<<<<<< HEAD
+=======
         alert(data);
 
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         for (var property in object) {
 
             var newRow = document.createElement('tr');
@@ -92,9 +101,13 @@ function readURL() {
             }
 
             if (property == "device_id") {
+<<<<<<< HEAD
+                deviceID = object[property];
+=======
                 alert("Why"+deviceID);
                 deviceID = object[property];
                 alert("Why"+deviceID);
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             } else if (property == "resolved") {
 
                 if(object[property] == "1" || object[property] == "4" || object[property] == "3"){
@@ -127,7 +140,10 @@ function readURL() {
 
         }
         issueDetailsTbl.appendChild(tbody);
+<<<<<<< HEAD
+=======
         alert("boo"+data);
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
     },
     async:false
     });
