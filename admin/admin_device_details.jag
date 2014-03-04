@@ -270,7 +270,11 @@
                                         </li>
                                         <li class="middle">|</li>
                                         <li class="right">
+<<<<<<< HEAD
                                             <a href="logout">Sign-out</a>
+=======
+                                            <a href="/logout">Sign-out</a>
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                                         </li>
 					<li class="middle">|</li>
                                         <li class="right">

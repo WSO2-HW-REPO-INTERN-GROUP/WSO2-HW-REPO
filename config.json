@@ -2,6 +2,7 @@
     "ssoConfiguration": {
         "enabled": true,
         "issuer": "hwrepo",
+
         "identityProviderURL": "https://hwrepo.private.wso2.com/wso2is/samlsso",
         "keyStorePassword": "wso2carbon",
         "identityAlias": "wso2carbon",

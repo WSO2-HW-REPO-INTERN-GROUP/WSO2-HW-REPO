@@ -1,11 +1,22 @@
 function readURL() {
     var urlData = window.location.search.substring(1);
     deviceID = urlData.split("=");
+<<<<<<< HEAD
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
+=======
+    alert(deviceID);
+
+    $.post("admin_devices_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         device_id: deviceID[1],
         operation: "getDeviceDetails"
     }, function (data, status) {
 
+<<<<<<< HEAD
+=======
+        alert(data);
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         var i = 0;
 
         var basicDetailsTbl = document.getElementById('basicFeaturesTbl');
@@ -66,7 +77,11 @@ function readURL() {
 
                 
                     td4.appendChild(document.createTextNode("Not Assigned"));
+<<<<<<< HEAD
                     td4.setAttribute("contentEditable","true");
+=======
+                    td4.setAttribute("contentEditable","false");
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                     td4.setAttribute("class","editableCell");
                 }
 
@@ -115,11 +130,20 @@ function getUpgradeHistory() {
 
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
+<<<<<<< HEAD
     $.post("admin/dataGetFiles/admin_data_get.jag", {
+=======
+    $.post("admin_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         operation: "upgradeHistory",
         device_id: deviceID[1]
     }, function (data, status) {
 
+<<<<<<< HEAD
+=======
+        alert("dnfsdfjskjkfjsl---" + data);
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         var objArray = JSON.parse(data);
 
         var tablearea = document.getElementById('upgradeHistoryDiv');
@@ -188,7 +212,11 @@ function getAccessories() {
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
 
+<<<<<<< HEAD
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
+=======
+    $.post("admin_devices_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         operation: "getAccessories",
         deviceID: deviceID[1]
     }, function (data, status) {
@@ -238,10 +266,15 @@ function getAccessories() {
                 if (property == 'accessory_id') {
                     var accId = object[property]
                     th.appendChild(document.createTextNode("Accessory ID: " + accId));
+<<<<<<< HEAD
+=======
+                    alert("jdklfsjkfdl");
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                     removeLbl.onclick = function () {
                         var inputData = {
                             "accID": accId
                         };
+<<<<<<< HEAD
                         $.post("admin/dataGetFiles/admin_devices_updates.jag", {
                             operation: "removeAccessory",
                             inputs: JSON.stringify(inputData)
@@ -252,6 +285,13 @@ function getAccessories() {
                             else{
                                 alert("Error While Updating Database");
                             }
+=======
+                        $.post("admin_devices_updates.jag", {
+                            operation: "removeAccessory",
+                            inputs: JSON.stringify(inputData)
+                        }, function (data, status) {
+                            alert(data);
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                         });
                     };
 
@@ -296,18 +336,33 @@ function getReportedIssues() {
 
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
+<<<<<<< HEAD
     var issueID="";
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
+=======
+    alert(deviceID);
+
+    $.post("admin_devices_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         operation: "getReportedIssues",
         device_id: deviceID[1]
     }, function (data, status) {
 
+<<<<<<< HEAD
+=======
+        alert(data);
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         var objArray = JSON.parse(data);
 
         var tablearea = document.getElementById('deviceIssuesDevision');
         tablearea.setAttribute("class", "datagrid");
 
         for (var i = 0; i < objArray.length; i++) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             var cntr = 0;
             var device_id;
 
@@ -336,7 +391,10 @@ function getReportedIssues() {
                 }
 
                 if (property == 'issue_number') {
+<<<<<<< HEAD
     		    issueID=object[property];
+=======
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                     th.appendChild(document.createTextNode("Issue ID: " + object[property]));
                 }
 
@@ -370,7 +428,11 @@ function getReportedIssues() {
             linkTd.setAttribute("colspan", "2");
 
             var link = document.createElement('a');
+<<<<<<< HEAD
             link.setAttribute("href", ("adminissues?id=" +issueID));
+=======
+            link.setAttribute("href", ("/HW_REPO/adminissues?id=" + device_id));
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             link.innerHTML = 'more';
             linkTd.appendChild(link);
             linkRow.appendChild(linkTd);
@@ -388,11 +450,20 @@ function getReportedIssues() {
 function getWarrantyDetails(){
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
+<<<<<<< HEAD
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
+=======
+    $.post("admin_devices_data_get.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         operation: "accessoryWarrantyDetails",
         device_id: deviceID[1]
     }, function (data, status) {
 
+<<<<<<< HEAD
+=======
+        alert("dnfsdfjskjkfjsl---" + data);
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         var objArray = JSON.parse(data);
 
         var tablearea = document.getElementById('warrantyDetailsDevision');

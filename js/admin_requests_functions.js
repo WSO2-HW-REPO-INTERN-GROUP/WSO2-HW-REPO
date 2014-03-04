@@ -1,25 +1,45 @@
     function acceptRejectBtnClick(requestId, action) {
+<<<<<<< HEAD
         
         $.post("admin/dataGetFiles/admin_devices_updates.jag", {
+=======
+        if (action == "0") {
+            alert(requestId + "--reject");
+        } else if (action == "1") {
+            alert(requestId + "--Accept");
+        }
+        $.post("admin_devices_updates.jag", {
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             operation: "acceptRejcetRequest",
             value: action,
             req_id: requestId
         }, function (data, status) {
+<<<<<<< HEAD
             if(data=='SUCCESSFUL'){
                 location.reload(true);
             }
             else{
                 alert("Error While Updating Database");
             }
+=======
+            alert("jhjfhsj");
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         });
 
     }
 
     function loadUnassignedRequests(){
         $("#assignDevicePopup").dialog("open");
+<<<<<<< HEAD
             $.post("admin/dataGetFiles/admin_requests_data_get.jag",{operation:"getUnassignedDevices"
 
             }, function(data,status){
+=======
+            $.post("admin_requests_data_get.jag",{operation:"getUnassignedDevices"
+
+            }, function(data,status){
+                alert(data);
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 
                 var devicesTbl=document.getElementById('assignDevices');
                 var tableArea=document.getElementById("requestDeviceDetailsDiv");
@@ -56,7 +76,11 @@
                         newRow.appendChild(td);
                     }
                     var link = document.createElement('a');
+<<<<<<< HEAD
                     link.setAttribute("href", "admindevicedetails?id=" + deviceId);
+=======
+                    link.setAttribute("href", "/HW_REPO/admindevicedetails?id=" + deviceId);
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                     link.innerHTML = "more";
                     var linkTD = document.createElement("td");
                     linkTD.appendChild(link);
@@ -74,10 +98,19 @@
 
 
     function loadRequests() {
+<<<<<<< HEAD
         $.post("admin/dataGetFiles/admin_requests_data_get.jag", {
             operation: "getUnresolved"
         }, function (data, status) {
 
+=======
+        $.post("admin_requests_data_get.jag", {
+            operation: "getUnresolved"
+        }, function (data, status) {
+
+            alert(data);
+
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             var objArray = JSON.parse(data);
 
             var unresolvedTablearea = document.getElementById('unresolvedDiv');

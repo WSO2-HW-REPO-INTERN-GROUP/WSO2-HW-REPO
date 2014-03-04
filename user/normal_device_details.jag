@@ -24,9 +24,12 @@
       <!-- My CSS -->
       <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css"/>
       <link rel="stylesheet" href="css/jquery.dataTables.css"/>
+<<<<<<< HEAD
 
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
          <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
+=======
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
       <!--[if gte IE 8]>
       <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
       <![endif]-->
@@ -76,11 +79,19 @@
          })
          });
                  readURL();
+<<<<<<< HEAD
                  getAccessories();
                  Hwdrepo.loadIssueHistory(deviceID);
                  Hwdrepo.loadUpgradeHistory(deviceID);
                  Hwdrepo.loadWarranties(deviceID);
                  Hwdrepo.loadDialogs(deviceID);
+=======
+
+                 
+
+                 Hwdrepo.loadDialogs(deviceID);
+      
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
          
                  $( "#dialog-confirm" ).dialog({
          autoOpen: false,
@@ -119,6 +130,7 @@
              });
          
              function readURL(){
+<<<<<<< HEAD
          
                     Hwdrepo.getDeviceDetails(deviceID);
                  
@@ -130,6 +142,13 @@
          
               }
          
+=======
+
+                     Hwdrepo.initiateDeviceDetails(deviceID);
+                 
+                 }
+         
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
              
                     
       </script>
@@ -184,7 +203,11 @@
                               </li>
                               <li class="middle">|</li>
                               <li class="left">
+<<<<<<< HEAD
                                  <a target="_blank" href="about.html">About</a>
+=======
+                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.html">About</a>
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                               </li>
                            </ul>
                         </div>
@@ -383,7 +406,11 @@
                   <div id="footer-div">
                      <div class="footer-content">
                         <div class="copyright">
+<<<<<<< HEAD
                            © 2005 - 2014 WSO2 Inc. All Rights Reserved.
+=======
+                           © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
                         </div>
                         <!--div class="poweredby">
                            </div-->
@@ -399,4 +426,8 @@
          }
       </script>
    </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
