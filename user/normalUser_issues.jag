@@ -3,7 +3,7 @@
    *** project-wso2 Hardware Repository
    *** interns UOM-2014 -->  
 <%
-   //include("userCheck.jag");
+   include("userCheck.jag");
    var userName=session.get('LOGGED_IN_USER');
    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
