@@ -16,12 +16,7 @@ function getSearchedDevices(queryType, searchText) {
     });
 }
 
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
 function getAllDevices() {
     $('#devices').dataTable({
         "bProcessing": true,
@@ -32,7 +27,6 @@ function getAllDevices() {
         "aaSorting": [[ 4, "desc" ]]
     });
 }
-<<<<<<< HEAD
 
 function deleteDevice(devId){
     $.post("admin/dataGetFiles/admin_devices_updates.jag",{operation:"deleteDevice",deviceID:devId},function(data,status){
@@ -44,5 +38,4 @@ function deleteDevice(devId){
         }
     });
 }
-=======
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
+

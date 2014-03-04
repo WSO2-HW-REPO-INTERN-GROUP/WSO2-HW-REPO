@@ -2,23 +2,15 @@ function getReportedIssues() {
 
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
-<<<<<<< HEAD
+
 
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
-=======
-    alert(deviceID);
 
-    $.post("admin_devices_data_get.jag", {
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         operation: "getReportedIssues",
         device_id: deviceID[1]
     }, function (data, status) {
 
-<<<<<<< HEAD
-=======
-        alert(data);
 
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
         var objArray = JSON.parse(data);
 
         var tablearea = document.getElementById('deviceIssuesDevision');
@@ -87,11 +79,8 @@ function getReportedIssues() {
             linkTd.setAttribute("colspan", "2");
 
             var link = document.createElement('a');
-<<<<<<< HEAD
+
             link.setAttribute("href", ("adminissues?id=" + device_id));
-=======
-            link.setAttribute("href", ("/HW_REPO/adminissues?id=" + device_id));
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
             link.innerHTML = 'more';
             linkTd.appendChild(link);
             linkRow.appendChild(linkTd);
