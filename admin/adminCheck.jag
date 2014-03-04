@@ -9,16 +9,12 @@
  		}
  	}
  }else{
-<<<<<<< HEAD
 	if(request.getRequestURL().indexOf("https") == -1){
                         session.put("prevURL",request.getRequestURL().replace("http","https"));
                 }else{
                         session.put("prevURL",request.getRequestURL());
                 }
 // 	session.put("prevURL",request.getRequestURL());
-=======
- 	session.put("prevURL",request.getRequestURL());
->>>>>>> 2ab677376f8113936a01e790217f203bd1ae7a7f
  	response.sendRedirect("login");
  }
 %>
