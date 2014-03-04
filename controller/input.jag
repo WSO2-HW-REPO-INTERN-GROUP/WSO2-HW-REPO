@@ -5,7 +5,9 @@
 * project-wso2 Hardware Repository
 * interns UOM- 2014
 */
+var user_id = session.get("LOGGED_IN_USER");
 
+if(user_id!==null){
 include("../model/userModel.jag");
 
 var dataStore=require("../store.json");
@@ -24,7 +26,7 @@ log.info(verb +'-URI: '+uri+'-Content:'+JSON.stringify(data)+', Parameters:'+JSO
 
 var callPath=uri.replace("/WSO2-HW-REPO/server/user","");
 
-var user_id = session.get("LOGGED_IN_USER");
+
 
 var opr;
 var opr2;
@@ -60,7 +62,8 @@ if(uri != null) {
     }
 }
 
-log.info("Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
+log.info("User: "+user_id+" ,Params= opr: "+opr+" ,id1: "+id1+" ,opr2: "+opr2+" ,id2: "+id2);
+
 
 
 if (verb == "POST") {
@@ -229,9 +232,9 @@ if(verb=="PUT"){
         print(editIssue(editIssueObj.issue));
 
     }
-    else if (opr=='issues' && id1 != null) {
+    else if (opr=='requests' && id1 != null) {
 
-        print(confirmRequest(request_id));
+        print(confirmRequest(id1));
 
     }
 
@@ -249,11 +252,15 @@ if(verb =="DELETE"){
     else if(opr=='requests' && id1 != null){
 
 
-        //log.info(request_id);
+        //log.info(id1+','+user_id);
 
-        print(deleteRequest(id1));
+        print(deleteRequest(id1,user_id));
     }
 
+}
+}
+else{
+    print({"Error":"Unauthorized access request: Please Login first!"});
 }
 
 %>

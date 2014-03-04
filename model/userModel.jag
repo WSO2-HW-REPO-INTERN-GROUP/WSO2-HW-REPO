@@ -207,14 +207,14 @@ function deleteIssue(issue){
  return rslt;
 }
 
-function deleteRequest(requestID) {
+function deleteRequest(requestID,user) {
 
-    //log.info(requestID);
+    log.info(requestID+','+user);
 
     var url = dssUrl+"DeleteRequestFromID"
     var headers = {"Accept":"application/json" };
-    var rslt=post(url,{req_id:requestID},headers,'json',function(data,xhr){});
-   // log.info(rslt);
+    var rslt=post(url,{'req_id':requestID,'emp_id':user},headers,'json',function(data,xhr){});
+    log.info(rslt);
    return rslt;
 
 }
