@@ -1,0 +1,346 @@
+<%
+    include("adminCheck.jag");
+    var userName=session.get('LOGGED_IN_USER');
+    var dataGetFilesLocation="admin/dataGetFiles/";
+%>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>WSO2 Hardware Repository</title>
+        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
+        <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/adminHomeStyle.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="css/carbonFormStyles.css">
+        <link href="css/demo_table_jui.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+        
+        <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+
+        <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/testJs.js"></script>
+        <script type="text/javascript" src="js/globalFunctions.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+
+        <script>
+                    jQuery(document).ready(function(){
+
+                        var searchClkCounter=0;
+            
+                        $( "#fromDatepicker" ).datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                        $( "#toDatepicker" ).datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                                    
+                        prepareList();
+                        loadAllWarranties();
+                        loadIssues("0","allIssuesDiv",'issuesTable');
+                        loadIssues("1","resolvedIssuesDiv",'resolvedIssuesTable');
+                        loadIssues("3","rejectedIssuesDiv",'rejectedIssuesTable');
+                        loadIssues("4","acceptedIssuesDiv",'acceptedIssuesTable');              
+            
+                        $("#warrantySearchButton").click(function(){
+
+                            var searchText=document.getElementById("serialOrId").value;
+                            var state=(document.getElementById("warrantyStateSelect"));
+                            var filterVal=state.options[state.selectedIndex].value;
+                            var errMsgField=document.getElementById("errMessage");
+
+                            if(searchText=="" && filterVal==-1){
+                                errMsgField.classList.remove(errMsgField.className);
+                                errMsgField.classList.add('error');
+                                errMsgField.textContent="Invalid search Text or Warranty State";
+                            }
+                            else{
+                                errMsgField.classList.remove(errMsgField.className);
+                                errMsgField.classList.add('hidden');
+
+                                var allWarrantTable=$("#allWarranties");
+
+                                var ajaxUrl='DataTable/loadWarranties.jag?operation=getCustomWarranty&filterValue='+filterVal+'&searchText='+searchText;
+
+                                $('#allWarrantiesTable').dataTable({
+                                    "bProcessing": true,
+                                    "sAjaxSource": ajaxUrl,
+                                    "bAutoWidth": false,
+                                    "sPaginationType": "full_numbers",
+                                    "bJQueryUI": true,
+                                    "aaSorting": [[ 4, "desc" ]],
+                                    "bDestroy": true
+                                });
+                            }
+                        });
+                    });
+                
+        </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+        <div id="dcontainer"></div>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <div id="header-div">
+                            <div class="right-logo">WSO2 Hardware Repository</div>
+                            <div class="left-logo">
+                            </div>
+                            <div class="middle-ad">
+                            </div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong><%print(userName);%>
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="logout">Sign-out</a>
+                                        </li>
+					<li class="middle">|</li>
+					<li class="right">
+                                            <a href="userhome">Login As User</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top" height="400px">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
+                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a href="https://localhost:9443/carbon/sequences/docs/userguide.html" target="_blank">Help</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id="adminHomeListContainer" class="main_container">
+                                            <ul id="expList">
+                                                <li id="issueList">
+                                                    <h2><span style="color: #00346e">Issues</span></h2>
+                                                    <ul>
+                                                        </br>
+                                                        <li>
+                                                            <!--<div id="allIssues" class="datagrid">-->
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Latest reported Issues</span></h4></br>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div id="allIssuesDiv">
+                                                                                <table id="issuesTable">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Issue ID</th>
+                                                                                            <th>Status</th>
+                                                                                            <th>Device Serial</th>
+                                                                                            <th>User Name</th>
+                                                                                            <th>Issue Details</th>
+                                                                                            <th></th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                </table>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+
+
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Pending For User Response</span></h4></br>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div id="resolvedIssuesDiv">
+                                                                                <table id="resolvedIssuesTable">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Issue ID</th>
+                                                                                            <th>Status</th>
+                                                                                            <th>Device Serial</th>
+                                                                                            <th>User Name</th>
+                                                                                            <th>Issue Details</th>
+                                                                                            <th></th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                </table>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Rejected By User</span></h4></br>
+                                                                    <ul>
+                                                                        <li>
+                                                                                <div id="rejectedIssuesDiv">
+                                                                                    <table id="rejectedIssuesTable">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Issue ID</th>
+                                                                                                <th>Status</th>
+                                                                                                <th>Device ID</th>
+                                                                                                <th>User Name</th>
+                                                                                                <th>Issue Details</th>
+                                                                                                <th></th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                    </table>
+                                                                                </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Accepted Issues By Admin</span></h4></br>
+                                                                    <ul>
+                                                                        <li>
+                                                                                <div id="acceptedIssuesDiv">
+                                                                                    <table id="acceptedIssuesTable">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Issue ID</th>
+                                                                                                <th>Status</th>
+                                                                                                <th>Device ID</th>
+                                                                                                <th>User Name</th>
+                                                                                                <th>Issue Details</th>
+                                                                                                <th></th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                    </table>
+                                                                                </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+                                                        </li>
+                                                    </ul>
+                                                </li></br><hr  style="margin-bottom: 25px"/></br>
+
+                                                <li id="warrantyList">
+                                                    <h2><span style="color: #00346e;">Warranty</span></h2>
+                                                    <ul></br>
+                                                        <li>
+                                                            <div id="warranty" >
+                                                                <div id="warranties" class="issuePaneSearch">
+                                                                    <div id="searchButtonField">
+                                                                        <table style="margin-bottom: 25px;border-collapse: collapse;">
+                                                                            <tr>
+                                                                                <td style="padding: 5px">
+                                                                                    <span style="font-family: Arial;color: #474747;font-size: 13px;font-weight: bold">Warranty State</span>
+                                                                                </td>
+                                                                                <td style="padding: 5px">
+                                                                                    <select id="warrantyStateSelect" class="siteButton">
+                                                                                        <option value="-1">Select State</option>
+                                                                                        <option value="1" >Valid</option>
+                                                                                        <option value="0" >Void</option>
+                                                                                        <!-- <option value="3" >Medium</option> -->
+                                                                                    </select>
+                                                                                    <br/><br/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr style="text-align: center">
+                                                                                <td style="padding: 5px"><input type="text" id="serialOrId" class="inputField" placeholder="Warranty ID or Device Serial"/></td></td>
+                                                                                <td style="padding: 5px" align="center">
+                                                                                    <!-- <input type="button" value="Search" id="warrantySearchButton" class="siteButton"> -->
+                                                                                    <div style="background-image:url(images/magnifier.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                                                    <label id="warrantySearchButton" class="linkLabel">Search</label>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr><td colspan="2"><span class="hidden" id="errMessage"></span></td></tr>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div id="workArea" style="margin:25px 0px 25px 0px"> 
+                                                                    <div id="allWarranties" style="width:900px;margin:auto">
+                                                                        <table id="allWarrantiesTable" class="styledLeft" style="margin:auto">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Warranty ID</th>
+                                                                                    <th>Status</th>
+                                                                                    <th>Device Serial</th>
+                                                                                    <th>Start Date</th>
+                                                                                    <th>End Date</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody></tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </li></br></br>
+                                            </ul>
+                                        </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()){
+                document.documentElement.className+=' ie10';
+            }
+        </script>
+    </body>
+</html>

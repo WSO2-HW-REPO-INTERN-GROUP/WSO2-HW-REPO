@@ -1,0 +1,535 @@
+<%
+    include("adminCheck.jag");
+    var userName=session.get('LOGGED_IN_USER');
+    var dataGetFilesLocation="admin/dataGetFiles/";
+%>
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Admin:DeviceDetails</title>
+        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/adminDeviceDetailsStyle.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="css/carbonFormStyles.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+        <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>
+        <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/globalFunctions.js"></script>
+        <script type="text/javascript" src="js/admin_device_details_functions.js"></script>
+        <script type="text/javascript">
+
+            jQuery(document).ready(function(){
+            
+                readURL();
+                prepareList();
+                getAccessories();
+                getUpgradeHistory();
+                getReportedIssues();
+                getWarrantyDetails();
+                var accesoryRemarks;
+            
+                $("#addHardwareForm").dialog({
+                    autoOpen:false,
+                    height: 600,
+                    width: 700,
+                    modal: true,
+                    buttons:{
+                        'Confirm': function() {
+
+                            var type=document.getElementById('hardwareTypeSelect');
+                            var devices=document.getElementById('hardwareSelect');
+                            var description=document.getElementById('upgradeDescription');
+                            var errSpan=document.getElementById('addHdwErr');
+
+
+                            if(type.options[type.selectedIndex].value=="0"||devices.options[devices.selectedIndex].value=="0"||description.value==""){
+                                errSpan.classList.remove(errSpan.className);
+                                errSpan.classList.add("error");
+                                errSpan.textContent="Please Check for Correct device type selection or empty description";
+                            }
+                            else{
+
+
+                                var urlData=window.location.search.substring(1);
+                                var devID=urlData.split("=");
+
+                                var newDeviceData={
+
+                                    "type":type.options[type.selectedIndex].text,
+                                    "accessory":devices.options[devices.selectedIndex].value,
+                                    "desc":description.value
+                                };
+
+                                $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"addNewAccessoryUpdate",deviceID:devID[1],inputs:JSON.stringify(newDeviceData)},function(data,status){
+
+                                    if(data=='SUCCESSFUL'){
+                                        location.reload(true);
+                                    }
+                                    else{
+                                        alert("Error While Updating Database");
+                                    }
+
+                                });
+
+
+                                $(this).dialog('close');
+                            }            
+                        }
+                    }
+                });
+            
+                $("#assignDevicePopup").dialog({
+                    autoOpen:false,
+                    height: 200,
+                    width: 350,
+                    modal: true,
+                    buttons:{
+                        'Ok': function() {
+
+                            var usernameField=document.getElementById("assignUserInput");
+                            var errField=document.getElementById("errorField");
+                            if(usernameField.value==""){
+
+                                errField.style.display="";
+                            }
+
+                            else{
+                                errField.style.display="none";
+
+                                var urlData=window.location.search.substring(1);
+                                var devID=urlData.split("=");
+
+                                var inputData={
+                                    "user":usernameField.value,
+                                    "dev":devID[1]
+                                }
+
+                                $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"assignDevice",inputs:JSON.stringify(inputData)},function(data,status){
+                                    if(data=='SUCCESSFUL'){
+                                        location.reload(true);
+                                    }
+                                    else{
+                                        alert("Error While Updating Database");
+                                    }
+                                });
+
+
+                                $(this).dialog('close');
+                            }            
+                        }
+                    }
+                });
+
+
+            
+                $("#addNew").click(function(event)
+                {
+                    //Stop any default actions on the button.
+                    event.preventDefault();
+                    //Open your dialog.
+                    $("#addHardwareForm").dialog("open");
+            
+                });
+
+                $("#editSubmitBtn").click(function()
+                {
+                    (document.getElementById('editableBasicDetailsDiv')).style.display="";
+                    (document.getElementById('basicDetailsDiv')).style.display="none";            
+                });
+                $("#backBtn").click(function()
+                {
+                    (document.getElementById('editableBasicDetailsDiv')).style.display="none";
+                    (document.getElementById('basicDetailsDiv')).style.display="";            
+                });
+                $("#updateBtn").click(function()
+                {
+                    var updateData={};
+                    var dev_ID;
+                    $('#editableBasicFeaturesTbl tr').each(function() {
+                        var editedVal = $(this).find(".editableCell").html();
+                        var idVal=$(this).find(".idCell").html()
+
+                        if(typeof editedVal != 'undefined'){
+
+                                if(editedVal == 'Not Assigned' || editedVal==''){
+                                    var x;
+                                    updateData[idVal]=x;
+                                }
+                                else{
+                                    updateData[idVal]=editedVal;
+                                }
+                        }
+                        
+                     });
+
+                    $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"updateDeviceDetails",deviceID:dev_ID,inputs:JSON.stringify(updateData)},function(data,status){
+
+                        if(data=='SUCCESSFUL'){
+                            location.reload(true);
+                        }
+                        else{
+                            alert("Error While Updating Database");
+                        }
+                    });
+
+
+
+                });
+
+
+
+
+                $("#hardwareTypeSelect").change(function() {
+            
+                            var selectedText=$("#hardwareTypeSelect :selected").text();
+
+                            accesoryRemarks=[];
+            
+                            //empty the dropdown
+                             $("#hardwareSelect").empty();
+            
+                            // send the post for processing
+                            $.post(<%print('"'+dataGetFilesLocation+"admin_data_get.jag"+'"');%>,{searchText:selectedText,operation:"getAccessory"},function(data,status){
+                                var parsed=JSON.parse(data);
+                                var option="";
+                                //add all the available options
+                                $("#hardwareSelect").append('<option value="-1">Select Hardware</option>');
+                                for(var i=0;i< parsed.length;i++){
+                                    var obj=parsed[i];
+                                    accesoryRemarks[obj["accessory_id"]]=obj["remarks"];
+                                    option="<option value='"+obj["accessory_id"]+"'>"+obj["serial_number"]+"</option>";
+                                    $("#hardwareSelect").append(option);
+                                }
+                                
+                            });
+                        });
+
+                        $("#hardwareSelect").change(function() {
+
+                            var selectedValue=$("#hardwareSelect :selected").val();
+                            var detailsArea=document.getElementById("componentDetailsArea");
+                            detailsArea.innerHTML=accesoryRemarks[selectedValue];
+
+
+                        });
+
+
+                $("#assign").click(function(){
+                    $("#assignDevicePopup").dialog("open");
+                });
+                $("#revoke").click(function(){
+                    var urlData=window.location.search.substring(1);
+                    var devID=urlData.split("=");
+                     $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"revokeDevice",device_id:deviceID[1]},function(data,status){
+                        if(data=='SUCCESSFUL'){
+                            location.reload(true);
+                        }
+                        else{
+                            alert("Error While Updating Database");
+                        }
+                     });
+                });                
+             });
+
+
+        </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+        <div id="dcontainer"></div>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <div id="header-div">
+                            <div class="right-logo">WSO2 Hardware Repository</div>
+                            <div class="left-logo"></div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong><%print(userName);%>
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="logout">Sign-out</a>
+                                        </li>
+					<li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="userhome">Login As User</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
+                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a>Help</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <!--This is edited for device details grid implementation -->
+                                <tr>
+                                    <td>
+                                        <div id="deviceMainContainer" class="main_container">
+                                            <div id="listContainer">
+                                                <ul id="expList">
+                                                    <li id="basicList"><h2><span style="color: #00346e">Basic Features</span></h2>
+                                                        <!-- Get the data from DB and show here -->
+                                                        <ul>
+                                                            </br>
+                                                            <li>
+                                                                <div id="basicDetailsDiv">
+                                                                    <table id="basicFeaturesTbl">
+                                                                        <thead>
+                                                                            <tr style="height: 25px">
+                                                                                <th colspan="2">Basic Details</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                    </table></br></br>
+                                                                    <!-- <input type="button" value="Edit" class="siteButton" id="editSubmitBtn" /> -->
+
+
+                                                                    <div style="background-image:url(images/edit.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                                    <label id="editSubmitBtn" class="linkLabel">Edit</label>
+
+                                                                </div></br></br>
+
+                                                                <div id="editableBasicDetailsDiv" style="display:none">
+                                                                    <table id="editableBasicFeaturesTbl">
+                                                                        <thead>
+                                                                            <tr style="height: 25px">
+                                                                                <th colspan="2">Basic Details</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                    </table></br></br>
+                                                                    <!-- <input type="button" value="Update" class="siteButton" id="updateBtn" /> -->
+
+                                                                    <div style="background-image:url(images/accept.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                                    <label id="updateBtn" class="linkLabel">Update</label>
+
+                                                                    <div style="background-image:url(images/reload.gif);background-repeat:no-repeat;width:16px;height:16px; margin-left:25px" class="icon-div"></div>
+                                                                    <label id="backBtn" class="linkLabel">Back</label>
+
+
+
+                                                                    <!-- <input type="button" value="Back" class="siteButton" id="backBtn" style="margin-left:25px" /> -->
+                                                                </div></br></br>
+
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Upgrade History</span></h4>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div id="upgradeHistoryDiv">
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Issue History</span></h4>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div id="deviceIssuesDevision"></div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+                                                                <li style="margin-left:15px">
+                                                                    <h4><span style="color: #00346e">Warranty Details</span></h4>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div id="warrantyDetailsDevision"></div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li></br></br>
+
+
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    </br>
+                                                    <hr/>
+                                                    </br>
+                                                    <li id="accList">
+                                                        <h2><span style="color: #00346e">Accessories</span></h2>
+                                                        <!-- Get the data from DB and show here -->
+                                                        <ul>
+                                                            </br>
+                                                            <li>
+                                                                <div id="accessoryDiv">
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div id="deviceDetailsButtons">
+                                                                    <table cellspacing="10px">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <!-- <button id="addNew" value="Add" class="siteButton">Add</button> -->
+                                                                                <div style="background-image:url(images/menu_add_ds.gif);background-repeat:no-repeat;width:16px;height:16px; margin-left:25px" class="icon-div"></div>
+                                                                                <label id="addNew" class="linkLabel">Add Accessory</label>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    </br>
+                                                    <hr/>
+                                                    </br>
+
+                                                    <div>
+                                                        <h2><span style="color: #00346e;margin-left:20px">Operations</span></h2></br>
+                                                        <!-- <input type="button" id="assign" value="Assign" class="siteButton" style="margin-left:15px" /> -->
+                                                        <!-- <input type="button" id="revoke" value="Revoke" class="siteButton"style="margin-left:15px"/> -->
+                                                        <!-- <input type="button" id="delete" value="Delete" class="siteButton"style="margin-left:15px"/> -->
+
+                                                        <div style="background-image:url(images/accept.gif);background-repeat:no-repeat;width:16px;height:16px; margin-left:25px" class="icon-div"></div>
+                                                        <label id="assign" class="linkLabel">Assign</label>
+
+                                                        <div style="background-image:url(images/warn.png);background-repeat:no-repeat;width:16px;height:16px; margin-left:25px" class="icon-div"></div>
+                                                        <label id="revoke" class="linkLabel">Revoke</label>
+
+
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                            <div id="addHardwareForm">
+                                                <form>
+                                                    <table style="width: 500px;margin: auto;" cellspacing="25px">
+                                                        <tr>
+                                                            <td><label id="selectHardwareTypeLbl">Select Device Type</label></td>
+                                                            <td>
+                                                                <select id="hardwareTypeSelect" class="siteButton">
+                                                                    <option id="option1" selected value="0">--Select Device Type--</option>
+                                                                    <option id="option2" value="op1">Battery</option>
+                                                                    <option id="option3" value="op2">Ram</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label id="selectHardwareLbl">Select Device Type</label></td>
+                                                            <td>
+                                                                <select id="hardwareSelect" class="siteButton">
+                                                                    <option id="option11" value="0">--Select Device--</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label id="componentDetailsLbl">Hardware Component Description</label><br/><br/>
+                                                                <div id="componentDetailsArea" style="width: 450px;height: 100px;" class="textArea"></div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label id="upgradeDescriptionLbl">Add Upgrade Description</label><br/><br/>
+                                                                <textarea rows="8" cols="54" id="upgradeDescription" class="textArea"></textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span class="hidden" id="addHdwErr"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- <div id="upgradeHistoryPopup">
+                                            <h2 style="text-align: center;color: #ffffff;background-color: #005580;margin: 25px auto 25px auto;width: 400px;">Upgrade History for The Device</h2>
+                                        </div> -->
+
+                                        <div id="assignDevicePopup">
+
+                                        <table cellspacing="25px">
+                                            <tr>
+                                                <td><label>User Name</label></td>
+                                                <td><input type="text" placeholder="User name" id="assignUserInput" class="inputField" /></td>
+                                            </tr>
+                                            <tr><label id="errorField" class="error" style="display:none">Please Enter a USer Name</label></tr>
+                                        </table>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <!-- End of devices grid generation -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                                <!--div class="poweredby">
+                                    </div-->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()) {
+                document.documentElement.className += ' ie10';
+            }
+        </script>
+    </body>
+</html>

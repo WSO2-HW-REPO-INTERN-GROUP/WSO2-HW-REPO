@@ -1,0 +1,108 @@
+<!-- Author - Mihil Ranathunga 
+*** Email - mihil@wso2.com
+*** project-wso2 Hardware Repository
+*** interns UOM-2014 -->  
+
+{{^status}}
+{{#accessory_id}}
+<table style='width: 700px; margin:0px 0px 15px 50px -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;'>
+<thead>
+<tr>
+<th style ='width: 300px;height: 15px' >Accessory SN: {{serial_number}}
+</th>
+<th style ='height: 15px'>{{type}}
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class='alt'>
+<td><b>Accessory ID</b>
+</td>
+<td>{{accessory_id}}
+</td>
+</tr>
+<tr>
+<td><b>Health</b>
+</td>
+<td>{{health}}
+</td>
+</tr>
+<tr class='alt'>
+<td><b>Remarks</b>
+</td>
+<td>{{remarks}}
+</td>
+</tr>
+<tr>
+<td><b>Assigned date</b>
+</td>
+<td>{{assigned_date}}
+</td>
+</tr>
+<tr class='alt'>
+<td><b>Remove Date</b>
+</td>
+<td>{{removed_date}}
+</td>
+</tr>
+</tbody>
+</table>
+<br/>
+{{/accessory_id}}
+{{^accessory_id}}
+	
+<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		<span><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+		<strong>Information:</strong> No Accessories For this device</span>
+	</div>
+
+
+{{/accessory_id}}
+{{/status}} 
+{{#status}}
+<table style='width: 700px;'>
+<thead>
+<tr>
+<th style ='width: 300px;height: 15px' >Accessory Warranty: {{war_time_months}} months
+</th>
+<th style ='height: 15px'>Warranty Status : {{status}}
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class='alt'>
+<td><b>Warranty ID</b>
+</td>
+<td>{{warranty_number}}
+</td>
+</tr>
+<tr>
+<td><b>Serial</b>
+</td>
+<td>{{sn}}
+</td>
+</tr>
+<tr  class='alt'>
+<td><b>Accessory</b>
+</td>
+<td>{{type}}
+</td>
+</tr>
+<tr>
+<td><b>Start date</b>
+</td>
+<td>{{start_date}}
+</td>
+</tr>
+<tr class='alt'>
+<td><b>End Date</b>
+</td>
+<td>{{end_date}}
+</td>
+</tr>
+</tbody>
+</table>
+<br/>
+{{/status}}                   

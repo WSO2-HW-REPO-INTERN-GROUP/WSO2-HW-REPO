@@ -1,0 +1,78 @@
+/*.adminHomeTable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}*/
+/*.adminHomeTable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}*/
+/*.adminHomeTable tr {background-color:#ffffff;}*/
+/*.adminHomeTable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}*/
+/*.adminHomeTable tr:hover {background-color:#ffff99;}*/
+
+
+
+.datagrid table {
+    border-collapse: collapse; text-align: center; width: 100%;
+}
+.datagrid {
+      font: normal 12px/150% Arial, Helvetica, sans-serif;
+      background: #fff;
+      overflow: hidden;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+  }
+.datagrid table td, .datagrid table th {
+    padding: 3px 20px;
+}
+.datagrid table thead th {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+    background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');
+    background-color:#006699;
+    color:#FFFFFF; font-size: 15px;
+    font-weight: bold;
+    border-left: 1px solid #0070A8;
+}
+.datagrid table thead th:first-child {
+    border: none;
+}
+.datagrid table tbody td {
+    color: #121212;
+    border-left: 2px solid #E1EEF4;
+    font-size: 13px;
+    font-weight: normal;
+}
+.datagrid table tbody .alt td {
+    background: #E1EEF4;
+    color: #121212;
+}
+.datagrid table tbody td:first-child {
+    border-left: none;
+}
+.datagrid table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.issuePane{
+    /*width: 1000px;*/
+    width: 800px;
+    height: 150px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+    overflow-y: auto;
+}
+
+
+#warranties{
+    margin-left: 0px;
+}
+
+#warrantyDetails{
+    margin-bottom: -40px;
+}
+
+#issueDetails{
+    margin-bottom: -40px;
+}
+
+.issuePaneSearch{
+    margin: 0px 0px;
+}
+

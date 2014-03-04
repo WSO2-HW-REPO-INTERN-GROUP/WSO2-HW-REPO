@@ -1,0 +1,10 @@
+function makePostRequest(resourceName,data){
+
+	log.info("kakka");
+
+	return post(dssUrl+resourceName,data,{"Content-Type":"application/json","Accept": "application/json"}, "json");
+	
+}
+functionmakeGetRequest(resourceName,data){
+	
+}

@@ -1,0 +1,128 @@
+<%
+
+	var log=new Log();
+
+    var store=require("../store.json");
+	var dssUrl=store.urlConfigurations.dssUrl;
+
+
+	var operation=request.getParameter("operation");
+
+	if(operation=="getAllWarranty"){
+		getAllWarranty();
+	}
+
+	else if(operation=="getCustomWarranty"){
+		var searchText=request.getParameter("searchText");
+        var filterVal=request.getParameter("filterValue");
+
+        customWarranty(searchText,filterVal);
+	}
+
+	function getAllWarranty(){
+		var tableDataArray={"aaData": []};
+        var url  = dssUrl+"GetAllWarrantyAdmin";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+        // print(dataArray);
+
+
+        for (var i = 0; i < dataArray.length; i++) {
+        	var dataArr=[];
+            var warrantyId;
+            var object = dataArray[i];
+
+            for (var property in object) {
+                if (property == "warranty_number") {
+                    warrantyId = object[property];
+                }
+                	dataArr.push(object[property]);
+            }
+            dataArr.push('<a target="_blank" href="/HW_REPO/adminwarranties?id='+warrantyId+'">more</a>');
+            tableDataArray.aaData.push(dataArr);
+        }
+        print(tableDataArray);
+    }
+
+
+
+
+    function customWarranty(searchText,status){
+
+    	var tableDataArray={"aaData": []};
+
+        var headers = {"Accept":"application/json" };
+        var data;
+        var url;
+
+        if(searchText=="" && status!="-1"){
+            data={stat:status};
+            url  =dssUrl+"GetWarrantyByDeviceStatus";
+        }
+        else if(searchText!="" && status=="-1"){
+            data={dev_sn:searchText};
+            url  =dssUrl+"GetWarrantyByDeviceSerial";
+        }
+        else if(searchText!="" && status!="-1"){
+            data={dev_sn:searchText,stat:status};
+            url  =dssUrl+"GetWarrantyByDeviceSNandStatus";
+        }
+
+        var result=post(url,data,headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(tableDataArray);
+        }
+        else{
+            if(dataArray.length==null){
+
+                var dataArr=[];
+                var warrantyId;
+
+                for (var property in dataArray) {
+                    if (property == "warranty_number") {
+                        warrantyId = dataArray[property];
+                    }
+                        dataArr.push(dataArray[property]);
+                }
+                dataArr.push('<a "target="_blank" href="/HW_REPO/adminwarranties?id='+warrantyId+'">more</a>');
+                tableDataArray.aaData.push(dataArr);
+
+
+
+
+                print(tableDataArray);
+            }
+            else{
+                for (var i = 0; i < dataArray.length; i++) {
+		        	var dataArr=[];
+		            var warrantyId;
+		            var object = dataArray[i];
+
+		            for (var property in object) {
+		                if (property == "warranty_number") {
+		                    warrantyId = object[property];
+		                }
+		                	dataArr.push(object[property]);
+		            }
+		            dataArr.push('<a target="_blank" href="/HW_REPO/adminwarranties?id='+warrantyId+'">more</a>');
+		            tableDataArray.aaData.push(dataArr);
+		        }
+		        print(tableDataArray);
+            }
+        }
+    }
+
+
+
+%>

@@ -1,0 +1,11 @@
+#deviceIssuesDevision{
+    /*width: 1000px;*/
+    width: 900px;
+    margin: 50px;
+    height: 950px;
+    overflow-y: auto;
+}
+
+#commentDivision{
+    height: 400px;
+}

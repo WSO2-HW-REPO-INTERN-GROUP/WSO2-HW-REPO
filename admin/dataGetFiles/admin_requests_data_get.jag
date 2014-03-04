@@ -1,0 +1,72 @@
+<%
+
+    var log=new Log();
+    var store=require("/store.json");
+    var dssUrl=store.urlConfigurations.dssUrl;
+    
+	var operation=request.getParameter("operation");
+
+	if(operation=="getUnresolved"){
+		getUnresolvedRequests();
+	}
+
+    else if(operation=="getUnassignedDevices"){
+        getUnassignedDevices();
+    }
+
+    function getUnassignedDevices(){
+        var url  = dssUrl+"GetNotAssignedDevices";
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+        var jsonData=result.data;
+
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+    }
+
+	function getUnresolvedRequests(){
+        var url  = dssUrl+"GetUnresolvedRequests";
+
+        var type = "json";
+        var headers = {"Accept":"application/json" };
+        var result=post(url,{},headers,"json");
+
+        var jsonData=result.data;
+        var elementArray=jsonData["BaseElement"];
+        var dataArray=elementArray["Element"];
+
+        if (dataArray==null) {
+            var forcedArray=new Array();
+            print(forcedArray);
+        }
+        else{
+            if(dataArray.length==null){
+                var forcedArray=new Array();
+                forcedArray.push(dataArray);
+                print(forcedArray);
+            }
+            else{
+                print(dataArray);
+            }
+        }
+	}
+
+
+
+%>

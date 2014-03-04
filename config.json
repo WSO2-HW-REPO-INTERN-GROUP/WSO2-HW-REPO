@@ -1,0 +1,12 @@
+{
+    "ssoConfiguration": {
+        "enabled": true,
+        "issuer": "hwrepo",
+        "identityProviderURL": "https://hwrepo.private.wso2.com/wso2is/samlsso",
+        "keyStorePassword": "wso2carbon",
+        "identityAlias": "wso2carbon",
+        "responseSigningEnabled": "true",
+        "keyStoreName": "/repository/resources/security/wso2carbon.jks",
+        "appAcs" : "https://localhost:9443/test/sso.jag",
+    }
+}

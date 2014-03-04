@@ -1,0 +1,212 @@
+<%
+	include("adminCheck.jag");
+    var userName=session.get("LOGGED_IN_USER");
+    var dataGetFilesLocation="admin/dataGetFiles/";
+
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>WSO2 Hardware Repository</title>
+        <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+        <link href="css/adminWarrantyDetails.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="css/carbonFormStyles.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+        <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+
+        <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/customControls.js"></script>
+        <script type="text/javascript" src="js/admin_warranty_details_functions.js"></script>
+        <script>
+                    jQuery(document).ready(function(){
+                    //read the id value sent via the url
+                        readURL()
+                        var urlData = window.location.search.substring(1);
+                        var warrantyID = urlData.split("=");
+            
+                        $("#renewPopup").dialog({
+
+
+                            autoOpen:false,
+                            height: 200,
+                            width: 400,
+                            modal: true,
+                            buttons:{
+                                'Confirm': function() {
+            
+                                    var endDate=document.getElementById("datePicker");
+                                    if(!(endDate.value=="")){
+                                        $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{newEndDate:endDate.value,warrantyNum:warrantyID[1],operation:"renewWarranty"},function(data){
+                                                
+                                                if(data=='SUCCESSFUL'){
+                                                    location.reload(true);
+                                                }
+                                                else{
+                                                    alert("Error While Updating Database");
+                                                }
+                                        });
+                                        $(this).dialog('close');
+                                    }
+                                    else{
+                                        var errSpan=document.getElementById("errSpan");
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please select the date";
+                                    }
+                                }
+                            }
+                        });
+            
+                        $("#renew").click(function(event){
+            
+                            event.preventDefault();
+                            $("#renewPopup").dialog("open");
+                        });
+            
+                        $(function() {
+                            $( "#datePicker" ).datepicker({ dateFormat: 'yy-mm-dd+05:30' });
+                        });
+            
+                        
+                    });
+                
+        </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+
+        <div id="dcontainer"></div>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <div id="header-div">
+                            <div class="right-logo">WSO2 Hardware Repository</div>
+                            <div class="left-logo">
+                            </div>
+                            <div class="middle-ad">
+                            </div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong><%print(userName); %>
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="logout">Sign-out</a>
+                                        </li>
+					<li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="userhome">Login As User</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top" height="400px">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
+                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a>Help</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!--This is edited for issue details implementation -->
+                                <tr>
+                                    <td>
+                                        <div id="adminWarrantyContainer" class="main_container">
+                                            <div id="warrantyBasicDetails">
+                                                <table id="warrantyDetailsTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2">Warranty Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div id="renew">
+                                                <a>Renew Warranty</a>
+                                            </div>
+                                            <div id="renewPopup">
+                                                <table class="warrantiesTable" id="renewTable">
+                                                </table>
+                                                <div id="updateDiv">
+                                                    <label>New End Date: </label>
+                                                    <input id="datePicker" type="text" class="inputField"/><br/><br/>
+                                                    <span id="errSpan"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- End of issue details generation -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()){
+            document.documentElement.className+=' ie10';
+            }
+        </script>
+    </body>
+</html>

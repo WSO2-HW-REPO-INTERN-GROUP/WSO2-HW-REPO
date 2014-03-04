@@ -1,0 +1,332 @@
+<!-- Author - Mihil Ranathunga 
+   *** Email - mihil@wso2.com
+   *** project-wso2 Hardware Repository
+   *** interns UOM-2014 -->  
+<%
+   include("userCheck.jag");
+   var userName=session.get('LOGGED_IN_USER');
+   %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <title>User:Issues</title>
+
+
+       <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all"/>
+      <link rel="stylesheet" href="css/carbonFormStyles.css"/>
+      <link rel="stylesheet" href="css/jquery-ui.css"/>
+      <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+
+       <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all"/>
+
+
+      <!-- My CSS -->
+        <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css"/>
+         <link rel="stylesheet" href="css/jquery.dataTables.css"/>
+
+      <!--[if gte IE 8]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <!--[if gte IE 7]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+      <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
+
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+      <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+      <script type="text/javascript" src="js/jquery-ui.js"></script-->
+      <script type="text/javascript" src="js/mustache.js"></script>
+
+      <!--myscripts-->
+
+      <script type="text/javascript" src="appJS/util.js"></script>
+      <script type="text/javascript" src="appJS/Hwdrepo.js"></script>
+           
+      <!-- This script handles the tabbed pane functionality -->
+      <script type="text/javascript">
+      
+           $(function() {
+         
+        $(function prepareList() {
+         $('#expList').find('li:has(ul)').unbind('click').click(function(event) {
+         if(this == event.target) {
+         $(this).toggleClass('expanded');
+         $(this).addClass('collapsed');
+         $(this).children('ul').toggle('medium');
+         }
+         return false;
+         }).addClass('expanded').removeClass('collapsed').children('ul').show();
+         
+         //Hack to add links inside the cv
+         $('#expList a').unbind('click').click(function() {
+         window.open($(this).attr('href'));
+         return false;
+         });
+         //Create the button functionality
+         $('#expandList').unbind('click').click(function() {
+         $('.collapsed').addClass('expanded');
+         $('.collapsed').children().show('medium');
+         })
+         $('#collapseList').unbind('click').click(function() {
+         $('.collapsed').removeClass('expanded');
+         $('.collapsed').children().hide('medium');
+         })
+         });
+
+         Hwdrepo.initiateIssues();
+
+          $( "#dialog-confirm" ).dialog({
+         autoOpen: false,
+         resizable: false,
+         height:150,
+         modal: true
+
+         });
+
+
+                   $("#editIssueDialog").dialog({
+
+            autoOpen: false,
+            height: 500,
+            width: 700,
+            modal: true
+            });    
+         
+           });
+
+
+              
+         
+      </script>
+   </head>
+   <body>
+      <noscript>
+         &lt;div class="something-wrong"&gt;
+         &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+         &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+         &lt;/div&gt;
+      </noscript>
+      <!--[if lte IE 6]>
+      <div class="something-wrong">
+         <div class="title">Did you know that your Internet Explorer is out of date?</div>
+         <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
+      </div>
+      <![endif]-->
+      <div id="dcontainer"></div>
+      <!-- JS imports for collapsible menu -->
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <!--[IF IE 7]>
+                  <style>
+                     div#header-div div.right-links{
+                     position:absolute;
+                     }
+                  </style>
+                  <![endif]-->
+                  <div id="header-div">
+                     <div class="right-logo">Issues</div>
+                     <div class="left-logo">
+                     </div>
+                     <div class="middle-ad">
+                     </div>
+                     <div class="header-links">
+                        <div class="right-links">
+                           <ul>
+                              <li class="middle">
+                                 <label id="logged-user">
+                                 <strong>Signed-in as:</strong>&nbsp;<%print(userName);%>
+                                 </label>
+                              </li>
+                              <%
+                              if(session.get("role")=='admin'){
+                                 print(" <li class='middle'>|</li><li class='right'><a href='adminhome'>Switch to admin view</a></li>");
+                                 }
+                              %>
+                              <li class="middle">|</li>
+                              <li class="right">
+                                 <a href="logout">Sign-out</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="left">
+                                 <a target="_blank" href="about.html">About</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+            <tr>
+               <td id="menu-panel" valign="top" height="400px">
+                  <div id='mainMenu'>
+                     <ul>
+                        <li><a href='userhome'><span>Home</span></a></li>
+                        <li><a href='userrequests'><span>Requests</span></a></li>
+                        <li class='last'><a href='userissues'><span>Issues</span></a></li>
+                     </ul>
+                  </div>
+               </td>
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div"></div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="README.md" target="_blank">Help</a></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="body">
+                           </td>
+                        </tr>
+                        <!--This is edited for devices grid implementation -->
+                        <tr>
+                           <td>
+                              <div id="normalIssuesContainer" class ="main_container">
+                                 <div id="listContainer" >
+                                    <ul id="expList">
+                                       <li>
+                                          <h2><span style="color: #00346e">My Device Issues</span></h2>
+                                          <!-- Get the data from DB and show here -->
+                                          <br/>
+                                           <hr  style="margin-bottom: 25px"/>
+                                          <br/>
+                                          <ul id="expList" >
+                                             <li>
+                                                <h3><span style="color: #00346e">New Issues</span></h3>
+                                                <!-- Get the data from DB and show here -->
+                                                <ul>
+                                                   <li>
+                                                   <br/>
+                                                      <div id="newIssueDiv" class="datagrid">
+                                                      </div>
+                                                   </li>
+                                                </ul>
+                                                <br/>
+                                                <br/>
+                                             </li>
+                                             <li>
+                                                <h3><span style="color: #00346e">Rejected Issues</span></h3>
+                                                <!-- Get the data from DB and show here -->
+                                                <ul>
+                                                   <li>
+                                                   <br/>
+                                                      <div id="rejectIssueDiv" class="datagrid">
+                                                      </div>
+                                                   </li>
+                                                </ul>
+                                                <br/>
+                                                <br/>
+                                             </li>
+                                             <li>
+                                                <h3><span style="color: #00346e">Admin Resolved Issues</span></h3>
+                                                <!-- Get the data from DB and show here -->
+                                                <ul>
+                                                   <li>
+                                                   <br/>
+                                                      <div id="resolvedIssueDiv" class="datagrid">
+                                                      </div>
+                                                   </li>
+                                                </ul>
+                                                <br/>
+                                                <br/>
+                                             </li>
+                                             <li>
+                                                <h3><span style="color: #00346e">Past Issues</span></h3>
+                                                <!-- Get the data from DB and show here -->
+                                                <ul>
+                                                   <li>
+                                                   <br/>
+                                                      <div id="pastIssueDiv" class="datagrid">
+                                                      </div>
+                                                   </li>
+                                                </ul>
+                                             </li>
+                                          </ul>
+                                          <br/>
+                                          <br/>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </div>
+                               <div id="editIssueDialog" class='ui-dialog-content' title="Edit Issue">
+                                    <form action="">
+                                       <table style="width: 500px;margin: auto;border-collapse: separate; border-spacing: 25px;">
+                                          <tr>
+                                             <td>
+                                                <p style="">Date: </p>
+                                             </td>
+                                             <td><input type="text" id="editDatepicker" class="inputField" tabindex="-1"/></td>
+                                          </tr>
+                                          <tr>
+                                             <td colspan="2">
+                                                <label id="editIssueDescriptionLbl">Add Issue Description</label><br/><br/>
+                                                <textarea rows="8" cols="54" id="editIssueDescription" class="textArea"></textarea>
+                                             </td>
+                                          </tr>
+                                          <tr>
+                                             <td colspan="2">
+                                                <div id="editIssErr" >
+                  
+                                                </div>
+                                             </td>
+                                          </tr>
+                                       </table>
+                                    </form>
+                                 </div>
+                                 <div id="dialog-confirm" title="Report the issue?">
+                                    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Report to lkoperations? You can review it after in issues</p>
+                                 </div>
+                           </td>
+                        </tr>
+                        <!-- End of devices grid generation -->
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+            <tr>
+               <td id="footer" colspan="3">
+                  <div id="footer-div">
+                     <div class="footer-content">
+                        <div class="copyright">
+                           © 2005 - 2014 WSO2 Inc. All Rights Reserved.
+                        </div>
+                        <!--div class="poweredby">
+                           </div-->
+                     </div>
+                  </div>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+         if (Function('/*@cc_on return document.documentMode===10@*/')()){
+             document.documentElement.className+=' ie10';
+         }
+      </script>
+   </body>
+</html>

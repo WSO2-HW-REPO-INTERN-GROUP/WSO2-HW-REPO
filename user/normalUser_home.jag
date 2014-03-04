@@ -1,0 +1,325 @@
+<!-- Author - Mihil Ranathunga 
+   *** Email - mihil@wso2.com
+   *** project-wso2 Hardware Repository
+   *** interns UOM-2014 -->  
+<%
+   include("userCheck.jag");
+   var userName=session.get('LOGGED_IN_USER');
+   %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0110)https://localhost:9443/carbon/sequences/list_sequences.jsp?region=region1&item=sequences_menu&loginStatus=true -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <title>WSO2 Hardware Repository</title>
+      <link href="css/userglobal.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+      <!--<link href="css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">-->
+      <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all"/>
+      <link rel="stylesheet" href="css/carbonFormStyles.css"/>
+      <!--<link rel="stylesheet" href="css/jquery.ui.datepicker.css">-->
+      <link rel="stylesheet" href="css/jquery-ui.css"/>
+      <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+      <link href="css/normalUserPageStyles.css" rel="stylesheet" type="text/css" media="all"/>
+      <!-- My CSS -->
+      <link rel="stylesheet" href="css/jquery.dataTables_themeroller.css"/>
+      <link rel="stylesheet" href="css/jquery.dataTables.css"/>
+      <!--[if gte IE 8]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <!--[if gte IE 7]>
+      <link href="../dialog/css/dialog-ie8.css" rel="stylesheet" type="text/css" media="all"/>
+      <![endif]-->
+      <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+         <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+      <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+      <!--script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+         <script type="text/javascript" src="js/jquery-ui.js"></script-->
+      <script type="text/javascript" src="js/mustache.js"></script>
+      <!--myscripts-->
+      <script type="text/javascript" src="appJS/util.js"></script>
+      <script type="text/javascript" src="appJS/Hwdrepo.js"></script>
+      <!--script type="text/javascript" src="js/jquery.dataTables.js"></script-->
+      <!-- This script handles the tabbed pane functionality -->
+      <script type="text/javascript">
+         jQuery(document).ready(function(){
+         
+             <!--*******************-->
+         
+         
+         $(function prepareList() {
+         $('#expList').find('li:has(ul)').unbind('click').click(function(event) {
+         if(this == event.target) {
+         $(this).toggleClass('expanded');
+         $(this).addClass('collapsed');
+         $(this).children('ul').toggle('medium');
+         }
+         return false;
+         }).addClass('expanded').removeClass('collapsed').children('ul').show();
+         
+         //Hack to add links inside the cv
+         $('#expList a').unbind('click').click(function() {
+         window.open($(this).attr('href'));
+         return false;
+         });
+         //Create the button functionality
+         $('#expandList').unbind('click').click(function() {
+         $('.collapsed').addClass('expanded');
+         $('.collapsed').children().show('medium');
+         })
+         $('#collapseList').unbind('click').click(function() {
+         $('.collapsed').removeClass('expanded');
+         $('.collapsed').children().hide('medium');
+         })
+         });
+         
+         $( "#requestConfirm" ).dialog({
+         autoOpen: false,
+         resizable: false,
+         height:150,
+         modal: true,
+         });
+                
+         
+         $("#requestDeviceForm").dialog({
+         autoOpen:false,
+         height: 500,
+         width: 800,
+         modal: true,
+         buttons:{
+         'Confirm': function() {
+             var deviceType=$("#deviceTypeSelect option:selected").text();
+             var purpose=$("#purposeArea").val();
+             var requirements=$("#requirementArea").val();
+         
+         
+         $("#requestConfirm").dialog("open");
+                        $( "#requestConfirm" ).dialog({ buttons: [ { text: "Got it!", click: function() { Hwdrepo.requestDevice(deviceType,purpose,requirements);$('#requestConfirm').dialog( "close" ); } } ,{ text: "No !", click: function() { $('#requestConfirm').dialog( "close" ); } } ] });
+             $(this).dialog('close');        
+         
+         }
+         }
+         });
+         
+         $( "#addRequestButton" ).button({ label: "Request Device",icons: { primary: "ui-icon-gear"} });
+         
+         
+         $("#addRequestButton").click(function(event)
+         {
+         //Stop any default actions on the button.
+         event.preventDefault();
+         //Open your dialog.
+         $("#requestDeviceForm").dialog("open");
+         
+         });
+             
+         Hwdrepo.initiateHome();
+         
+         
+         });
+         
+      </script>
+   </head>
+   <body>
+      <noscript>
+         &lt;div class="something-wrong"&gt;
+         &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+         &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+         &lt;/div&gt;
+      </noscript>
+      <!--[if lte IE 6]>
+      <div class="something-wrong">
+         <div class="title">Did you know that your Internet Explorer is out of date?</div>
+         <div class="content">To get the best possible experience using our website we recommend that you upgrade to a newer version.</div>
+      </div>
+      <![endif]-->
+      <div id="dcontainer"></div>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <!--[IF IE 7]>
+                  <style>
+                     div#header-div div.right-links{
+                     position:absolute;
+                     }
+                  </style>
+                  <![endif]-->
+                  <div id="header-div">
+                     <div class="right-logo">User Home</div>
+                     <div class="left-logo">
+                     </div>
+                     <div class="middle-ad">
+                     </div>
+                     <div class="header-links">
+                        <div class="right-links">
+                           <ul>
+                              <li class="middle">
+                                 <label id="logged-user">
+                                 <strong>Signed-in as:</strong>&nbsp; <% print(userName); %>
+                                 </label>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="right">
+                                 <a href="logout">Sign-out</a>
+                              </li>
+                              <%
+                                 if(session.get("role")=='admin'){
+                                    print(" <li class='middle'>|</li><li class='right'><a href='adminhome'>Switch to admin view</a></li>");
+                                    }
+                                 %>
+                              <li class="middle">|</li>
+                              <li class="left">
+                                 <a target="_blank" href="about.html">About</a> 
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+            <tr>
+               <td id="menu-panel" valign="top" height="400px">
+                  <div id='mainMenu'>
+                     <ul>
+                        <li><a href='userhome'><span>Home</span></a></li>
+                        <li><a href='userrequests'><span>Requests</span></a></li>
+                        <li class='last'><a href='userissues'><span>Issues</span></a></li>
+                     </ul>
+                  </div>
+               </td>
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div"></div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="README.md" target="_blank">Help</a></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <!--<tr>-->
+                        <!--<td id="body">-->
+                        <!--<img src="./page2_files/1px.gif" width="735px" height="1px">-->
+                        <!--</td>-->
+                        <!--</tr>-->
+                        <!--This is edited for tabbed pane implementation -->
+                        <tr>
+                           <td>
+                              <div id="normalHomeListContainer" class="main_container">
+                                 <ul id="expList">
+                                    <li>
+                                       <h2><span style="color: #00346e">My Requests</span></h2>
+                                       <br/>
+                                       <br/>
+                                       <ul>
+                                          <li>
+                                             <div id="requestArea" class="datagrid">
+                                                <!--data is loaded by the javascript function loadAllIssues()-->
+                                             </div>
+                                          </li>
+                                       </ul>
+                                       <br/>                                      
+                                       <hr  style="margin-bottom: 25px"/>
+                                       <br/>
+                                    </li>
+                                    <li>
+                                       <h2><span style="color: #00346e">My Devices</span></h2>
+                                       <br/>
+                                       <br/>
+                                       <ul>
+                                          <li>
+                                             <div id="deviceArea" class="datagrid">
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <br/>
+                                             <br/>
+                                             <div >
+                                                <!--class="siteButton"--> 
+                                                <button id="addRequestButton" value="New Device"/>
+                                             </div>
+                                          </li>
+                                       </ul>
+                                       <br/>
+                                       <hr  style="margin-bottom: 25px"/>
+                                       <br/>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <!--<button id="addRequestButton" name="addRequestDevice">Add New Device</button>-->
+                              <!-- This is the form for adding a new device -->
+                              <div id="requestDeviceForm" class='ui-dialog-content' title="Request a device">
+                                 <form action="">
+                                    <table style="width: 500px;margin: auto;" cellspacing="25px">
+                                       <tr>
+                                          <td>
+                                             <label id="selectDeviceLbl">Select Device Type</label>             
+                                          </td>
+                                          <td>
+                                             <select id="deviceTypeSelect" class="siteButton">
+                                                <option id="option1">pad</option>
+                                                <option id="option2">laptop</option>
+                                                <option id="option3">desktop</option>
+                                                <option id="option4">server</option>
+                                                <option id="option5">other</option>
+                                             </select>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td style="vertical-align: middle"><label id="purposeLbl" for="purposeArea">Request Purpose</label></td>
+                                          <td><textarea rows="8" cols="80" id="purposeArea" class="textArea"></textarea></td>
+                                       </tr>
+                                       <tr style="vertical-align: middle">
+                                          <td  style="vertical-align: middle"><label id="requirementLbl" for="requirementArea">Requirement Details</label></td>
+                                          <td><textarea rows="8" cols="80" id="requirementArea" class="textArea"></textarea></td>
+                                       </tr>
+                                    </table>
+                                 </form>
+                              </div>
+                              <div id="requestConfirm" title="Request a device?">
+                                 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Report to lkoperations? You can review it after in Requests</p>
+                              </div>
+                           </td>
+                        </tr>
+                        <!-- End of tab pane generation -->
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+            <tr>
+               <td id="footer" colspan="3">
+                  <div id="footer-div">
+                     <div class="footer-content">
+                        <div class="copyright">
+                           © 2005 - 2014 WSO2 Inc. All Rights Reserved.
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+         if (Function('/*@cc_on return document.documentMode===10@*/')()){
+             document.documentElement.className+=' ie10';
+         }
+      </script>
+   </body>
+</html>

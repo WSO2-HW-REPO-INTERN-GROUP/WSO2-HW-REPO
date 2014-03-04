@@ -1,0 +1,24 @@
+<%
+var log = new Log();
+var roles = session.get("Roles");
+if(!session.get("Logged")) {
+		if(request.getRequestURL().indexOf("https") == -1){
+			print('<script>alert("'+request.getRequestURL().replace("http","https")+'")');
+			session.put("prevURL",request.getRequestURL().replace("http","https"));
+		}else{
+			session.put("prevURL",request.getRequestURL());
+		}response.sendRedirect("login");
+	}
+	else{
+		if(roles.indexOf("hwadmin") > -1){
+			session.put("prevURL","");
+			session.put("role","admin");
+			response.sendRedirect("adminhome");
+		}else{
+			session.put("prevURL","");
+			session.put("role","user");
+			response.sendRedirect("userhome");
+		}
+	}
+%>
+

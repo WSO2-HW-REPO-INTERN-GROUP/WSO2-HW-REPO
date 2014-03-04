@@ -1,0 +1,904 @@
+<%
+    include("adminCheck.jag");
+    var userName=session.get('LOGGED_IN_USER');
+    var dataGetFilesLocation="admin/dataGetFiles/";
+%>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <head>
+            <title>Admin:Home</title>
+            <link href="css/global.css" rel="stylesheet" type="text/css" media="all">
+            <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+            <link href="css/dialog.css" rel="stylesheet" type="text/css" media="all">
+            <link href="css/adminDevices.css" rel="stylesheet" type="text/css" media="all">
+            <link rel="stylesheet" href="css/carbonFormStyles.css">
+            <link href="css/demo_table_jui.css" rel="stylesheet" type="text/css">
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+            <link rel="icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+            <link rel="shortcut icon" href="https://10.217.234.165:9443/carbon/admin/images/favicon.ico" type="image/x-icon">
+            <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+            <script type="text/javascript" src="js/jquery-ui.js"></script>
+            <script type="text/javascript" src="js/customControls.js"></script>
+            <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+            <script type="text/javascript" src="js/admin_devices_functions.js"></script>
+
+            <!-- This script handles the tabbed pane functionality -->
+            <script type="text/javascript">
+                $(document).ready(function(){                   
+
+                    var basicFields=new Array();
+                    var accHealth;
+                    basicFields=[$("#serial"),$('#make'),$("#model"),$("#rating"),$("#purchaseDate"),$('#supplier'),$('#remarks'),$("#deviceType"),$("#warrantyEndDate")];
+                    var inputData={};
+                    var remarks;
+                    var dropdownSelect="";                
+                    getAllDevices();
+
+                    <!--Add the health bar-->
+                    var canvas = document.getElementById('canvas');
+                    canvas.width = 150;
+                    canvas.height = 50;
+                    var context = canvas.getContext('2d');
+
+                    var object1 = {
+                        x: 20,
+                        y: 30,
+                        width: 100,
+                        height: 20
+
+                    };
+
+                    var health = 10;
+                    var maxHealth = 10;
+
+                    // Loop
+                    setInterval(onTimerTick, 33);
+                    // Render Loop
+                    function onTimerTick() {
+                        // Clear the canvas
+                        canvas.width = canvas.width;                        
+                        // Calculate health bar percent
+                        var percent = health / maxHealth;
+                        accHealth=health;
+
+                        context.fillStyle = "#9ecaed";
+                        context.font = "18px sans-serif";
+                        context.fillText("Life " +health+"/"+maxHealth+" = " + percent * 100 +"%", 20, 20);
+
+                        context.fillStyle = "#d9d9d9";
+                        context.fillRect(object1.x, object1.y, object1.width, object1.height);
+
+                        context.fillStyle = "#9ecaed";
+                        context.fillRect(object1.x, object1.y, object1.width * percent, object1.height);
+                    }
+
+                    function contains(target, x, y) {
+                        if (x >= target.x && x <= (target.x + target.width) && y >= target.y && y <= (target.y + target.height)) {
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    // Update mouse position
+                    canvas.onmousemove = function (e) {
+                        var mouseX = e.offsetX;
+                        var mouseY = e.offsetY;
+
+                        if (contains(object1, mouseX, mouseY)) {
+                            health = Math.round(((mouseX - object1.x) / object1.width) * maxHealth);
+                        }
+                    }
+
+                    <!--Add the health bar-->
+
+                    $("#addNewAccessory").dialog({
+                        autoOpen:false,
+                        height: 450,
+                        width:650,
+                        modal: true,
+                        buttons:{
+                            'Confirm': function() {
+
+                                var accSerial=$("#accSerial").val();
+                                var accType=$('#accType').val();
+                                var remarks=$("#accRemarks").val();
+                                var accPurchaseDate=$("#accPurchase").val();
+                                var accWarEndDate=$("#accWarEnd").val();
+
+                                if(accSerial=="" || accType=="0" || remarks=="" || accPurchaseDate=="" || accWarEndDate==""){
+                                    document.getElementById("accError").style.display="";
+                                }
+                                else{
+                                    document.getElementById("accError").style.display="none";
+                                    var accData={
+                                        "serial":accSerial,
+                                        "accType":accType,
+                                        "remarks":remarks,
+                                        "health":accHealth,
+                                        "purchaseDate":accPurchaseDate,
+                                        "endDate":accWarEndDate
+                                    };
+
+                                    $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"addAccessory",inputs:JSON.stringify(accData)},function(data,status){
+                                        if(data=='SUCCESSFUL'){
+                                            location.reload(true);
+                                        }
+                                        else{
+                                            alert("Error While Updating Database");
+                                        }
+                                    });
+                                    $(this).dialog('close');
+                                }                             
+                            }
+                        }
+                    });
+                
+                    $("#addDevicePopup").dialog({
+                        autoOpen:false,
+                        height: 600,
+                        width:850,
+                        modal: true,
+                        buttons:{
+                            'Confirm': function() {
+
+                            var submitError=false;
+                            var deviceType=$('#deviceType').val();
+                            var inputJsonObj={};
+
+                                for(var i=0;i<basicFields.length;i++){
+                                    if(basicFields[i].val()==""){
+                                            basicFields[i].removeClass("inputField");
+                                            basicFields[i].addClass("errorInputField");
+                                            submitError=true;                                            
+                                    }
+                                    else{
+                                            basicFields[i].removeClass("errorInputField");
+                                            basicFields[i].addClass("inputField");
+                                            if(i==6){
+                                                remarks=basicFields[i].val();
+                                            }
+                                            else if(i!=7){
+                                                inputData[basicFields[i].attr('id')]=basicFields[i].val();
+                                            }
+                                    }
+                                }                                
+
+                                switch (deviceType){
+
+                                    case '0':
+                                    break;
+
+                                    case '1':{
+                                        var padFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','screen','touch','cam','vga','remarks'];
+                                        //var itemsArr={};
+
+                                        padFields=[$("#padScreen"),$("#padTouch"),$("#padCam"),$("#padVga")];
+
+                                        inputJsonObj["type"]="AddPad";
+
+                                        for(var i=0;i<padFields.length;i++){
+
+                                            if(padFields[i].val()==""){
+                                                padFields[i].removeClass("inputField");
+                                                padFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    padFields[i].removeClass("errorInputField");
+                                                    padFields[i].addClass("inputField");
+                                                    //temsArr[padFields[i].attr('id')]=padFields[i].val();
+                                                    inputData[padFields[i].attr('id')]=padFields[i].val();
+                                            }
+                                        }
+                                        
+                                        inputData['remarks']=remarks;
+                                        inputJsonObj["padData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+                                        break;
+                                    }
+
+                                    case '2':{
+
+                                        var desktopsFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','cpu','memory','remarks'];
+
+                                        inputJsonObj["type"]="AddDesktop";
+
+                                        desktopsFields=[$("#dtProcessor"),$("#dtMemory")/*,$("#dtVga"),$("#dtHdd")*/];
+
+                                        for(var i=0;i<desktopsFields.length;i++){
+                                            if(desktopsFields[i].val()==""){
+                                                desktopsFields[i].removeClass("inputField");
+                                                desktopsFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    desktopsFields[i].removeClass("errorInputField");
+                                                    desktopsFields[i].addClass("inputField");
+                                                    //itemsArr[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                                    inputData[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                            }
+                                        }
+                                        //inputJsonObj["deskTop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+                                        //queryType="AddDesktop";
+
+                                        inputJsonObj["desktopData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+                                        break;
+                                    }
+
+
+                                    case '3':{
+                                        var laptopsFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','screen','cpu','vga','memory','remarks'];
+                                        //var itemsArr={};
+                                        inputJsonObj["type"]="AddLaptop";
+
+                                        laptopsFields=[$("#lapScreen"),$("#lapProcessor"),$("#lapVga"),$("#lapMemory")/*,$("#lapHdd")*/];
+                                        for(var i=0;i<laptopsFields.length;i++){
+                                            if(laptopsFields[i].val()==""){
+                                                laptopsFields[i].removeClass("inputField");
+                                                laptopsFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    laptopsFields[i].removeClass("errorInputField");
+                                                    laptopsFields[i].addClass("inputField");
+                                                    //itemsArr[laptopsFields[i].attr('id')]=laptopsFields[i].val();
+                                                    inputData[laptopsFields[i].attr('id')]=laptopsFields[i].val();
+                                            }
+                                        }
+
+                                        //inputJsonObj["laptop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+
+                                        //queryType="AddLaptop";
+
+                                        inputJsonObj["laptopData"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+                                        break;
+                                    }
+
+                                    case '5':{
+                                        var monitorFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','screen','remarks'];
+                                        //var itemsArr={};
+                                        inputJsonObj["type"]="AddLcdMonitor";
+                                        monitorFields=[$("#screen")];
+
+
+                                        for(var i=0;i<monitorFields.length;i++){
+                                            if(monitorFields[i].val()==""){
+                                                monitorFields[i].removeClass("inputField");
+                                                monitorFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    monitorFields[i].removeClass("errorInputField");
+                                                    monitorFields[i].addClass("inputField");
+                                                    inputData[monitorFields[i].attr('id')]=monitorFields[i].val();
+                                            }
+                                        }
+
+                                        //inputJsonObj["laptop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+
+                                        //queryType="AddLaptop";
+
+                                        inputJsonObj["AddLcdMonitor"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+                                        break;
+                                    }
+
+
+                                    case '4':{
+
+                                        var desktopsFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','cpu','memory','remarks'];
+
+                                        inputJsonObj["type"]="AddServerRoomDesktop";
+
+                                        desktopsFields=[$("#dtProcessor"),$("#dtMemory")/*,$("#dtVga"),$("#dtHdd")*/];
+
+                                        for(var i=0;i<desktopsFields.length;i++){
+                                            if(desktopsFields[i].val()==""){
+                                                desktopsFields[i].removeClass("inputField");
+                                                desktopsFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    desktopsFields[i].removeClass("errorInputField");
+                                                    desktopsFields[i].addClass("inputField");
+                                                    //itemsArr[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                                    inputData[desktopsFields[i].attr('id')]=desktopsFields[i].val();
+                                            }
+                                        }
+                                        //inputJsonObj["deskTop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+                                        //queryType="AddDesktop";
+
+                                        inputJsonObj["AddServerRoomDesktop"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+                                        break;
+                                    }
+
+
+                                    case '6':{
+                                        var otherFields=new Array();
+                                        var namesArray=['sn','make','model','rating','date','supplier','type','remarks'];
+                                        //var itemsArr={};
+                                        inputJsonObj["type"]="AddOtherDevice";
+                                        otherFields=[$("#type")];
+
+
+                                        for(var i=0;i<otherFields.length;i++){
+                                            if(otherFields[i].val()==""){
+                                                otherFields[i].removeClass("inputField");
+                                                monitorFields[i].addClass("errorInputField");
+                                                submitError=true;
+                                            }
+                                            else{
+                                                    otherFields[i].removeClass("errorInputField");
+                                                    otherFields[i].addClass("inputField");
+                                                    inputData[otherFields[i].attr('id')]=otherFields[i].val();
+                                            }
+                                        }
+
+                                        //inputJsonObj["laptop"]=itemsArr;
+                                        inputData['remarks']=remarks;
+
+                                        //queryType="AddLaptop";
+
+                                        inputJsonObj["AddOtherDevice"]=inputData;
+                                        inputJsonObj['names']=namesArray;
+
+                                        break;
+                                    }
+
+
+
+                                }
+
+                                if(submitError==false){
+                                    $.post(<%print('"'+dataGetFilesLocation+"admin_devices_updates.jag"+'"');%>,{operation:"update",arr:JSON.stringify(inputJsonObj)},function(data){
+
+                                        if(data=='SUCCESSFUL'){
+                                                location.reload(true);
+                                            }
+                                            else{
+                                                alert("Error While Updating Database");
+                                            }
+                                    });
+
+                                    $(this).dialog("close");
+                                }
+                                else{
+                                    inputData={};
+                                }
+                            }
+                        }
+                    });
+                
+                
+                    $("#addNewDevice").click(function(event){
+                        event.preventDefault();
+                        $("#addDevicePopup").dialog("open");
+                    });
+
+                    $("#addNewAcc").click(function(event){
+                        event.preventDefault();
+                        $("#addNewAccessory").dialog("open");
+                    });
+                
+                    $('#deviceType').change(function(){
+                
+                        var option = document.getElementById("deviceType");
+                        var selectedVal = option.options[option.selectedIndex].value;
+                
+                        if(selectedVal=="1"){
+                            document.getElementById('pads').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="pads";
+                        }
+                        else if(selectedVal=='2'){
+                            document.getElementById('desktops').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="desktops";
+                        }
+                        else if(selectedVal=='3'){
+                            document.getElementById('laptops').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="laptops";
+                        }
+                        else if(selectedVal=='4'){
+                            document.getElementById('desktops').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="desktops";
+                        }
+                        else if(selectedVal=='5'){
+                            document.getElementById('lcdMonitor').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="lcdMonitor";
+                        }
+                        else if(selectedVal=='6'){
+                            document.getElementById('otherDevice').style.display="";
+                            if(dropdownSelect!=""){
+                                document.getElementById(dropdownSelect).style.display="none";
+                            }
+                            dropdownSelect="otherDevice";
+                        }
+                
+                    });
+                
+                    $(function() {
+                        $( "#purchaseDate" ).datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                        $("#warrantyEndDate").datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                        $( "#accPurchase" ).datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                        $("#accWarEnd").datepicker({ dateFormat: 'yy-mm-dd+05:30'});
+                    });
+
+
+                    $("#searchDevices").click(function(){
+                        var userName=document.getElementById("userName");
+                        var serialNum=document.getElementById('serialNum');
+                        var deviceModel=document.getElementById("deviceModel");
+                        var deviceTypeSelect=document.getElementById("deviceTypeSelect");
+                        var radioGroup=document.getElementsByName("searchType");
+                        var errSpan=document.getElementById("searchErr");
+                        var queryType;
+
+                        for(var a=0;a<radioGroup.length;a++){
+                            if(radioGroup[a].checked){
+                                if(radioGroup[a].value=="0"){
+                                    if(serialNum.value==""){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=0;
+                                        getSearchedDevices(queryType,serialNum.value);
+                                    }
+                                }
+                                else if(radioGroup[a].value=="1"){
+                                    if(userName.value==""){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=1;
+                                        getSearchedDevices(queryType,userName.value);
+                                    }
+                                }
+                                else if(radioGroup[a].value=="2"){
+                                    if(deviceModel.value==""){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=2;
+                                        getSearchedDevices(queryType,deviceModel.value);
+                                    }
+                                }
+                                else if(radioGroup[a].value=="3"){
+                                    if(deviceTypeSelect.value=="0"){
+                                        errSpan.classList.remove(errSpan.className);
+                                        errSpan.classList.add("error");
+                                        errSpan.textContent="Please insert search Text";
+                                    }
+                                    else{
+                                        queryType=3;
+                                        getSearchedDevices(queryType,deviceTypeSelect.options[deviceTypeSelect.selectedIndex].text);
+                                    }
+                                }
+                            }
+                            else{
+                                    errSpan.classList.remove(errSpan.className);
+                                    errSpan.classList.add("error");
+                                    errSpan.textContent="Please insert search Text";
+                                }
+                        }
+                    });
+                });
+
+                
+            </script>
+    </head>
+    <body>
+        <noscript>
+            &lt;div class="something-wrong"&gt;
+            &lt;div class="title"&gt;JavaScript is disabled on your browser&lt;/div&gt;
+            &lt;div class="content"&gt;Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.&lt;/div&gt;
+            &lt;/div&gt;
+        </noscript>
+        <div id="dcontainer"></div>
+        <table id="main-table" border="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td id="header" colspan="3">
+                        <div id="header-div">
+                            <div class="right-logo">WSO2 Hardware Repository</div>
+                            <div class="left-logo">
+                            </div>
+                            <div class="middle-ad">
+                            </div>
+                            <div class="header-links">
+                                <div class="right-links">
+                                    <ul>
+                                        <li class="middle">
+                                            <label id="logged-user">
+                                            <strong>Signed-in as:</strong><%print(userName);%>
+                                            </label>
+                                        </li>
+                                        <li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="logout">Sign-out</a>
+                                        </li>
+					<li class="middle">|</li>
+                                        <li class="right">
+                                            <a href="userhome">Login As User</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="menu-panel" valign="top" height="400px">
+                        <div id='mainMenu'>
+                            <ul>
+                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
+                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li class='last'><a href='#'><span>Report Generation</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="middle-content">
+                        <table id="content-table" border="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td id="page-header-links">
+                                        <table class="page-header-links-table" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="breadcrumbs">
+                                                        <table class="breadcrumb-table" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="breadcrumb-div"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="page-header-help"><a>Help</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="body">
+                                    </td>
+                                </tr>
+                                <!--This is edited for devices grid implementation -->
+                                <tr>
+                                    <td>
+                                        <div id="devicesContainer" class="main_container">
+                                            <div id="devicesSearch">
+                                                <table id="operations" cellspacing="20px" >
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="0" id="serialBtn">Device Serial Number<br>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="Serial Number" class="inputField" id="serialNum"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="1" id="userBtn">User Name<br>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="User Name" class="inputField" id="userName"/>
+                                                        </td>
+                                                    </tr>
+
+
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="2" id="modelBtn">Device Model<br>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="Device Model" class="inputField" id="deviceModel"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>
+                                                            <input type="radio" name="searchType" value="3" id="deviceTypeBtn">Device Type<br>
+                                                        </td>
+                                                        <td>
+                                                            <select id="deviceTypeSelect" class="siteButton">
+                                                                <option selected="selected" disabled="disabled" value="0">Select Device Type</option>
+                                                                <option id="dev1" value="1">pad</option>
+                                                                <option id="dev2" value="2">laptop</option>
+                                                                <option id="dev3" value="3">desktop</option>
+                                                                <option id="dev3" value="4">Server Room Desktop Machine</option>
+                                                                <option id="dev3" value="5">LCD Monitor</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr><br>
+                                                    <tr>
+                                                        <td>
+                                                            <!-- <input type="button" value="Search" class="siteButton" id="searchDevices"/> -->
+                                                            <div style="background-image:url(images/magnifier.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                            <label id="searchDevices" class="linkLabel">Search</label>
+                                                        </td>
+                                                        <td>
+                                                            <!-- <input type="button" value="Add Device" class="siteButton" id="addNewDevice"/> -->
+                                                            <div style="background-image:url(images/menu_add_ds.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                            <label id="addNewDevice" class="linkLabel">Add Device</label>
+                                                        </td>
+                                                        <td>
+                                                            <!-- <input type="button" value="Add Accessory" class="siteButton" id="addNewAcc"/> -->
+                                                            <div style="background-image:url(images/menu_add_ds.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div>
+                                                            <label id="addNewAcc" class="linkLabel">Add Accessory</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="hidden" id="searchErr"></span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div id="workArea" style="margin:25px 0px 25px 0px">
+                                            <div id="deviceDetailsDiv" style="width:900px;margin:auto">
+                                                <table id="devices"  class="styledLeft" style="margin:auto">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Device ID</th>
+                                                            <th>Device Serial</th>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th>Rating</th>
+                                                            <th>Purchase Date</th>
+                                                            <th>Type</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                                <div style="height:50px"></div>
+                                            </div>
+                                            <div id="searchedDeviceDetailsDiv" style="display: none;width:900px;margin:auto">
+                                                <table id="searchedDevices" class="styledLeft" style="margin:auto">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Device ID</th>
+                                                            <th>Device Serial</th>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th>Rating</th>
+                                                            <th>Purchase Date</th>
+                                                            <th>Type</th>
+                                                            <th></th>
+                                                            <th></th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+
+                                            </div>
+                                        </div>
+                                        <div id="addDevicePopup">
+                                            <form id="addDeviceForm">
+                                                <table cellspacing="25px" style="width: 500px">
+                                                    <tr>
+                                                        <td><label>Device Serial</label></td>
+                                                        <td><input type="text" id="serial" class="inputField" style="width: 225px" /></td>
+                                                        <td><label>Model</label></td>
+                                                        <td><input type="text" id="model" class="inputField" style="width: 225px"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Make</label></td>
+                                                        <td><input type="text" id="make" class="inputField" style="width: 225px"/></td>
+                                                        <td><label>Rating (I to 5)</label></td>
+                                                        <td><input type="text" id="rating" class="inputField" style="width: 225px"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Purchase Date</label></td>
+                                                        <td><input type="text" id="purchaseDate" class="inputField" style="width: 225px"/></td>
+                                                        <td><label>Warranty End Date</label></td>
+                                                        <td><input type="text" id="warrantyEndDate" class="inputField" style="width: 225px"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Supplier</label></td>
+                                                        <td><input type="text" id="supplier" class="inputField" style="width: 225px"/></td>
+                                                        <td><label>Type</label></td>
+                                                        <td>
+                                                            <select id="deviceType" class="siteButton">
+                                                                <option value="0">Select Type</option>
+                                                                <option value="1">Pads</option>
+                                                                <option value="2">Desktops</option>
+                                                                <option value="3">Laptops</option>
+                                                                <option value="4">Server Room Desktop Machine</option>
+                                                                <option value="5">LCD Monitor</option>
+                                                                <option value="6">Other</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Remarks</label></td>
+                                                        <td colspan="3"><textarea rows="6" cols="80" placeholder="Remarks" class="textArea" id="remarks"></textarea></td>
+                                                    </tr>
+                                                </table>
+                                                <div id="specificDetails">
+                                                    <div id="pads" style="display: none">
+                                                        <table cellspacing="30px" style="width: 500px">
+                                                            <tr>
+                                                                <td><label>Screen Size</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Screen Size" id="padScreen"/></td>
+                                                                <td><label>Touch Type</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Touch Type" id="padTouch"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><label>Camera</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Camera" id="padCam"/></td>
+                                                                <td><label>VGA</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="VGA" id="padVga"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div id="laptops" style="display: none">
+                                                        <table cellspacing="30px" style="width: 500px">
+                                                            <tr>
+                                                                <td><label>Screen Size</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Screen Size"  id="lapScreen"/></td>
+                                                                <td><label>Processor</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Processor" id="lapProcessor"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><label>Memory</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Memory" id="lapMemory"/></td>
+                                                                <td><label>VGA</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="VGA" id='lapVga'/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><label>HDD</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="HDD" id="lapHdd"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div id="desktops" style="display: none">
+                                                        <table cellspacing="30px" style="width: 500px">
+                                                            <tr>
+                                                                <td><label>Processor</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Processor" id="dtProcessor"/></td>
+                                                                <td><label>Memory</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Memory" id="dtMemory"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><label>VGA</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="VGA" id="dtVga"/></td>
+                                                                <td><label>HDD</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="HDD" id="dtHdd"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div id="lcdMonitor" style="display: none">
+                                                        <table cellspacing="20px">
+                                                            <tr>
+                                                                <td><label>Screen Size</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Screen Size" id="screen"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div id="otherDevice" style="display: none">
+                                                        <table cellspacing="20px">
+                                                            <tr>
+                                                                <td><label>Device Type</label></td>
+                                                                <td><input type="text" class="inputField" placeholder="Device Type" id="type"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+
+                                        <div id="addNewAccessory">
+                                            <table id="newAccessoryAddTbl" cellspacing="25px">
+                                                <tr>
+                                                    <td><label>Serail Numbber</label></td>
+                                                    <td><input type="text" class="inputField" placeholder="Serial Number" id="accSerial"/></td>
+                                                    <td><label>Type</label></td>
+                                                    <td><select id="accType" class="siteButton">
+                                                                <option value="0">Select Type</option>
+                                                                <option value="1">Battery</option>
+                                                                <option value="2">Ram</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><label>Health</label></td>
+                                                    <td><canvas id="canvas" style="margin-left:-20px"></canvas></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><labe>Purchase Date</labe></td>
+                                                    <td><input type="text" id="accPurchase" placeholder="Purchase Date" class="inputField"/></td></td>
+
+                                                    <td><labe>Warranty End Date</labe></td>
+                                                    <td><input type="text" id="accWarEnd" placeholder="Warranty End Date" class="inputField" /></td></td>
+                                                </tr>
+                                                    
+                                                                                                   
+                                            </table>
+                                            <div style="margin-left:25px">
+                                                <label>Remarks</label></br>
+                                                <textarea rows="6" cols="67" placeholder="Remarks" class="textArea" id="accRemarks"></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label id="accError" class="error" style="display: none">Please fill all the required fields</label>
+                                            </div>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                                <!-- End of devices grid generation -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="footer" colspan="3">
+                        <div id="footer-div">
+                            <div class="footer-content">
+                                <div class="copyright">
+                                    © 2005 - 2013 WSO2 Inc. All Rights Reserved.
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            if (Function('/*@cc_on return document.documentMode===10@*/')()){
+                document.documentElement.className+=' ie10';
+            }
+        </script>
+    </body>
+</html>

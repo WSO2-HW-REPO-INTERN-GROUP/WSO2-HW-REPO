@@ -1,0 +1,63 @@
+<!-- Author - Mihil Ranathunga 
+*** Email - mihil@wso2.com
+*** project-wso2 Hardware Repository
+*** interns UOM-2014 -->  
+
+{{#status}}
+<table style='width: 600px; margin:0px 0px 15px 50px -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;'>
+<thead>
+<tr>
+<th style ='width: 100px;height: 15px' >Request ID {{request_id}}
+</th>
+<th style ='height: 15px'>{{device_type}}  <span style="padding-left:100px">Status: {{status}}</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class='alt'>
+<td><b>Purpose</b>
+</td>
+<td>{{purpose}}
+</td>
+</tr>
+<tr>
+<td><b>Requirement</b>
+</td>
+<td>{{requirements}}
+</td>
+</tr>
+<tr class='alt'>
+<td><b>Reported Date</b>
+</td>
+<td>{{request_date}}
+</td>
+</tr>
+{{#rejected}}
+<tr>
+<td colspan="2">
+<!--button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:15px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button-->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.deleteRequest({{request_id}});'>Delete Request</label>
+</td>
+</tr>
+{{/rejected}}
+{{#New}}
+<tr>
+<td>
+<!--button id='deleteRequest{{request_id}}' class='siteButton' style='margin-top:10px;' onclick='Hwdrepo.deleteRequest({{request_id}});' >Delete Request</button-->
+<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.deleteRequest({{request_id}});'>Delete Request</label>
+</td>
+</tr>
+{{/New}}
+{{#resolved}}
+<td>
+<!--button id='confirmRequest{{request_id}}' class='siteButton' style='' onclick='Hwdrepo.confirmRequest({{request_id}});' >Confirm Response</button-->
+<div style="background-image:url(images/activate.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick='Hwdrepo.confirmRequest({{request_id}});'>Confirm Response</label>
+</td>
+{{/resolved}} 
+</tr>
+</tbody>                    
+</table>
+<br/>
+{{/status}}
