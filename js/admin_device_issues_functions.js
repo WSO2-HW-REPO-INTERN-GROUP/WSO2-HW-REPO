@@ -3,13 +3,10 @@ function getReportedIssues() {
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
 
-
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
-
         operation: "getReportedIssues",
         device_id: deviceID[1]
     }, function (data, status) {
-
 
         var objArray = JSON.parse(data);
 
@@ -79,7 +76,6 @@ function getReportedIssues() {
             linkTd.setAttribute("colspan", "2");
 
             var link = document.createElement('a');
-
             link.setAttribute("href", ("adminissues?id=" + device_id));
             link.innerHTML = 'more';
             linkTd.appendChild(link);

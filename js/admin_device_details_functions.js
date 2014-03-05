@@ -1,7 +1,6 @@
 function readURL() {
     var urlData = window.location.search.substring(1);
     deviceID = urlData.split("=");
-
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
         device_id: deviceID[1],
         operation: "getDeviceDetails"
@@ -16,9 +15,9 @@ function readURL() {
         var assignBtn = document.getElementById("assign");
         var revokeBtn = document.getElementById("revoke");
 
-        basicDetailsTbl.style.width = "600px";
+        basicDetailsTbl.style.width = "800px";
         basicDetailsArea.setAttribute('class', 'datagrid');
-        editableBasicDetailsTbl.style.width = "600px";
+        editableBasicDetailsTbl.style.width = "800px";
         editableBasicDetailsArea.setAttribute('class', 'datagrid');
         var tbody = document.createElement('tbody');
         var editableTbody = document.createElement('tbody');
@@ -29,10 +28,14 @@ function readURL() {
 
             if (property == "assigned_state" && object[property] == "true") {
                 assignBtn.style.display = "none";
+                $("#assignImg").hide();
                 revokeBtn.style.display = "";
+                $("#revokeImg").show();
             } else if (property == "assigned_state" && object[property] == "false") {
                 assignBtn.style.display = "";
+                $("#assignImg").show();
                 revokeBtn.style.display = "none";
+                $("#revokeImg").hide();
             } else {
 
                 //if(object[property]!=null){
@@ -116,13 +119,10 @@ function getUpgradeHistory() {
 
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
-
     $.post("admin/dataGetFiles/admin_data_get.jag", {
-
         operation: "upgradeHistory",
         device_id: deviceID[1]
     }, function (data, status) {
-
 
         var objArray = JSON.parse(data);
 
@@ -192,9 +192,7 @@ function getAccessories() {
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
 
-
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
-
         operation: "getAccessories",
         deviceID: deviceID[1]
     }, function (data, status) {
@@ -244,12 +242,10 @@ function getAccessories() {
                 if (property == 'accessory_id') {
                     var accId = object[property]
                     th.appendChild(document.createTextNode("Accessory ID: " + accId));
-
                     removeLbl.onclick = function () {
                         var inputData = {
                             "accID": accId
                         };
-
                         $.post("admin/dataGetFiles/admin_devices_updates.jag", {
                             operation: "removeAccessory",
                             inputs: JSON.stringify(inputData)
@@ -260,7 +256,6 @@ function getAccessories() {
                             else{
                                 alert("Error While Updating Database");
                             }
-
                         });
                     };
 
@@ -305,14 +300,11 @@ function getReportedIssues() {
 
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
-
     var issueID="";
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
-
         operation: "getReportedIssues",
         device_id: deviceID[1]
     }, function (data, status) {
-
 
         var objArray = JSON.parse(data);
 
@@ -320,7 +312,6 @@ function getReportedIssues() {
         tablearea.setAttribute("class", "datagrid");
 
         for (var i = 0; i < objArray.length; i++) {
-
             var cntr = 0;
             var device_id;
 
@@ -349,9 +340,7 @@ function getReportedIssues() {
                 }
 
                 if (property == 'issue_number') {
-
     		    issueID=object[property];
-
                     th.appendChild(document.createTextNode("Issue ID: " + object[property]));
                 }
 
@@ -385,9 +374,7 @@ function getReportedIssues() {
             linkTd.setAttribute("colspan", "2");
 
             var link = document.createElement('a');
-
             link.setAttribute("href", ("adminissues?id=" +issueID));
-
             link.innerHTML = 'more';
             linkTd.appendChild(link);
             linkRow.appendChild(linkTd);
@@ -405,13 +392,10 @@ function getReportedIssues() {
 function getWarrantyDetails(){
     var urlData = window.location.search.substring(1);
     var deviceID = urlData.split("=");
-
     $.post("admin/dataGetFiles/admin_devices_data_get.jag", {
-
         operation: "accessoryWarrantyDetails",
         device_id: deviceID[1]
     }, function (data, status) {
-
 
         var objArray = JSON.parse(data);
 

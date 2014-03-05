@@ -3,11 +3,9 @@ function readURL() {
     var urlData = window.location.search.substring(1);
     
     var issueID = urlData.split("=");
-
     $.ajax({
         type: 'POST',
         url :"admin/dataGetFiles/admin_data_get.jag", 
-
         data :{
         operation: "getissueDetails",
         issueID: issueID[1]
@@ -22,7 +20,6 @@ function readURL() {
 
         var object = JSON.parse(data);
 
-
         for (var property in object) {
 
             var newRow = document.createElement('tr');
@@ -32,21 +29,26 @@ function readURL() {
             }
 
             if (property == "device_id") {
-
                 deviceID = object[property];
-
             } else if (property == "resolved") {
 
                 if(object[property] == "1" || object[property] == "4" || object[property] == "3"){
                     $("#issueStat").hide();
+                    $("#issueAccept").hide();
+                    $('#acImg').hide();
                 }
 
                 if (object[property] == "0") {
                     //$("#issueResolve").hide();
                     $("#viewUpgrades").hide();
+                    $('#upHisImg').hide();
                 } else if (object[property] == "1") {
                     $("#issueReject").hide();
+                    $('#reImg').hide();
                     $("#issueResolve").hide();
+                    $('#resImg').hide();
+                    $("#sendMail").hide();
+                    $("#emailLbl").hide();
                 }
             } else {
                 var td1 = document.createElement('td');
@@ -67,7 +69,6 @@ function readURL() {
 
         }
         issueDetailsTbl.appendChild(tbody);
-
     },
     async:false
     });

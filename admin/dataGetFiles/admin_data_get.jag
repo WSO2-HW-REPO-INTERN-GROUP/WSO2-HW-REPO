@@ -45,6 +45,10 @@ var dssUrl=store.urlConfigurations.dssUrl;
         getAccessories(searchText);
     }
 
+    else if(operation=="setSession"){
+        session.put("devID", request.getParameter("deviceID"));
+    }
+
 
     function getAdminHomeIssues(resolved){
 
