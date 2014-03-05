@@ -8,7 +8,6 @@ function loadAllWarranties() {
         "bJQueryUI": true,
         "aaSorting": [[ 4, "desc" ]]
     });
-
 }
 
 
@@ -18,6 +17,7 @@ function loadIssues(resolved, tableArea, table) {
         resolved: resolved
     }, function (data) {
         var issueTbl = document.getElementById(table);
+        issueTbl.style.width="800px";
         var issueArea = document.getElementById(tableArea);
         issueArea.setAttribute('class', 'datagrid');
         var tbody = document.createElement('tbody');
@@ -59,10 +59,8 @@ function loadIssues(resolved, tableArea, table) {
 
                 var linkTd = document.createElement('td');
                 var link = document.createElement('a');
-
                 link.setAttribute("href", ("adminissues?id=" + issueId));
                 link.setAttribute("target","_blank");
-
                 link.innerHTML = 'more';
                 linkTd.appendChild(link);
                 newRow.appendChild(linkTd);

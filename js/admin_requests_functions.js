@@ -1,31 +1,36 @@
-    function acceptRejectBtnClick(requestId, action) {
-
-        
+    function acceptRejectBtnClick(requestId, action) {        
         $.post("admin/dataGetFiles/admin_devices_updates.jag", {
-
             operation: "acceptRejcetRequest",
             value: action,
             req_id: requestId
         }, function (data, status) {
-
             if(data=='SUCCESSFUL'){
+
+                if(action=='2'){
+                    var emailOptions={
+                        "to":'nadeeshaangunasinghe@gmail.com',
+                        "message":"Sorry! Your device request has been rejected.For more details check your Hardware repo account",
+                        "subject":"Device Request Rejected by Admin"
+                    };
+
+                    sendMail(emailOptions);
+                }
+
+
                 location.reload(true);
             }
             else{
                 alert("Error While Updating Database");
             }
-
         });
 
     }
 
     function loadUnassignedRequests(){
         $("#assignDevicePopup").dialog("open");
-
             $.post("admin/dataGetFiles/admin_requests_data_get.jag",{operation:"getUnassignedDevices"
 
             }, function(data,status){
-
 
                 var devicesTbl=document.getElementById('assignDevices');
                 var tableArea=document.getElementById("requestDeviceDetailsDiv");
@@ -62,9 +67,7 @@
                         newRow.appendChild(td);
                     }
                     var link = document.createElement('a');
-
                     link.setAttribute("href", "admindevicedetails?id=" + deviceId);
-
                     link.innerHTML = "more";
                     var linkTD = document.createElement("td");
                     linkTD.appendChild(link);
@@ -82,11 +85,9 @@
 
 
     function loadRequests() {
-
         $.post("admin/dataGetFiles/admin_requests_data_get.jag", {
             operation: "getUnresolved"
         }, function (data, status) {
-
 
             var objArray = JSON.parse(data);
 
@@ -105,7 +106,7 @@
 
                 var newTable = document.createElement('table');
                 newTable.style.width = '600px';
-                newTable.style.margin = '0px 0px 15px 50px';
+                newTable.style.margin = '25px 0px 15px 50px';
 
                 var thead = document.createElement('thead');
                 var htr = document.createElement('tr');
@@ -176,6 +177,7 @@
 
                 var buttonRow = document.createElement('tr');
                 var buttonTd = document.createElement('td');
+                var br=document.createElement('br');
 
                 var btnDiv = document.createElement('div');
                 btnDiv.style.marginLeft = "25px";

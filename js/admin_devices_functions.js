@@ -16,7 +16,6 @@ function getSearchedDevices(queryType, searchText) {
     });
 }
 
-
 function getAllDevices() {
     $('#devices').dataTable({
         "bProcessing": true,
@@ -29,13 +28,9 @@ function getAllDevices() {
 }
 
 function deleteDevice(devId){
-    $.post("admin/dataGetFiles/admin_devices_updates.jag",{operation:"deleteDevice",deviceID:devId},function(data,status){
-        if(data=='SUCCESSFUL'){
-            location.reload(true);
-        }
-        else{
-            alert("Error While Updating Database");
-        }
-    });
-}
 
+    $.post("admin/dataGetFiles/admin_data_get.jag",{operation:"setSession",deviceID:devId},function(data,status){
+    });
+    
+    $("#deleteDevicePopup").dialog("open");
+}

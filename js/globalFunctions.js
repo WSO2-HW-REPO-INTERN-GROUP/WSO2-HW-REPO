@@ -14,10 +14,15 @@ function prepareList() {
     $('#expandList').unbind('click').click(function() {
         $('.collapsed').addClass('expanded');
         $('.collapsed').children().show('medium');
-    })
+    });
     $('#collapseList').unbind('click').click(function() {
         $('.collapsed').removeClass('expanded');
         $('.collapsed').children().hide('medium');
-    })
+    });
 }
 
+function sendMail(opts){
+    var str = 'http://mail.google.com/mail/?view=cm&fs=1'+ '&to=' + opts.to + '&su=' + opts.subject + '&body=' + opts.message + '&ui=1';    // // location.href.blank = str;
+    window.open(str,'_blank');
+
+}

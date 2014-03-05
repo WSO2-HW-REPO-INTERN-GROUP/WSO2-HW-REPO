@@ -41,7 +41,17 @@
                 if (property == "warranty_number") {
                     warrantyId = object[property];
                 }
-                	dataArr.push(object[property]);
+                if(property=="status"){
+                    if(object[property]=="0"){
+                        dataArr.push("Void");
+                    }
+                    else if(object[property]=="1"){
+                        dataArr.push("Valid");
+                    }                	
+                }
+                else{
+                    dataArr.push(object[property]);
+                }
             }
             dataArr.push('<a target="_blank" href="/HW_REPO/adminwarranties?id='+warrantyId+'">more</a>');
             tableDataArray.aaData.push(dataArr);

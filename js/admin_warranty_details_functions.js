@@ -4,9 +4,7 @@ function readURL() {
 
     var i = 0;
 
-
     $.post("admin/dataGetFiles/admin_data_get.jag", {
-
         warrantyID: warrantyID[1],
         operation: "getWarrantyDetailsByID"
     }, function (data, status) {
