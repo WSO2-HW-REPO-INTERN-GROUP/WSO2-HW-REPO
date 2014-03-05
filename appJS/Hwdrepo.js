@@ -357,7 +357,7 @@ Hwdrepo = new function () {
                 }
             }),
             function (data, status) {
-                alert(JSON.stringify(status));
+                //alert(JSON.stringify(status));
                 Hwdrepo.viewRequests(0);
             });
 
