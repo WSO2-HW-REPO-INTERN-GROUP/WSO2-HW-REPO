@@ -24,7 +24,20 @@
      }   
      
  }else{
- 	print("<script>alert('Please Login Using the Gateway');</script>");
+ 	%>
+ 	<script>
+ 	if (window.confirm('Do you want to Login to the System Using the Gateway?'))
+	{
+    // They clicked Yes
+ 		window.location = 'http://192.168.32.6:8382/hwrepository/1.0.0/';
+	}
+	else
+	{
+    // They clicked no
+		document.write("<p>You do not have permission to access this page</p>");
+	}
+	</script>
+ 	<%
  }
 
 
