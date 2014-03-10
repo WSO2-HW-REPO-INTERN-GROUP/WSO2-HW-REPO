@@ -1,5 +1,8 @@
 <%
-// if(session.get("Logged")){
+ if(session.get("Logged")){
+ 	%>
+ 	<script>alert('<%=session.get("LOGGED_IN_USER")%>');</script>
+ 	<%
 // 	if(!(session.get("role")=='user')&&!(session.get("role")=='admin')){
 // 			response.sendRedirect("logout");
 // 	}
@@ -10,5 +13,5 @@
 //                         session.put("prevURL",request.getRequestURL());
 //                 }
 // 	response.sendRedirect("");
-// }
+ }
 %>
