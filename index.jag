@@ -1,8 +1,8 @@
 <%
-var log = new Log();
-var roles = session.get("Roles");
-session.put("Logged",true);
-session.put("role","admin");
+// var log = new Log();
+// var roles = session.get("Roles");
+// session.put("Logged",true);
+// session.put("role","admin");
 response.sendRedirect("adminhome");
 // if(!session.get("Logged")) {
 // if(!session.get("Logged")) {
