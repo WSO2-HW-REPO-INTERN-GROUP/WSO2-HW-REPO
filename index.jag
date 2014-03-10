@@ -16,6 +16,9 @@
      if (roles.indexOf("hwadmin") > -1) {
          session.put("user",{"mail":email,"admin":true});
          session.put("role","admin");
+         %>
+         <script>alert("WOW");</script>
+         <%
          response.sendRedirect("adminhome");
      } else {
          session.put("user",{"mail":email,"admin":false});
