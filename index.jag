@@ -16,11 +16,15 @@
      if (roles.indexOf("hwadmin") > -1) {
          session.put("user",{"mail":email,"admin":true});
          session.put("role","admin");
-         response.sendRedirect("adminhome");
+         print(session.get("role"));
+         print(session.get("LOGGED_IN_USER"));
+         //response.sendRedirect("adminhome");
      } else {
          session.put("user",{"mail":email,"admin":false});
          session.put("role","user");
-         response.sendRedirect("userhome");
+         print(session.get("role"));
+         print(session.get("LOGGED_IN_USER"));
+         //response.sendRedirect("userhome");
      }   
      
  }else{
@@ -29,7 +33,7 @@
  	if (window.confirm('Do you want to Login to the System Using the Gateway?'))
 	{
     // They clicked Yes
- 		indow.location.assign('http://192.168.32.6:8382/hwrepository/1.0.0/');
+ 		window.location.assign('http://192.168.32.6:8382/hwrepository/1.0.0/');
 	}
 	else
 	{
