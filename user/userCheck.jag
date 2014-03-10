@@ -9,6 +9,6 @@ if(session.get("Logged")){
                 }else{
                         session.put("prevURL",request.getRequestURL());
                 }
-	response.sendRedirect("../");
+	response.sendRedirect("");
 }
 %>
