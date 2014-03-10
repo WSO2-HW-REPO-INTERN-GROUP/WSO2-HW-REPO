@@ -1,15 +1,14 @@
 <%
-// if(session.get("Logged")){
-// 	if(!(session.get("role")=='user')&&!(session.get("role")=='admin')){
-// 			response.sendRedirect("logout");
-// 	}
-// }else{
-// //	session.put("prevURL",request.getRequestURL());
-// 	if(request.getRequestURL().indexOf("https") == -1){
-//                         session.put("prevURL",request.getRequestURL().replace("http","https"));
-//                 }else{
-//                         session.put("prevURL",request.getRequestURL());
-//                 }
-// 	response.sendRedirect("login");
-// }
+if(session.get("Logged")){
+	if(!(session.get("role")=='user')&&!(session.get("role")=='admin')){
+			response.sendRedirect("logout");
+	}
+}else{
+	if(request.getRequestURL().indexOf("https") == -1){
+                        session.put("prevURL",request.getRequestURL().replace("http","https"));
+                }else{
+                        session.put("prevURL",request.getRequestURL());
+                }
+	response.sendRedirect("../");
+}
 %>
