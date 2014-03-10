@@ -1,9 +1,47 @@
 <%
-// var log = new Log();
+ var log = new Log();
+ var header = request.getHeader("X-JWT-Assertion");
+ var helper = require("js/base64.js");//helper.Base64.decode(
+
+ if(header !=null){
+ 	 session.put("Logged", "true");
+     var jwtAssertions = header.split("."); //JWT header by default contains three '.' separated sections
+     var jsonString = helper.Base64.decode(jwtAssertions[1]);
+     jsonString = jsonString.replace("http://wso2.org/claims/emailaddress", "email");
+     jsonString = jsonString.replace("http://wso2.org/claims/role", "roles");
+     var obj = parse(jsonString);
+     var email = obj.email;
+     var roles = obj.roles;
+     session.put("LOGGED_IN_USER", email);
+     if (roles.indexOf("hwadmin") > -1) {
+         session.put("user",{"mail":email,"admin":true});
+         session.put("role","admin");
+         response.sendRedirect("adminhome");
+     } else {
+         session.put("user",{"mail":email,"admin":false});
+         session.put("role","user");
+         response.sendRedirect("userhome");
+     }   
+     
+ }else{
+ 	print("<script>alert('Please Login Using the Gateway');</script>");
+ }
+
+
+
+
+
+
+
+
+
+
+
+
 // var roles = session.get("Roles");
 // session.put("Logged",true);
 // session.put("role","admin");
-response.sendRedirect("adminhome");
+//response.sendRedirect("adminhome");
 // if(!session.get("Logged")) {
 // if(!session.get("Logged")) {
 
