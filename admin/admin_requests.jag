@@ -90,9 +90,9 @@
                     <td id="menu-panel" valign="top" height="400px">
                         <div id='mainMenu'>
                             <ul>
-                                <li><a href='/HW_REPO/adminhome'><span>Home</span></a></li>
-                                <li><a href='/HW_REPO/admindevices'><span>Devices</span></a></li>
-                                <li><a href='/HW_REPO/adminrequests'><span>Requests</span></a></li>
+                                <li><a href='/adminhome'><span>Home</span></a></li>
+                                <li><a href='/admindevices'><span>Devices</span></a></li>
+                                <li><a href='/adminrequests'><span>Requests</span></a></li>
                                 <li class='last'><a href='#'><span>Report Generation</span></a></li>
                             </ul>
                         </div>
