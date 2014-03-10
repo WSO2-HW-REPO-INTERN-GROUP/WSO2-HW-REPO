@@ -29,7 +29,7 @@
  	if (window.confirm('Do you want to Login to the System Using the Gateway?'))
 	{
     // They clicked Yes
- 		window.location = 'http://192.168.32.6:8382/hwrepository/1.0.0/';
+ 		indow.location.assign('http://192.168.32.6:8382/hwrepository/1.0.0/');
 	}
 	else
 	{
