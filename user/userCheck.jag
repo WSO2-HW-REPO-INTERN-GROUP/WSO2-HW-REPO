@@ -1,5 +1,5 @@
 <%
-include(headerHandler.jag);
+include(../headerHandler.jag);
 //  if(session.get("Logged")){
 //  	if(!(session.get("role")=='user')&&!(session.get("role")=='admin')){
 //  			response.sendRedirect("logout");
