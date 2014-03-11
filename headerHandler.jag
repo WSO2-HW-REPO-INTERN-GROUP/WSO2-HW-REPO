@@ -1,0 +1,24 @@
+<%
+var header = request.getHeader("X-JWT-Assertion");
+var helper = require("js/base64.js");
+if(header !=null){
+ 	 session.put("Logged", "true");
+     var jwtAssertions = header.split("."); //JWT header by default contains three '.' separated sections
+     var jsonString = helper.Base64.decode(jwtAssertions[1]);
+     jsonString = jsonString.replace("http://wso2.org/claims/emailaddress", "email");
+     jsonString = jsonString.replace("http://wso2.org/claims/role", "roles");
+     var obj = parse(jsonString);
+     var email = obj.email;
+     var roles = obj.roles;
+     session.put("LOGGED_IN_USER", email);
+     if (roles.indexOf("hwadmin") > -1) {
+         session.put("user",{"mail":email,"admin":true});
+         session.put("role","admin");
+     } else {
+         session.put("user",{"mail":email,"admin":false});
+         session.put("role","user");
+     }
+}else{
+	response.sendRedirect('http://192.168.32.6:8382/hwrepository/1.0.0/');
+}
+%>
