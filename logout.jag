@@ -6,6 +6,8 @@ var cookies = $.cookie();
 for(var cookie in cookies) {
    $.removeCookie(cookie);
 }
+
 $.cookie('samlssoTokenId', null , { path: '/' });
+
 alert('name:' +$.cookie('samlssoTokenId'));
 </script> 
