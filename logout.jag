@@ -1,4 +1,3 @@
-<%
-var logout = include("js/logout.js");
-logout.logout();
-%>
+<script>
+
+</script>
