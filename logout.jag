@@ -1,6 +1,6 @@
 <%
 	print('<script>');
-   print('document.cookie = encodeURIComponent(samlssoTokenId) + "=deleted; expires=" + new Date(0).toUTCString();');
+   print('document.cookie = encodeURIComponent("samlssoTokenId") + "=deleted; expires=" + new Date(0).toUTCString();');
    print('window.location = "http://192.168.32.6:8382/hwrepository/1.0.0/";');
    print('</script>');
 %>
