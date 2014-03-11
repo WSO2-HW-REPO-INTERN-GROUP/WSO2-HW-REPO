@@ -25,6 +25,7 @@
          session.put("role","user");
          print(session.get("role"));
          print(session.get("LOGGED_IN_USER"));
+         
          //response.sendRedirect("userhome");
      }   
      
