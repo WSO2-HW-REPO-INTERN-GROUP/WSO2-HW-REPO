@@ -24,7 +24,7 @@
                 }
                 	dataArr.push(object[property]);
             }
-            dataArr.push('<a target="_blank" href="/HW_REPO/admindevicedetails?id='+deviceId+'">more</a>');
+            dataArr.push('<a target="_blank" href="admindevicedetails?id='+deviceId+'">more</a>');
             dataArr.push('<div style="background-image:url(images/delete.gif);background-repeat:no-repeat;width:16px;height:16px" class="icon-div"></div><label class="linkLabel" onclick="deleteDevice('+object.device_id+')">Delete</label>');
             tableDataArray.aaData.push(dataArr);
         }
