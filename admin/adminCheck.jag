@@ -1,4 +1,11 @@
 <%
+include(headerHandler.jag);
+if(session.get("Logged")) {
+	if(!(session.get("role")=="admin")){
+		if(session.get("role")=="user")
+			response.sendRedirect("userhome");
+	}
+}
 //  var log = new Log();
 //  if(session.get("Logged")){
 //  	if(!((session.get("role")=='admin')||(session.get("LOGGED_IN_USER")=="nadeeshaan@wso2.com"))){

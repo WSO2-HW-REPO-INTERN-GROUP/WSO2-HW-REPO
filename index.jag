@@ -1,62 +1,18 @@
 <%
 
- var log = new Log();
- var header = request.getHeader("X-JWT-Assertion");
- var helper = require("js/base64.js");//helper.Base64.decode(
- session.put("LOGGED_IN_USER", 'tharindup@wso2.com');
-//  if(header !=null){
-//  	 session.put("Logged", "true");
-//      var jwtAssertions = header.split("."); //JWT header by default contains three '.' separated sections
-//      var jsonString = helper.Base64.decode(jwtAssertions[1]);
-//      jsonString = jsonString.replace("http://wso2.org/claims/emailaddress", "email");
-//      jsonString = jsonString.replace("http://wso2.org/claims/role", "roles");
-//      var obj = parse(jsonString);
-//      var email = obj.email;
-//      var roles = obj.roles;
-//      session.put("LOGGED_IN_USER", email);
-//      if (roles.indexOf("hwadmin") > -1) {
-//          session.put("user",{"mail":email,"admin":true});
-//          session.put("role","admin");
-//          print(session.get("role"));
-//          print(session.get("LOGGED_IN_USER"));
-//          //response.sendRedirect("adminhome");
-//      } else {
-//          session.put("user",{"mail":email,"admin":false});
-//          session.put("role","user");
-//          print(session.get("role"));
-//          print(session.get("LOGGED_IN_USER"));
-         
-//          //response.sendRedirect("userhome");
-//      }   
-     
-//  }else{
-//  	%>
-<!--  	<script> -->
-//  	if (window.confirm('Do you want to Login to the System Using the Gateway?'))
-// 	{
-//     // They clicked Yes
-//  		window.location.assign('http://192.168.32.6:8382/hwrepository/1.0.0/');
-// 	}
-// 	else
-// 	{
-//     // They clicked no
-// 		document.write("<p>You do not have permission to access this page</p>");
-// 	}
-//	</script>
-// 	<%
-//  }
-
-
-
-
-
-
-
-
-
-
-
-
+var log = new Log(); 
+include(headerHandler.jag);
+if(session.get("Logged")) {
+	if(session.get("role")=="admin"){
+		response.sendRedirect("adminhome");
+	}else{
+		response.sendRedirect("userhome");
+	}
+}
+ 
+ 
+ 
+ 
 // var roles = session.get("Roles");
 // session.put("Logged",true);
 // session.put("role","admin");
