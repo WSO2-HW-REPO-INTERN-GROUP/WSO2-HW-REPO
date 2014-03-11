@@ -22,7 +22,9 @@
      } else {
          session.put("user",{"mail":email,"admin":false});
          session.put("role","user");
-         response.sendRedirect("userhome");
+         print(session.get("role"));
+         print(session.get("LOGGED_IN_USER"));
+         //response.sendRedirect("userhome");
      }   
      
  }else{
