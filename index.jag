@@ -1,4 +1,5 @@
 <%
+
  var log = new Log();
  var header = request.getHeader("X-JWT-Assertion");
  var helper = require("js/base64.js");//helper.Base64.decode(
