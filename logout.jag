@@ -6,6 +6,6 @@ var cookies = $.cookie();
 for(var cookie in cookies) {
    $.removeCookie(cookie);
 }
-$.cookie('samlssoTokenId', null);
+$.cookie('samlssoTokenId', null , { path: '/hwrepository/1.0.0' });
 alert('name:' +$.cookie('samlssoTokenId'));
 </script>
