@@ -1,7 +1,7 @@
 <%
 
 var log = new Log(); 
-include("header");
+include("header"); 
 if(session.get("Logged")) {
 	if(session.get("role")=="admin"){
 		response.sendRedirect("adminhome");
