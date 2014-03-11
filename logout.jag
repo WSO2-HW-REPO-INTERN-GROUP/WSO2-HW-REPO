@@ -8,4 +8,4 @@ for(var cookie in cookies) {
 }
 $.cookie('samlssoTokenId', null , { path: '/' });
 alert('name:' +$.cookie('samlssoTokenId'));
-</script>
+</script> 
