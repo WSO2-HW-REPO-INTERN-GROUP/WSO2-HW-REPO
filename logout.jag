@@ -9,5 +9,6 @@ for(var cookie in cookies) {
 
 $.cookie('samlssoTokenId', null , { path: '/' });
 
+$.cookie('samlssoTokenId', null , { path: '/hwrepository/1.0.0' });
 alert('name:' +$.cookie('samlssoTokenId'));
 </script> 
