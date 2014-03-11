@@ -1,11 +1,7 @@
 <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript" src="js/jquery-cookie/jquery.cookie.js"></script>
 <script>
-alert('name:' +$.cookie('samlssoTokenId'));
 var cookies = $.cookie();
-for(var cookie in cookies) {
-   $.removeCookie(cookie);
-}
 $.removeCookie('samlssoTokenId', { path: '/' });
-alert('name:' +$.cookie('samlssoTokenId'));
+window.location.href = "http://192.168.32.6:8382/hwrepository/1.0.0/";
 </script> 
