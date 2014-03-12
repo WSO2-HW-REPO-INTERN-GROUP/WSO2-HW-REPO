@@ -53,7 +53,7 @@
                     dataArr.push(object[property]);
                 }
             }
-            dataArr.push('<a target="_blank" href="/HW_REPO/adminwarranties?id='+warrantyId+'">more</a>');
+            dataArr.push('<a target="_blank" href="adminwarranties?id='+warrantyId+'">more</a>');
             tableDataArray.aaData.push(dataArr);
         }
         print(tableDataArray);
