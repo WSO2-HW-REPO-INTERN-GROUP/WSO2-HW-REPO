@@ -3,5 +3,4 @@
     "urlConfigurations":{
 	"dssUrl":"http://192.168.3.23:9764/services/WSO2_HardwareRepo/",
      }
-
 }
